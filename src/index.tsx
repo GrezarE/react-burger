@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 
 import Header from "./components/appHeader/appHeader";
+import BurgerIngredients from "./components/burgerIngredients/burgerIngredients"
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -13,6 +14,8 @@ import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BurgerIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ListIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+
+
 
 // const Header: FunctionComponent = (props) => {
 //   return (
@@ -115,15 +118,22 @@ import { ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components"
 ReactDOM.render(
   <React.StrictMode>
     {/* <App /> */}
-    <div
+    {/* <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
       }}
-    >
+    > */}
       <Header></Header>
-    </div>
+
+    {/* </div> */}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: 'center'
+
+      }}><BurgerIngredients/></div>
   </React.StrictMode>,
   document.getElementById("root")
 );

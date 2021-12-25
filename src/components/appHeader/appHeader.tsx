@@ -16,7 +16,7 @@ const NavigationLink = (props: any) => {
     <div
       className={
         "mt-4 mb-4 mr-2 pl-5 pr-5 " +
-        [props.class || headerStyles.navigation_link]
+        [props.class || headerStyles.navigation__link]
       }
     >
       {props.children}
@@ -43,7 +43,7 @@ export default class Header extends React.Component {
           </NavigationLink>
         </Navigation>
         <Logo />
-        <NavigationLink class={headerStyles.navigation_link_right}>
+        <NavigationLink class={headerStyles.navigation__link_right}>
           <ProfileIcon type="primary" />
           <NaviText>Личный&nbsp;кабинет</NaviText>
         </NavigationLink>

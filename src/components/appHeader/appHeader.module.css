@@ -13,7 +13,7 @@
   margin-right: 104px;
 }
 
-.navigation_link {
+.navigation__link {
   height: 56px;
   border: 1px dashed #4C4CFF;
   border-radius: 40px;
@@ -22,14 +22,7 @@
   justify-content: center;
 }
 
-.navigation_link_right {
-  composes: navigation_link;
-  /* height: 56px;
-  border: 1px dashed #4C4CFF;
-  border-radius: 40px;
-  display: flex;
-  align-Items: center;
-  justify-content: center; */
+.navigation__link_right {
+  composes: navigation__link;
   margin-left: 289px;
-
 }

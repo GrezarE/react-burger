@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import headerStyles from "./appHeader.module.css";
 
 import { BurgerIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -7,11 +6,11 @@ import { ListIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const Navigation = (props: any) => {
-  return <div className={headerStyles.navigation}>{props.children}</div>;
+const Navigation = (props) => {
+  return <nav className={headerStyles.navigation}>{props.children}</nav>;
 };
 
-const NavigationLink = (props: any) => {
+const NavigationLink = (props) => {
   return (
     <div
       className={
@@ -24,7 +23,7 @@ const NavigationLink = (props: any) => {
   );
 };
 
-const NaviText = (props: any) => {
+const NaviText = (props) => {
   return <p className="pl-2 text text_type_main-default"> {props.children}</p>;
 };
 

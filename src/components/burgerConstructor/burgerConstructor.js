@@ -36,7 +36,6 @@ const ConstructorLockedItem = (props) => {
   return (
     <li className="pl-8">
       <ConstructorElement
-        // className={}
         type={props.type}
         isLocked={true}
         text={props.text}
@@ -56,6 +55,7 @@ ConstructorLockedItem.propTypes = {
 };
 
 const ConstructorBox = () => {
+  let ingredients = api.filter(item => item.type !== "bun")
   return (
     <ul className={burgerConstructorStyle.box}>
       <ConstructorLockedItem
@@ -67,7 +67,7 @@ const ConstructorBox = () => {
       />
       <li>
         <ul className={burgerConstructorStyle.box_active}>
-          {api.map((item) => (
+          {ingredients.map((item) => (
             <ConstructorItem key={item._id} props={item} />
           ))}
         </ul>
@@ -103,7 +103,7 @@ const ConstructorButtonBox = () => {
   );
 };
 
-export default class burgerConstructor extends React.Component {
+export default class BurgerConstructor extends React.Component {
   render() {
     return (
       <section className={"pt-25 " + burgerConstructorStyle.constructor}>

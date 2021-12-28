@@ -103,13 +103,22 @@ const ConstructorButtonBox = () => {
   );
 };
 
-export default class BurgerConstructor extends React.Component {
-  render() {
-    return (
-      <section className={"pt-25 " + burgerConstructorStyle.constructor}>
-        <ConstructorBox />
-        <ConstructorButtonBox />
-      </section>
-    );
-  }
+export const BurgerConstructor = () => {
+  return (
+    <section className={"pt-25 " + burgerConstructorStyle.constructor}>
+      <ConstructorBox />
+      <ConstructorButtonBox />
+    </section>
+  );
 }
+
+// export default class BurgerConstructor extends React.Component {
+//   render() {
+//     return (
+//       <section className={"pt-25 " + burgerConstructorStyle.constructor}>
+//         <ConstructorBox />
+//         <ConstructorButtonBox />
+//       </section>
+//     );
+//   }
+// }

@@ -89,18 +89,32 @@ IngridientsBlock.propTypes = {
   text: PropTypes.string.isRequired,
 };
 
-export default class BurgerIngredients extends React.Component {
-  render() {
-    return (
-      <section className={burgerIngredientsStyle.burgerIngredients}>
-        <HeaderIngridients>Соберите бургер</HeaderIngridients>
-        <TabConteiner />
-        <ul className={burgerIngredientsStyle.box}>
-          <IngridientsBlock key="bun" type="bun" text="Булки" />
-          <IngridientsBlock key="sauce" type="sauce" text="Соусы" />
-          <IngridientsBlock key="main" type="main" text="Начинки" />
-        </ul>
-      </section>
-    );
-  }
-}
+export const BurgerIngredients = () => {
+  return (
+    <section className={burgerIngredientsStyle.burgerIngredients}>
+      <HeaderIngridients>Соберите бургер</HeaderIngridients>
+      <TabConteiner />
+      <ul className={burgerIngredientsStyle.box}>
+        <IngridientsBlock key="bun" type="bun" text="Булки" />
+        <IngridientsBlock key="sauce" type="sauce" text="Соусы" />
+        <IngridientsBlock key="main" type="main" text="Начинки" />
+      </ul>
+    </section>
+  );
+};
+
+// export default class BurgerIngredients extends React.Component {
+//   render() {
+//     return (
+//       <section className={burgerIngredientsStyle.burgerIngredients}>
+//         <HeaderIngridients>Соберите бургер</HeaderIngridients>
+//         <TabConteiner />
+//         <ul className={burgerIngredientsStyle.box}>
+//           <IngridientsBlock key="bun" type="bun" text="Булки" />
+//           <IngridientsBlock key="sauce" type="sauce" text="Соусы" />
+//           <IngridientsBlock key="main" type="main" text="Начинки" />
+//         </ul>
+//       </section>
+//     );
+//   }
+// }

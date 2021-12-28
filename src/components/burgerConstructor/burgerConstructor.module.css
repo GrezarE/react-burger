@@ -1,0 +1,57 @@
+.constructor {
+  width: 600px;
+}
+
+.box {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.box_active {
+  composes: box;
+  max-height: 470px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #8585AD #2F2F37;
+}
+
+.box_active::-webkit-scrollbar {
+  background-color: #2F2F37;
+  width: 8px;
+
+}
+
+.box_active::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+
+.card {
+  position: relative;
+}
+
+.drag {
+  position: absolute;
+  left: 0;
+  top: calc(50% - 12px);
+}
+
+.element {
+  width: 536px;
+  height: 80px;
+}
+
+.button_box {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

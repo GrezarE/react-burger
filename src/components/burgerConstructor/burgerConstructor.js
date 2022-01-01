@@ -11,6 +11,7 @@ import image from "../../images/CurrencyIcon.svg";
 import "./burgerConstructor.module.css"
 
 const ConstructorItem = ({ props }) => {
+  // console.log(props)
   return (
     <li className={"pl-8 " + burgerConstructorStyle.card}>
       <div className={burgerConstructorStyle.drag}>

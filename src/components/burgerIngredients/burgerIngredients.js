@@ -90,6 +90,7 @@ IngridientsBlock.propTypes = {
 };
 
 export const BurgerIngredients = () => {
+  const buns = React.useRef("bun");
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>
       <HeaderIngridients>Соберите бургер</HeaderIngridients>

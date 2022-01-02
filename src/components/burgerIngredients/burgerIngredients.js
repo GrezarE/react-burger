@@ -16,25 +16,40 @@ HeaderIngridients.propTypes = {
   children: PropTypes.string.isRequired,
 };
 
-const TabConteiner = () => {
+const TabConteiner = (props) => {
   const [current, setCurrent] = React.useState("one");
   return (
     <div style={{ display: "flex" }}>
-      <a className={burgerIngredientsStyle.link} href="#bun">
-        <Tab value="one" active={current === "one"} onClick={setCurrent}>
-          Булки
-        </Tab>
-      </a>
-      <a className={burgerIngredientsStyle.link} href="#sauce">
-        <Tab value="two" active={current === "two"} onClick={setCurrent}>
-          Соусы
-        </Tab>
-      </a>
-      <a className={burgerIngredientsStyle.link} href="#main">
-        <Tab value="three" active={current === "three"} onClick={setCurrent}>
-          Начинки
-        </Tab>
-      </a>
+      <Tab
+        value="one"
+        active={current === "one"}
+        onClick={() => {
+          setCurrent("one");
+          props.buns();
+        }}
+      >
+        Булки
+      </Tab>
+      <Tab
+        value="two"
+        active={current === "two"}
+        onClick={() => {
+          setCurrent("two");
+          props.sauses();
+        }}
+      >
+        Соусы
+      </Tab>
+      <Tab
+        value="three"
+        active={current === "three"}
+        onClick={() => {
+          setCurrent("three");
+          props.main();
+        }}
+      >
+        Начинки
+      </Tab>
     </div>
   );
 };
@@ -72,7 +87,7 @@ IngridientCard.propTypes = {
 const IngridientsBlock = (data) => {
   let itemType = data.api.filter((item) => item.type === data.type);
   return (
-    <li className="mt-10" id={data.type}>
+    <li className="mt-10" id={data.type} ref={data.refElement}>
       <h2>{data.text}</h2>
       <ul className={" pl-4 " + burgerIngredientsStyle.ingridientsList}>
         {itemType.map((item) => (
@@ -90,14 +105,43 @@ IngridientsBlock.propTypes = {
 
 export const BurgerIngredients = (props) => {
   const buns = React.useRef("bun");
+  const sause = React.useRef("sause");
+  const main = React.useRef("main");
+
+  const scroll = (item) => {
+    item.current.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>
       <HeaderIngridients>Соберите бургер</HeaderIngridients>
-      <TabConteiner />
+      <TabConteiner
+        buns={() => scroll(buns)}
+        sauses={() => scroll(sause)}
+        main={() => scroll(main)}
+      />
       <ul className={burgerIngredientsStyle.box}>
-        <IngridientsBlock api={props.api} key="bun" type="bun" text="Булки" />
-        <IngridientsBlock api={props.api} key="sauce" type="sauce" text="Соусы" />
-        <IngridientsBlock api={props.api} key="main" type="main" text="Начинки" />
+        <IngridientsBlock
+          refElement={buns}
+          api={props.api}
+          key="bun"
+          type="bun"
+          text="Булки"
+        />
+        <IngridientsBlock
+          refElement={sause}
+          api={props.api}
+          key="sauce"
+          type="sauce"
+          text="Соусы"
+        />
+        <IngridientsBlock
+          refElement={main}
+          api={props.api}
+          key="main"
+          type="main"
+          text="Начинки"
+        />
       </ul>
     </section>
   );

@@ -5,13 +5,11 @@ import {
   DragIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { api } from "../../utils/data";
 import burgerConstructorStyle from "./burgerConstructor.module.css";
 import image from "../../images/CurrencyIcon.svg";
 import "./burgerConstructor.module.css"
 
 const ConstructorItem = ({ props }) => {
-  // console.log(props)
   return (
     <li className={"pl-8 " + burgerConstructorStyle.card}>
       <div className={burgerConstructorStyle.drag}>
@@ -55,8 +53,8 @@ ConstructorLockedItem.propTypes = {
   thumbnail: PropTypes.string.isRequired,
 };
 
-const ConstructorBox = () => {
-  let ingredients = api.filter(item => item.type !== "bun")
+const ConstructorBox = (data) => {
+  let ingredients = data.api.filter(item => item.type !== "bun")
   return (
     <ul className={burgerConstructorStyle.box}>
       <ConstructorLockedItem
@@ -104,22 +102,12 @@ const ConstructorButtonBox = () => {
   );
 };
 
-export const BurgerConstructor = () => {
+export const BurgerConstructor = (props) => {
   return (
     <section className={"pt-25 " + burgerConstructorStyle.constructor}>
-      <ConstructorBox />
+      <ConstructorBox api={props.api}/>
       <ConstructorButtonBox />
     </section>
   );
 }
 
-// export default class BurgerConstructor extends React.Component {
-//   render() {
-//     return (
-//       <section className={"pt-25 " + burgerConstructorStyle.constructor}>
-//         <ConstructorBox />
-//         <ConstructorButtonBox />
-//       </section>
-//     );
-//   }
-// }

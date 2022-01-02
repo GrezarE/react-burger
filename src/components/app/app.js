@@ -43,8 +43,8 @@ export const App = () => {
     <div>
       <Header></Header>
       <main className={appStyle.main}>
-        <BurgerIngredients />
-        <BurgerConstructor />
+        <BurgerIngredients api={api}/>
+        <BurgerConstructor api={api}/>
       </main>
     </div>
   );

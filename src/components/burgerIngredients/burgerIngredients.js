@@ -1,5 +1,4 @@
 import React from "react";
-import { api } from "../../utils/data";
 import PropTypes from "prop-types";
 import burgerIngredientsStyle from "./burgerIngredients.module.css";
 import {
@@ -70,11 +69,11 @@ IngridientCard.propTypes = {
   card: PropTypes.object.isRequired,
 };
 
-const IngridientsBlock = (props) => {
-  let itemType = api.filter((item) => item.type === props.type);
+const IngridientsBlock = (data) => {
+  let itemType = data.api.filter((item) => item.type === data.type);
   return (
-    <li className="mt-10" id={props.type}>
-      <h2>{props.text}</h2>
+    <li className="mt-10" id={data.type}>
+      <h2>{data.text}</h2>
       <ul className={" pl-4 " + burgerIngredientsStyle.ingridientsList}>
         {itemType.map((item) => (
           <IngridientCard key={item._id} card={item} />
@@ -89,33 +88,17 @@ IngridientsBlock.propTypes = {
   text: PropTypes.string.isRequired,
 };
 
-export const BurgerIngredients = () => {
+export const BurgerIngredients = (props) => {
   const buns = React.useRef("bun");
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>
       <HeaderIngridients>Соберите бургер</HeaderIngridients>
       <TabConteiner />
       <ul className={burgerIngredientsStyle.box}>
-        <IngridientsBlock key="bun" type="bun" text="Булки" />
-        <IngridientsBlock key="sauce" type="sauce" text="Соусы" />
-        <IngridientsBlock key="main" type="main" text="Начинки" />
+        <IngridientsBlock api={props.api} key="bun" type="bun" text="Булки" />
+        <IngridientsBlock api={props.api} key="sauce" type="sauce" text="Соусы" />
+        <IngridientsBlock api={props.api} key="main" type="main" text="Начинки" />
       </ul>
     </section>
   );
 };
-
-// export default class BurgerIngredients extends React.Component {
-//   render() {
-//     return (
-//       <section className={burgerIngredientsStyle.burgerIngredients}>
-//         <HeaderIngridients>Соберите бургер</HeaderIngridients>
-//         <TabConteiner />
-//         <ul className={burgerIngredientsStyle.box}>
-//           <IngridientsBlock key="bun" type="bun" text="Булки" />
-//           <IngridientsBlock key="sauce" type="sauce" text="Соусы" />
-//           <IngridientsBlock key="main" type="main" text="Начинки" />
-//         </ul>
-//       </section>
-//     );
-//   }
-// }

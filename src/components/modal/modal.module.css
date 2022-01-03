@@ -1,0 +1,19 @@
+.popup {
+  position: relative;
+  width: 720px;
+  background-color: #1C1C21;
+  height: 500px;
+  border: 1px solid rgba(76, 76, 255, 0.2);
+  border-radius: 40px;
+}
+
+.close {
+  position: absolute;
+  content: '';
+  top: 60px;
+  right: 40px;
+}
+
+.close:hover {
+  cursor: pointer;
+}

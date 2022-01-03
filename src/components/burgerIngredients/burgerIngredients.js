@@ -6,6 +6,8 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import { Modal } from "../modal/modal.js";
+
 const HeaderIngridients = (props) => {
   return (
     <h1 className="mt-10 mb-5 text text_type_main-large">{props.children}</h1>
@@ -55,28 +57,47 @@ const TabConteiner = (props) => {
 };
 
 const IngridientCard = ({ card }) => {
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  const handleOpen = () => {
+    setIsVisible(true);
+  };
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+  const modal = <Modal onClose={handleClose}></Modal>;
+
   return (
-    <li className={"mt-6 " + burgerIngredientsStyle.ingridientCard}>
-      <img className="ml-4 mr-4 " src={card.image} alt={card.image} />
-      <div className={"mt-1 mb-1 " + burgerIngredientsStyle.priceBox}>
-        <p className="text text_type_digits-default">{card.price}</p>
-        <CurrencyIcon type="primary" />
-      </div>
-      <h2
-        className={"text text_type_main-default " + burgerIngredientsStyle.name}
+    <>
+      <li
+        className={"mt-6 " + burgerIngredientsStyle.ingridientCard}
+        onClick={handleOpen}
       >
-        {card.name}
-      </h2>
-      <div
-        className={
-          "text text_type_digits-default " +
-          ((card.__v > 0 && burgerIngredientsStyle.count) ||
-            burgerIngredientsStyle.countZero)
-        }
-      >
-        {card.__v}
-      </div>
-    </li>
+        <img className="ml-4 mr-4 " src={card.image} alt={card.image} />
+        <div className={"mt-1 mb-1 " + burgerIngredientsStyle.priceBox}>
+          <p className="text text_type_digits-default">{card.price}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+        <h2
+          className={
+            "text text_type_main-default " + burgerIngredientsStyle.name
+          }
+        >
+          {card.name}
+        </h2>
+        <div
+          className={
+            "text text_type_digits-default " +
+            ((card.__v > 0 && burgerIngredientsStyle.count) ||
+              burgerIngredientsStyle.countZero)
+          }
+        >
+          {card.__v}
+        </div>
+      </li>
+      {isVisible && modal}
+    </>
   );
 };
 

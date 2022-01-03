@@ -7,7 +7,9 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyle from "./burgerConstructor.module.css";
 import image from "../../images/CurrencyIcon.svg";
-import "./burgerConstructor.module.css"
+import "./burgerConstructor.module.css";
+import { Modal } from "../modal/modal.js";
+
 
 const ConstructorItem = ({ props }) => {
   return (
@@ -54,7 +56,7 @@ ConstructorLockedItem.propTypes = {
 };
 
 const ConstructorBox = (data) => {
-  let ingredients = data.api.filter(item => item.type !== "bun")
+  let ingredients = data.api.filter((item) => item.type !== "bun");
   return (
     <ul className={burgerConstructorStyle.box}>
       <ConstructorLockedItem
@@ -92,12 +94,28 @@ const ConstructorButtonBoxPrice = (props) => {
 };
 
 const ConstructorButtonBox = () => {
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  const handleOpen = () => {
+    setIsVisible(true);
+  };
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+  const modal = <Modal onClose={handleClose}></Modal>;
+
+  // const modal = <Modal active={isVisible} setActive={setIsVisible}></Modal>;
+
+
+
   return (
     <div className={"mr-4 mt-10 " + burgerConstructorStyle.button_box}>
       <ConstructorButtonBoxPrice>610</ConstructorButtonBoxPrice>
-      <Button type="primary" size="large">
+      <Button type="primary" size="large" onClick={handleOpen}>
         Оформить заказ
       </Button>
+      {isVisible && modal}
     </div>
   );
 };
@@ -105,9 +123,8 @@ const ConstructorButtonBox = () => {
 export const BurgerConstructor = (props) => {
   return (
     <section className={"pt-25 " + burgerConstructorStyle.constructor}>
-      <ConstructorBox api={props.api}/>
+      <ConstructorBox api={props.api} />
       <ConstructorButtonBox />
     </section>
   );
-}
-
+};

@@ -7,13 +7,19 @@
   border-radius: 40px;
 }
 
-.close {
-  position: absolute;
-  content: '';
-  top: 60px;
-  right: 40px;
-}
-
 .close:hover {
   cursor: pointer;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.header__box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+
 }

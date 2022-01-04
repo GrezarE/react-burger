@@ -66,7 +66,7 @@ const IngridientCard = ({ card }) => {
   const handleClose = () => {
     setIsVisible(false);
   };
-  const modal = <Modal onClose={handleClose}></Modal>;
+  const modal = <Modal onClose={handleClose} header='Детали ингредиента'></Modal>;
 
   return (
     <>

@@ -7,6 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { Modal } from "../modal/modal.js";
+import {IngredientDetails} from "../ingredientDetails/ingredientDetails.js"
 
 const HeaderIngridients = (props) => {
   return (
@@ -57,6 +58,7 @@ const TabConteiner = (props) => {
 };
 
 const IngridientCard = ({ card }) => {
+
   const [isVisible, setIsVisible] = React.useState(false);
 
   const handleOpen = () => {
@@ -66,7 +68,9 @@ const IngridientCard = ({ card }) => {
   const handleClose = () => {
     setIsVisible(false);
   };
-  const modal = <Modal onClose={handleClose} header='Детали ингредиента'></Modal>;
+  const modal = <Modal onClose={handleClose} header='Детали ингредиента'>
+    <IngredientDetails {...card}/>
+  </Modal>;
 
   return (
     <>

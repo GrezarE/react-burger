@@ -22,7 +22,6 @@ export const Modal = (props) => {
     };
   }, []);
 
-  console.log(props.onClose);
   return ReactDOM.createPortal(
     <ModalOverlay onClose={props.onClose}>
       <div className={modalStyle.popup} onClick={(e) => e.stopPropagation()}>

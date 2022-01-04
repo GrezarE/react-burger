@@ -1,6 +1,4 @@
-import React from "react";
 import PropTypes from "prop-types";
-import ReactDOM from "react-dom";
 import ingredientDetailsStyle from "./ingredientDetails.module.css";
 
 const Nutrient = (props) => {
@@ -11,6 +9,12 @@ const Nutrient = (props) => {
     </div>
   );
 };
+
+Nutrient.propTypes = {
+  nutrient: PropTypes.string,
+  children: PropTypes.number
+}
+
 
 export const IngredientDetails = (props) => {
   return (
@@ -26,3 +30,12 @@ export const IngredientDetails = (props) => {
     </div>
   );
 };
+
+IngredientDetails.propTypes = {
+  image: PropTypes.string,
+  name: PropTypes.string,
+  calories: PropTypes.number,
+  proteins: PropTypes.number,
+  fat: PropTypes.number,
+  carbohydrates: PropTypes.number
+}

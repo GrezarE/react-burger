@@ -38,21 +38,8 @@ export const Modal = (props) => {
   );
 };
 
-// export const Modal = (props) => {
-//   console.log(props);
-
-//   return ReactDOM.createPortal(
-//     <ModalOverlay active={props.active} setActive={props.setActive}>
-//       <div className={modalStyle.popup}>
-//         <div
-//           className={modalStyle.close}
-//           onClick={() => props.setActive(false)}
-//         >
-//           <CloseIcon />
-//         </div>
-//       </div>
-//     </ModalOverlay>,
-
-//     modalRoot
-//   );
-// };
+Modal.propTypes = {
+  onClose: PropTypes.func,
+  header: PropTypes.string,
+  children: PropTypes.element
+}

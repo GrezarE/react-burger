@@ -58,13 +58,10 @@ const TabConteiner = (props) => {
 };
 
 const IngridientCard = ({ card }) => {
-
   const [isVisible, setIsVisible] = React.useState(false);
-
   const handleOpen = () => {
     setIsVisible(true);
   };
-
   const handleClose = () => {
     setIsVisible(false);
   };
@@ -129,6 +126,7 @@ IngridientsBlock.propTypes = {
 };
 
 export const BurgerIngredients = (props) => {
+  console.log(props)
   const buns = React.useRef("bun");
   const sause = React.useRef("sause");
   const main = React.useRef("main");
@@ -171,3 +169,7 @@ export const BurgerIngredients = (props) => {
     </section>
   );
 };
+
+BurgerIngredients.propTypes = {
+  api: PropTypes.array
+}

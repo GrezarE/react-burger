@@ -1,19 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
-import ReactDOM from "react-dom";
 import modalOverlayStyle from "./modalOverlay.module.css";
-
-// export const ModalOverlay = (props) => {
-//   console.log(props);
-//   return (
-//     <div
-//       className={modalOverlayStyle.modalOverlay}
-//       onClick={() => props.setActive(false)}
-//     >
-//       {props.children}
-//     </div>
-//   );
-// };
 
 export const ModalOverlay = (props) => {
   return (
@@ -21,4 +7,9 @@ export const ModalOverlay = (props) => {
       {props.children}
     </div>
   );
+};
+
+ModalOverlay.propTypes = {
+  onClose: PropTypes.func,
+  children: PropTypes.element
 };

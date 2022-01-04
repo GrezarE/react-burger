@@ -59,7 +59,8 @@ ConstructorLockedItem.propTypes = {
 };
 
 const ConstructorBox = (data) => {
-  const ingredients = data.data.filter((item) => item.type !== "bun");
+  console.log(data.ingredients)
+  const ingredients = data.ingredients.filter((item) => item.type !== "bun");
   return (
     <ul className={burgerConstructorStyle.box}>
       <ConstructorLockedItem
@@ -88,7 +89,7 @@ const ConstructorBox = (data) => {
 };
 
 ConstructorBox.propTypes = {
-  data: PropTypes.array
+  ingredients: PropTypes.arrayOf(ingredientType)
 }
 
 
@@ -131,7 +132,7 @@ const ConstructorButtonBox = () => {
 export const BurgerConstructor = (props) => {
   return (
     <section className={"pt-25 " + burgerConstructorStyle.constructor}>
-      <ConstructorBox data={props.data} />
+      <ConstructorBox ingredients={props.data} />
       <ConstructorButtonBox />
     </section>
   );

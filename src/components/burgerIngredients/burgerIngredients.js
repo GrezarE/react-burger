@@ -8,6 +8,7 @@ import {
 
 import { Modal } from "../modal/modal.js";
 import {IngredientDetails} from "../ingredientDetails/ingredientDetails.js"
+import {ingredientType} from '../../utils/types.js'
 
 const HeaderIngridients = (props) => {
   return (
@@ -107,7 +108,7 @@ IngridientCard.propTypes = {
 };
 
 const IngridientsBlock = (data) => {
-  let itemType = data.api.filter((item) => item.type === data.type);
+  const itemType = data.api.filter((item) => item.type === data.type);
   return (
     <li className="mt-10" id={data.type} ref={data.refElement}>
       <h2>{data.text}</h2>
@@ -145,21 +146,21 @@ export const BurgerIngredients = (props) => {
       <ul className={burgerIngredientsStyle.box}>
         <IngridientsBlock
           refElement={buns}
-          api={props.api}
+          api={props.ingredients}
           key="bun"
           type="bun"
           text="Булки"
         />
         <IngridientsBlock
           refElement={sause}
-          api={props.api}
+          api={props.ingredients}
           key="sauce"
           type="sauce"
           text="Соусы"
         />
         <IngridientsBlock
           refElement={main}
-          api={props.api}
+          api={props.ingredients}
           key="main"
           type="main"
           text="Начинки"
@@ -170,5 +171,5 @@ export const BurgerIngredients = (props) => {
 };
 
 BurgerIngredients.propTypes = {
-  api: PropTypes.arrayOf(PropTypes.object).isRequired
+  ingredients: PropTypes.arrayOf(ingredientType).isRequired
 }

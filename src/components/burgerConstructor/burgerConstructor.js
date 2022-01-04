@@ -10,6 +10,8 @@ import CurrencyIcon from "../../images/CurrencyIcon.svg";
 import "./burgerConstructor.module.css";
 import { Modal } from "../modal/modal.js";
 import {OrderDetails} from "../orderDetails/orderDetails.js"
+import {ingredientType} from '../../utils/types.js'
+
 
 
 const ConstructorItem = ({ props }) => {
@@ -57,7 +59,7 @@ ConstructorLockedItem.propTypes = {
 };
 
 const ConstructorBox = (data) => {
-  let ingredients = data.api.filter((item) => item.type !== "bun");
+  const ingredients = data.data.filter((item) => item.type !== "bun");
   return (
     <ul className={burgerConstructorStyle.box}>
       <ConstructorLockedItem
@@ -86,7 +88,7 @@ const ConstructorBox = (data) => {
 };
 
 ConstructorBox.propTypes = {
-  api: PropTypes.array
+  data: PropTypes.array
 }
 
 
@@ -129,12 +131,12 @@ const ConstructorButtonBox = () => {
 export const BurgerConstructor = (props) => {
   return (
     <section className={"pt-25 " + burgerConstructorStyle.constructor}>
-      <ConstructorBox api={props.api} />
+      <ConstructorBox data={props.data} />
       <ConstructorButtonBox />
     </section>
   );
 };
 
 BurgerConstructor.propTypes = {
-  api: PropTypes.arrayOf(PropTypes.object).isRequired
+  data: PropTypes.arrayOf(ingredientType).isRequired
 }

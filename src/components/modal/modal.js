@@ -29,7 +29,9 @@ export const Modal = (props) => {
           <h2 className={"text text_type_main-large " + modalStyle.header}>
             {props.header}
           </h2>
-          <CloseIcon onClick={props.onClose} />
+          <div className={modalStyle.close}>
+            <CloseIcon onClick={props.onClose} />
+          </div>
         </div>
         {props.children}
       </div>
@@ -39,7 +41,7 @@ export const Modal = (props) => {
 };
 
 Modal.propTypes = {
-  onClose: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
   header: PropTypes.string,
-  children: PropTypes.element
-}
+  children: PropTypes.element,
+};

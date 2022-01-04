@@ -1,4 +1,3 @@
-import React from "react";
 import headerStyles from "./appHeader.module.css";
 
 import { BurgerIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -48,27 +47,3 @@ export const Header = () => {
     </header>
   );
 };
-
-// export default class Header extends React.Component {
-//   render() {
-//     return (
-//       <header className={headerStyles.header} style={{}}>
-//         <Navigation>
-//           <NavigationLink>
-//             <BurgerIcon type="primary" />
-//             <NaviText>Конструктор</NaviText>
-//           </NavigationLink>
-//           <NavigationLink>
-//             <ListIcon type="primary" />
-//             <NaviText>Лента&nbsp;заказов</NaviText>
-//           </NavigationLink>
-//         </Navigation>
-//         <Logo />
-//         <NavigationLink class={headerStyles.navigation__link_right}>
-//           <ProfileIcon type="primary" />
-//           <NaviText>Личный&nbsp;кабинет</NaviText>
-//         </NavigationLink>
-//       </header>
-//     );
-//   }
-// }

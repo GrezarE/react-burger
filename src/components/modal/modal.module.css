@@ -9,8 +9,14 @@
   align-items: center;
 }
 
+.close {
+  transition: 0.5s;
+
+}
+
 .close:hover {
   cursor: pointer;
+  opacity: 0.5;
 }
 
 .header {

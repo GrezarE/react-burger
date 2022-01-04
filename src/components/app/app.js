@@ -42,35 +42,33 @@ class ErrorBoundary extends React.Component {
 export const App = () => {
   const [api, setApi] = React.useState([]);
 
-  // React.useEffect(() => {
-  //   const getData = () => {
-  //     fetch(apiUrl)
-  //       .then(function (res) {
-  //         if (res.ok) {
-  //           return res.json();
-  //         }
-  //         return Promise.reject(`Ошибка: ${res.statusText}`);
-  //       })
-  //       .then((data) => setApi(data.data))
-  //       .catch((err) => console.log(err));
-  //   };
-  //   getData();
-  // }, []);
-
   React.useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await fetch(apiUrl);
-        const data = await res.json();
-        setApi(data.data);
-      } catch (err) {
-        console.log(err);
-      }
+    const getData = () => {
+      fetch(apiUrl)
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(`Ошибка: ${res.statusText}`);
+        })
+        .then((data) => setApi(data.data))
+        .catch((err) => console.log(err));
     };
     getData();
   }, []);
 
-    React.useEffect(() => console.log(api), [api]);
+  // React.useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const res = await fetch(apiUrl);
+  //       const data = await res.json();
+  //       setApi(data.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   getData();
+  // }, []);
 
   return (
     <div>

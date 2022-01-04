@@ -126,7 +126,6 @@ IngridientsBlock.propTypes = {
 };
 
 export const BurgerIngredients = (props) => {
-  console.log(props)
   const buns = React.useRef("bun");
   const sause = React.useRef("sause");
   const main = React.useRef("main");
@@ -171,5 +170,5 @@ export const BurgerIngredients = (props) => {
 };
 
 BurgerIngredients.propTypes = {
-  api: PropTypes.array
+  api: PropTypes.arrayOf(PropTypes.object).isRequired
 }

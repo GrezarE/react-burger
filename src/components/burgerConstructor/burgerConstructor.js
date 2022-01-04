@@ -6,9 +6,10 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyle from "./burgerConstructor.module.css";
-import image from "../../images/CurrencyIcon.svg";
+import CurrencyIcon from "../../images/CurrencyIcon.svg";
 import "./burgerConstructor.module.css";
 import { Modal } from "../modal/modal.js";
+import {OrderDetails} from "../orderDetails/orderDetails.js"
 
 
 const ConstructorItem = ({ props }) => {
@@ -84,14 +85,23 @@ const ConstructorBox = (data) => {
   );
 };
 
+ConstructorBox.propTypes = {
+  api: PropTypes.array
+}
+
+
 const ConstructorButtonBoxPrice = (props) => {
   return (
     <div className={"mr-10 " + burgerConstructorStyle.price}>
       <p className="text text_type_digits-medium">{props.children}</p>
-      <img src={image} alt="Самоцвет" />
+      <img src={CurrencyIcon} alt="Самоцвет" />
     </div>
   );
 };
+
+ConstructorButtonBoxPrice.propTypes = {
+  children: PropTypes.string
+}
 
 const ConstructorButtonBox = () => {
   const [isVisible, setIsVisible] = React.useState(false);
@@ -103,11 +113,7 @@ const ConstructorButtonBox = () => {
   const handleClose = () => {
     setIsVisible(false);
   };
-  const modal = <Modal onClose={handleClose}></Modal>;
-
-  // const modal = <Modal active={isVisible} setActive={setIsVisible}></Modal>;
-
-
+  const modal = <Modal onClose={handleClose}><OrderDetails/></Modal>;
 
   return (
     <div className={"mr-4 mt-10 " + burgerConstructorStyle.button_box}>
@@ -128,3 +134,7 @@ export const BurgerConstructor = (props) => {
     </section>
   );
 };
+
+BurgerConstructor.propTypes = {
+  api: PropTypes.arrayOf(PropTypes.object).isRequired
+}

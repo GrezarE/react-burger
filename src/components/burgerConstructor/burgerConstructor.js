@@ -5,10 +5,14 @@ import {
   DragIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { api } from "../../utils/data";
 import burgerConstructorStyle from "./burgerConstructor.module.css";
-import image from "../../images/CurrencyIcon.svg";
-import "./burgerConstructor.module.css"
+import CurrencyIcon from "../../images/CurrencyIcon.svg";
+import "./burgerConstructor.module.css";
+import { Modal } from "../modal/modal.js";
+import {OrderDetails} from "../orderDetails/orderDetails.js"
+import {ingredientType} from '../../utils/types.js'
+
+
 
 const ConstructorItem = ({ props }) => {
   return (
@@ -54,8 +58,9 @@ ConstructorLockedItem.propTypes = {
   thumbnail: PropTypes.string.isRequired,
 };
 
-const ConstructorBox = () => {
-  let ingredients = api.filter(item => item.type !== "bun")
+const ConstructorBox = (data) => {
+  console.log(data.ingredients)
+  const ingredients = data.ingredients.filter((item) => item.type !== "bun");
   return (
     <ul className={burgerConstructorStyle.box}>
       <ConstructorLockedItem
@@ -83,33 +88,56 @@ const ConstructorBox = () => {
   );
 };
 
+ConstructorBox.propTypes = {
+  ingredients: PropTypes.arrayOf(ingredientType)
+}
+
+
 const ConstructorButtonBoxPrice = (props) => {
   return (
     <div className={"mr-10 " + burgerConstructorStyle.price}>
       <p className="text text_type_digits-medium">{props.children}</p>
-      <img src={image} alt="Самоцвет" />
+      <img src={CurrencyIcon} alt="Самоцвет" />
     </div>
   );
 };
 
+ConstructorButtonBoxPrice.propTypes = {
+  children: PropTypes.string
+}
+
 const ConstructorButtonBox = () => {
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  const handleOpen = () => {
+    setIsVisible(true);
+  };
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+  const modal = <Modal onClose={handleClose}><OrderDetails/></Modal>;
+
   return (
     <div className={"mr-4 mt-10 " + burgerConstructorStyle.button_box}>
       <ConstructorButtonBoxPrice>610</ConstructorButtonBoxPrice>
-      <Button type="primary" size="large">
+      <Button type="primary" size="large" onClick={handleOpen}>
         Оформить заказ
       </Button>
+      {isVisible && modal}
     </div>
   );
 };
 
-export default class BurgerConstructor extends React.Component {
-  render() {
-    return (
-      <section className={"pt-25 " + burgerConstructorStyle.constructor}>
-        <ConstructorBox />
-        <ConstructorButtonBox />
-      </section>
-    );
-  }
+export const BurgerConstructor = (props) => {
+  return (
+    <section className={"pt-25 " + burgerConstructorStyle.constructor}>
+      <ConstructorBox ingredients={props.data} />
+      <ConstructorButtonBox />
+    </section>
+  );
+};
+
+BurgerConstructor.propTypes = {
+  data: PropTypes.arrayOf(ingredientType).isRequired
 }

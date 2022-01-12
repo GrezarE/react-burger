@@ -1,11 +1,14 @@
 import React from "react";
-import { api } from "../../utils/data";
 import PropTypes from "prop-types";
 import burgerIngredientsStyle from "./burgerIngredients.module.css";
 import {
   Tab,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+
+import { Modal } from "../modal/modal.js";
+import {IngredientDetails} from "../ingredientDetails/ingredientDetails.js"
+import {ingredientType} from '../../utils/types.js'
 
 const HeaderIngridients = (props) => {
   return (
@@ -17,52 +20,86 @@ HeaderIngridients.propTypes = {
   children: PropTypes.string.isRequired,
 };
 
-const TabConteiner = () => {
+const TabConteiner = (props) => {
   const [current, setCurrent] = React.useState("one");
   return (
     <div style={{ display: "flex" }}>
-      <a className={burgerIngredientsStyle.link} href="#bun">
-        <Tab value="one" active={current === "one"} onClick={setCurrent}>
-          Булки
-        </Tab>
-      </a>
-      <a className={burgerIngredientsStyle.link} href="#sauce">
-        <Tab value="two" active={current === "two"} onClick={setCurrent}>
-          Соусы
-        </Tab>
-      </a>
-      <a className={burgerIngredientsStyle.link} href="#main">
-        <Tab value="three" active={current === "three"} onClick={setCurrent}>
-          Начинки
-        </Tab>
-      </a>
+      <Tab
+        value="one"
+        active={current === "one"}
+        onClick={() => {
+          setCurrent("one");
+          props.buns();
+        }}
+      >
+        Булки
+      </Tab>
+      <Tab
+        value="two"
+        active={current === "two"}
+        onClick={() => {
+          setCurrent("two");
+          props.sauses();
+        }}
+      >
+        Соусы
+      </Tab>
+      <Tab
+        value="three"
+        active={current === "three"}
+        onClick={() => {
+          setCurrent("three");
+          props.main();
+        }}
+      >
+        Начинки
+      </Tab>
     </div>
   );
 };
 
 const IngridientCard = ({ card }) => {
+  const [isVisible, setIsVisible] = React.useState(false);
+  const handleOpen = () => {
+    setIsVisible(true);
+  };
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+  const modal = <Modal onClose={handleClose} header='Детали ингредиента'>
+    <IngredientDetails {...card}/>
+  </Modal>;
+
   return (
-    <li className={"mt-6 " + burgerIngredientsStyle.ingridientCard}>
-      <img className="ml-4 mr-4 " src={card.image} alt={card.image} />
-      <div className={"mt-1 mb-1 " + burgerIngredientsStyle.priceBox}>
-        <p className="text text_type_digits-default">{card.price}</p>
-        <CurrencyIcon type="primary" />
-      </div>
-      <h2
-        className={"text text_type_main-default " + burgerIngredientsStyle.name}
+    <>
+      <li
+        className={"mt-6 " + burgerIngredientsStyle.ingridientCard}
+        onClick={handleOpen}
       >
-        {card.name}
-      </h2>
-      <div
-        className={
-          "text text_type_digits-default " +
-          ((card.__v > 0 && burgerIngredientsStyle.count) ||
-            burgerIngredientsStyle.countZero)
-        }
-      >
-        {card.__v}
-      </div>
-    </li>
+        <img className="ml-4 mr-4 " src={card.image} alt={card.image} />
+        <div className={"mt-1 mb-1 " + burgerIngredientsStyle.priceBox}>
+          <p className="text text_type_digits-default">{card.price}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+        <h2
+          className={
+            "text text_type_main-default " + burgerIngredientsStyle.name
+          }
+        >
+          {card.name}
+        </h2>
+        <div
+          className={
+            "text text_type_digits-default " +
+            ((card.__v > 0 && burgerIngredientsStyle.count) ||
+              burgerIngredientsStyle.countZero)
+          }
+        >
+          {card.__v}
+        </div>
+      </li>
+      {isVisible && modal}
+    </>
   );
 };
 
@@ -70,11 +107,11 @@ IngridientCard.propTypes = {
   card: PropTypes.object.isRequired,
 };
 
-const IngridientsBlock = (props) => {
-  let itemType = api.filter((item) => item.type === props.type);
+const IngridientsBlock = (data) => {
+  const itemType = data.api.filter((item) => item.type === data.type);
   return (
-    <li className="mt-10" id={props.type}>
-      <h2>{props.text}</h2>
+    <li className="mt-10" id={data.type} ref={data.refElement}>
+      <h2>{data.text}</h2>
       <ul className={" pl-4 " + burgerIngredientsStyle.ingridientsList}>
         {itemType.map((item) => (
           <IngridientCard key={item._id} card={item} />
@@ -89,18 +126,50 @@ IngridientsBlock.propTypes = {
   text: PropTypes.string.isRequired,
 };
 
-export default class BurgerIngredients extends React.Component {
-  render() {
-    return (
-      <section className={burgerIngredientsStyle.burgerIngredients}>
-        <HeaderIngridients>Соберите бургер</HeaderIngridients>
-        <TabConteiner />
-        <ul className={burgerIngredientsStyle.box}>
-          <IngridientsBlock key="bun" type="bun" text="Булки" />
-          <IngridientsBlock key="sauce" type="sauce" text="Соусы" />
-          <IngridientsBlock key="main" type="main" text="Начинки" />
-        </ul>
-      </section>
-    );
-  }
+export const BurgerIngredients = (props) => {
+  const buns = React.useRef("bun");
+  const sause = React.useRef("sause");
+  const main = React.useRef("main");
+
+  const scroll = (item) => {
+    item.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <section className={burgerIngredientsStyle.burgerIngredients}>
+      <HeaderIngridients>Соберите бургер</HeaderIngridients>
+      <TabConteiner
+        buns={() => scroll(buns)}
+        sauses={() => scroll(sause)}
+        main={() => scroll(main)}
+      />
+      <ul className={burgerIngredientsStyle.box}>
+        <IngridientsBlock
+          refElement={buns}
+          api={props.ingredients}
+          key="bun"
+          type="bun"
+          text="Булки"
+        />
+        <IngridientsBlock
+          refElement={sause}
+          api={props.ingredients}
+          key="sauce"
+          type="sauce"
+          text="Соусы"
+        />
+        <IngridientsBlock
+          refElement={main}
+          api={props.ingredients}
+          key="main"
+          type="main"
+          text="Начинки"
+        />
+      </ul>
+    </section>
+  );
+};
+
+BurgerIngredients.propTypes = {
+  ingredients: PropTypes.arrayOf(ingredientType).isRequired
 }

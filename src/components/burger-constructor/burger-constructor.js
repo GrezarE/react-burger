@@ -5,11 +5,10 @@ import {
   DragIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import burgerConstructorStyle from "./burgerConstructor.module.css";
+import burgerConstructorStyle from "./burger-constructor.module.css";
 import CurrencyIcon from "../../images/CurrencyIcon.svg";
-import "./burgerConstructor.module.css";
 import { Modal } from "../modal/modal.js";
-import {OrderDetails} from "../orderDetails/orderDetails.js"
+import {OrderDetails} from "../order-details/order-details.js"
 import {ingredientType} from '../../utils/types.js'
 
 

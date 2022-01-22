@@ -1,4 +1,4 @@
-import orderDetailsStyle from "./orderDetails.module.css";
+import orderDetailsStyle from "./order-details.module.css";
 import image from '../../images/done.svg'
 
 export const OrderDetails = () => {

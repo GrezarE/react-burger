@@ -135,6 +135,7 @@ export const BurgerIngredients = (props) => {
     item.current.scrollIntoView({ behavior: "smooth" });
   };
 
+
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>
       <HeaderIngridients>Соберите бургер</HeaderIngridients>

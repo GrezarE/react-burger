@@ -1,18 +1,18 @@
 import React from "react";
 import appStyle from "./app.module.css";
-import { Header } from "../appHeader/appHeader";
-import { BurgerIngredients } from "../burgerIngredients/burgerIngredients.js";
-import { BurgerConstructor } from "../burgerConstructor/burgerConstructor";
-import  ErrorBoundary  from "../errorBoundary/ErrorBoundary";
+import { Header } from "../app-header/app-header";
+import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
+import { BurgerConstructor } from "../burger-constructor/burger-constructor";
+import  ErrorBoundary  from "../error-boundary/error-boundary";
 
-const baseUrl = "https://norma.nomoreparties.space/api";
+const BASE_URL = "https://norma.nomoreparties.space/api";
 
 export const App = () => {
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
     const getData = () => {
-      fetch(`${baseUrl}/ingredients`)
+      fetch(`${BASE_URL}/ingredients`)
         .then(function (res) {
           if (res.ok) {
             return res.json();

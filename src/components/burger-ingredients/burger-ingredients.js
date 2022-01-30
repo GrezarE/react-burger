@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import burgerIngredientsStyle from "./burgerIngredients.module.css";
+import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import {
   Tab,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { Modal } from "../modal/modal.js";
-import {IngredientDetails} from "../ingredientDetails/ingredientDetails.js"
+import {IngredientDetails} from "../ingredient-details/ingredient-details.js"
 import {ingredientType} from '../../utils/types.js'
 
 const HeaderIngridients = (props) => {
@@ -134,6 +134,7 @@ export const BurgerIngredients = (props) => {
   const scroll = (item) => {
     item.current.scrollIntoView({ behavior: "smooth" });
   };
+
 
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>

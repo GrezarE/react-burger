@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import modalOverlayStyle from "./modalOverlay.module.css";
+import modalOverlayStyle from "./modal-overlay.module.css";
 
 export const ModalOverlay = (props) => {
   return (

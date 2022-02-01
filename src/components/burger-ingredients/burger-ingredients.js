@@ -7,8 +7,9 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { Modal } from "../modal/modal.js";
-import {IngredientDetails} from "../ingredient-details/ingredient-details.js"
-import {ingredientType} from '../../utils/types.js'
+import { IngredientDetails } from "../ingredient-details/ingredient-details.js";
+import { ingredientType } from "../../utils/types.js";
+import { IngredientsContext } from "../../services/ingredientsContext";
 
 const HeaderIngridients = (props) => {
   return (
@@ -66,9 +67,11 @@ const IngridientCard = ({ card }) => {
   const handleClose = () => {
     setIsVisible(false);
   };
-  const modal = <Modal onClose={handleClose} header='Детали ингредиента'>
-    <IngredientDetails {...card}/>
-  </Modal>;
+  const modal = (
+    <Modal onClose={handleClose} header="Детали ингредиента">
+      <IngredientDetails {...card} />
+    </Modal>
+  );
 
   return (
     <>
@@ -108,7 +111,13 @@ IngridientCard.propTypes = {
 };
 
 const IngridientsBlock = (data) => {
-  const itemType = data.api.filter((item) => item.type === data.type);
+  const ingredients  = React.useContext(IngredientsContext)
+
+  // React.useEffect(() => {
+  //   console.log(ingredients)
+  // }, [ingredients])
+
+  const itemType = ingredients.filter((item) => item.type === data.type);
   return (
     <li className="mt-10" id={data.type} ref={data.refElement}>
       <h2>{data.text}</h2>
@@ -126,7 +135,13 @@ IngridientsBlock.propTypes = {
   text: PropTypes.string.isRequired,
 };
 
-export const BurgerIngredients = (props) => {
+export const BurgerIngredients = () => {
+// const date  = React.useContext(DataContext)
+
+// React.useEffect(() => {
+//   console.log(date)
+// }, [date])
+
   const buns = React.useRef("bun");
   const sause = React.useRef("sause");
   const main = React.useRef("main");
@@ -134,7 +149,6 @@ export const BurgerIngredients = (props) => {
   const scroll = (item) => {
     item.current.scrollIntoView({ behavior: "smooth" });
   };
-
 
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>
@@ -147,21 +161,18 @@ export const BurgerIngredients = (props) => {
       <ul className={burgerIngredientsStyle.box}>
         <IngridientsBlock
           refElement={buns}
-          api={props.ingredients}
           key="bun"
           type="bun"
           text="Булки"
         />
         <IngridientsBlock
           refElement={sause}
-          api={props.ingredients}
           key="sauce"
           type="sauce"
           text="Соусы"
         />
         <IngridientsBlock
           refElement={main}
-          api={props.ingredients}
           key="main"
           type="main"
           text="Начинки"
@@ -172,5 +183,5 @@ export const BurgerIngredients = (props) => {
 };
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientType).isRequired
-}
+  ingredients: PropTypes.arrayOf(ingredientType),
+};

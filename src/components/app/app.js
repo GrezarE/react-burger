@@ -4,6 +4,8 @@ import { Header } from "../app-header/app-header";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
 import { BurgerConstructor } from "../burger-constructor/burger-constructor";
 import  ErrorBoundary  from "../error-boundary/error-boundary";
+import { IngredientsContext } from "../../services/ingredientsContext";
+
 
 const BASE_URL = "https://norma.nomoreparties.space/api";
 
@@ -42,8 +44,10 @@ export const App = () => {
     <ErrorBoundary>
       <Header></Header>
       <main className={appStyle.main}>
-        <BurgerIngredients ingredients={data} />
-        <BurgerConstructor data={data} />
+        <IngredientsContext.Provider value={data}>
+        <BurgerIngredients/>
+        <BurgerConstructor />
+        </IngredientsContext.Provider>
       </main>
     </ErrorBoundary>
   );

@@ -5,9 +5,10 @@ import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
 import { BurgerConstructor } from "../burger-constructor/burger-constructor";
 import  ErrorBoundary  from "../error-boundary/error-boundary";
 import { IngredientsContext } from "../../services/ingredientsContext";
+import { BASE_URL } from "../../utils/base-url";
 
 
-const BASE_URL = "https://norma.nomoreparties.space/api";
+// const BASE_URL = "https://norma.nomoreparties.space/api";
 
 export const App = () => {
   const [data, setData] = React.useState([]);

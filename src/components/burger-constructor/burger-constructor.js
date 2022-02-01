@@ -12,6 +12,8 @@ import { OrderDetails } from "../order-details/order-details.js";
 import { ingredientType } from "../../utils/types.js";
 import { IngredientsContext } from "../../services/ingredientsContext";
 import { ConstructorContext } from "../../services/constructorContext";
+import { BASE_URL } from "../../utils/base-url";
+import { OrderContext } from "../../services/orderContext";
 
 const ConstructorItem = ({ ingridient }) => {
   return (
@@ -69,7 +71,6 @@ const ConstructorBox = () => {
   const ingredients = constructorData.filter((item) => item.type !== "bun");
   const buns = constructorData.filter((item) => item.type === "bun");
 
-
   console.log(buns);
   console.log(constructorData);
   console.log(ingredients);
@@ -77,7 +78,7 @@ const ConstructorBox = () => {
   return (
     <ul className={burgerConstructorStyle.box}>
       {buns.map((item) => (
-        <ConstructorLockedItem ingridient={item} />
+        <ConstructorLockedItem key={item._id} ingridient={item} />
       ))}
       <li>
         <ul className={burgerConstructorStyle.box_active}>
@@ -105,7 +106,7 @@ const ConstructorBox = () => {
         </ul>
       </li>
       {buns.map((item) => (
-        <ConstructorLockedItem ingridient={item} />
+        <ConstructorLockedItem key={item._id} ingridient={item} />
       ))}
       {/* // type="bottom"
         // isLocked={true}
@@ -134,10 +135,32 @@ ConstructorButtonBoxPrice.propTypes = {
 };
 
 const ConstructorButtonBox = () => {
+  const components = React.useContext(ConstructorContext);
+  const [order, setOrder] = React.useState({});
+
   const [isVisible, setIsVisible] = React.useState(false);
 
   const handleOpen = () => {
     setIsVisible(true);
+  };
+
+  const fetchOrder = async () => {
+    await fetch(`${BASE_URL}/orders`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ingredients: components,
+      }),
+    })
+      .then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+        console.log(res);
+        return Promise.reject(`Ошибка: ${res.statusText}`);
+      })
+      .then((data) => setOrder(data))
+      .catch((err) => console.log(err));
   };
 
   const handleClose = () => {
@@ -151,11 +174,20 @@ const ConstructorButtonBox = () => {
 
   return (
     <div className={"mr-4 mt-10 " + burgerConstructorStyle.button_box}>
-      <ConstructorButtonBoxPrice>610</ConstructorButtonBoxPrice>
-      <Button type="primary" size="large" onClick={handleOpen}>
-        Оформить заказ
-      </Button>
-      {isVisible && modal}
+      <OrderContext.Provider value={order}>
+        <ConstructorButtonBoxPrice>610</ConstructorButtonBoxPrice>
+        <Button
+          type="primary"
+          size="large"
+          onClick={async () => {
+            await fetchOrder();
+            await handleOpen();
+          }}
+        >
+          Оформить заказ
+        </Button>
+        {isVisible && modal}
+      </OrderContext.Provider>
     </div>
   );
 };

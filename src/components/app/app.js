@@ -3,12 +3,13 @@ import appStyle from "./app.module.css";
 import { Header } from "../app-header/app-header";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
 import { BurgerConstructor } from "../burger-constructor/burger-constructor";
-import  ErrorBoundary  from "../error-boundary/error-boundary";
-import { IngredientsContext } from "../../services/ingredientsContext";
+import ErrorBoundary from "../error-boundary/error-boundary";
+import {
+  IngredientsContext,
+  IngredientsContextT,
+} from "../../services/ingredientsContext";
 import { BASE_URL } from "../../utils/base-url";
-
-
-// const BASE_URL = "https://norma.nomoreparties.space/api";
+import { ConstructorContext } from "../../services/constructorContext";
 
 export const App = () => {
   const [data, setData] = React.useState([]);
@@ -28,6 +29,16 @@ export const App = () => {
     getData();
   }, []);
 
+  const [components] = React.useState([
+    "60d3b41abdacab0026a733ca",
+    "60d3b41abdacab0026a733ce",
+    "60d3b41abdacab0026a733d2",
+    "60d3b41abdacab0026a733d3",
+    "60d3b41abdacab0026a733cd",
+  ]);
+
+const [buns] = React.useState(["60d3b41abdacab0026a733c7"])
+
   // React.useEffect(() => {
   //   const getData = async () => {
   //     try {
@@ -46,8 +57,12 @@ export const App = () => {
       <Header></Header>
       <main className={appStyle.main}>
         <IngredientsContext.Provider value={data}>
-        <BurgerIngredients/>
-        <BurgerConstructor />
+          <ConstructorContext.Provider value={components}>
+            <IngredientsContextT.Provider value={buns}>
+              <BurgerIngredients />
+              <BurgerConstructor />
+            </IngredientsContextT.Provider>
+          </ConstructorContext.Provider>
         </IngredientsContext.Provider>
       </main>
     </ErrorBoundary>

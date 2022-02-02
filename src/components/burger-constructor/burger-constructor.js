@@ -10,8 +10,14 @@ import CurrencyIcon from "../../images/CurrencyIcon.svg";
 import { Modal } from "../modal/modal.js";
 import { OrderDetails } from "../order-details/order-details.js";
 import { ingredientType } from "../../utils/types.js";
-import { IngredientsContext } from "../../services/ingredientsContext";
-import { ConstructorContext } from "../../services/constructorContext";
+import {
+  IngredientsContext,
+  IngredientsContextT,
+} from "../../services/ingredientsContext";
+import {
+  ConstructorContext,
+  ConstructorDataContext,
+} from "../../services/constructorContext";
 import { BASE_URL } from "../../utils/base-url";
 import { OrderContext } from "../../services/orderContext";
 
@@ -34,18 +40,16 @@ const ConstructorItem = ({ ingridient }) => {
 };
 
 ConstructorItem.propTypes = {
-  props: PropTypes.object,
+  ingridient: ingredientType,
 };
 
-const ConstructorLockedItem = ({ ingridient }) => {
-  console.log(ingridient);
-
+const ConstructorLockedItem = ({ ingridient, position }) => {
   return (
     <li className="pl-8">
       <ConstructorElement
         isLocked={true}
         type={ingridient.type}
-        text={ingridient.name}
+        text={ingridient.name + position}
         price={ingridient.price / 2}
         thumbnail={ingridient.image}
       ></ConstructorElement>
@@ -53,91 +57,70 @@ const ConstructorLockedItem = ({ ingridient }) => {
   );
 };
 
-// ConstructorLockedItem.propTypes = {
-//   type: PropTypes.string.isRequired,
-//   isLocked: PropTypes.bool.isRequired,
-//   text: PropTypes.string.isRequired,
-//   price: PropTypes.number.isRequired,
-//   thumbnail: PropTypes.string.isRequired,
-// };
+ConstructorLockedItem.propTypes = {
+  ingridient: ingredientType,
+  position: PropTypes.string,
+};
 
-const ConstructorBox = () => {
+const ConstructorBox = ({ post }) => {
   const ingredientsData = React.useContext(IngredientsContext);
-  const components = React.useContext(ConstructorContext);
+  const { dispatch } = React.useContext(ConstructorDataContext);
+
   const constructorData = ingredientsData.filter((item) =>
-    components.find((el) => el === item._id)
+    post.find((el) => el === item._id)
   );
 
   const ingredients = constructorData.filter((item) => item.type !== "bun");
   const buns = constructorData.filter((item) => item.type === "bun");
 
-  console.log(buns);
-  console.log(constructorData);
-  console.log(ingredients);
+  React.useEffect(() => {
+    dispatch({ type: "set", arr: constructorData });
+  }, [ingredientsData, post]);
 
   return (
     <ul className={burgerConstructorStyle.box}>
       {buns.map((item) => (
-        <ConstructorLockedItem key={item._id} ingridient={item} />
+        <ConstructorLockedItem
+          key={item._id}
+          ingridient={item}
+          position={" (верх)"}
+        />
       ))}
       <li>
         <ul className={burgerConstructorStyle.box_active}>
-          {/* {components.map((item) => (
-            <ConstructorItem key={item} ingridient={ingredientsData.filter(el => el._id === item)} />
-          ))} */}
           {ingredients.map((item) => (
             <ConstructorItem key={item._id} ingridient={item} />
           ))}
-          {/* {ingredients.map((item) =>
-            <ConstructorItem key={item._id} ingridient={item} />
-          )} */}
-          {/* {components.map((item) => (
-            <ConstructorItem
-              key={item}
-              id = {item}
-            />
-          ))} */}
-          {/* {components.map(({ _id }) => {
-            <ConstructorItem
-              key={_id}
-              ingridient={ingredients.find((el) => el._id === _id)}
-            />;
-          })} */}
         </ul>
       </li>
       {buns.map((item) => (
-        <ConstructorLockedItem key={item._id} ingridient={item} />
+        <ConstructorLockedItem
+          key={item._id}
+          ingridient={item}
+          position={" (низ)"}
+        />
       ))}
-      {/* // type="bottom"
-        // isLocked={true}
-        // text="Краторная булка N-200i (верх)"
-        // price={200}
-        // thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"} */}
     </ul>
   );
 };
 
 ConstructorBox.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientType),
+  post: PropTypes.array.isRequired
 };
 
-const ConstructorButtonBoxPrice = (props) => {
+const ConstructorButtonBoxPrice = () => {
+  const { state } = React.useContext(ConstructorDataContext);
+
   return (
     <div className={"mr-10 " + burgerConstructorStyle.price}>
-      <p className="text text_type_digits-medium">{props.children}</p>
+      <p className="text text_type_digits-medium">{state.price}</p>
       <img src={CurrencyIcon} alt="Самоцвет" />
     </div>
   );
 };
 
-ConstructorButtonBoxPrice.propTypes = {
-  children: PropTypes.string,
-};
-
-const ConstructorButtonBox = () => {
-  const components = React.useContext(ConstructorContext);
+const ConstructorButtonBox = ({ post }) => {
   const [order, setOrder] = React.useState({});
-
   const [isVisible, setIsVisible] = React.useState(false);
 
   const handleOpen = () => {
@@ -149,14 +132,13 @@ const ConstructorButtonBox = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        ingredients: components,
+        ingredients: post,
       }),
     })
       .then(function (res) {
         if (res.ok) {
           return res.json();
         }
-        console.log(res);
         return Promise.reject(`Ошибка: ${res.statusText}`);
       })
       .then((data) => setOrder(data))
@@ -175,7 +157,7 @@ const ConstructorButtonBox = () => {
   return (
     <div className={"mr-4 mt-10 " + burgerConstructorStyle.button_box}>
       <OrderContext.Provider value={order}>
-        <ConstructorButtonBoxPrice>610</ConstructorButtonBoxPrice>
+        <ConstructorButtonBoxPrice></ConstructorButtonBoxPrice>
         <Button
           type="primary"
           size="large"
@@ -192,27 +174,44 @@ const ConstructorButtonBox = () => {
   );
 };
 
+ConstructorButtonBox.propTypes = {
+  post: PropTypes.array.isRequired
+};
+
+
+const priceInitialState = { price: 0 };
+function reducer(state, action) {
+  switch (action.type) {
+    case "set":
+      let total = 0;
+      action.arr.forEach(function (item) {
+        total += item.price;
+      });
+      return { price: total };
+    case "reset":
+      return priceInitialState;
+    default:
+      throw new Error(`Wrong type of action: ${action.type}`);
+  }
+}
+
 export const BurgerConstructor = () => {
-  const [state, setState] = React.useState([
-    "60d3b41abdacab0026a733c6",
-    "60d3b41abdacab0026a733c8",
-    "60d3b41abdacab0026a733ca",
-    "60d3b41abdacab0026a733ce",
-    "60d3b41abdacab0026a733d2",
-    "60d3b41abdacab0026a733d3",
-    "60d3b41abdacab0026a733cd",
-  ]);
+  const [state, dispatch] = React.useReducer(reducer, priceInitialState);
+  const components = React.useContext(ConstructorContext);
+  const buns = React.useContext(IngredientsContextT);
+  const [post, setPost] = React.useState([]);
+
+  React.useEffect(() => {
+    const array = components.concat(buns);
+    setPost(array);
+  }, [components, buns]);
 
   return (
     <section className={"pt-25 " + burgerConstructorStyle.constructor}>
-      <ConstructorContext.Provider value={state}>
-        <ConstructorBox />
-        <ConstructorButtonBox />
-      </ConstructorContext.Provider>
+      <ConstructorDataContext.Provider value={{ state, dispatch }}>
+        <ConstructorBox post={post} />
+        <ConstructorButtonBox post={post} />
+      </ConstructorDataContext.Provider>
     </section>
   );
 };
-
-// BurgerConstructor.propTypes = {
-//   data: PropTypes.arrayOf(ingredientType).isRequired
-// }

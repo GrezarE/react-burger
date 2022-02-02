@@ -107,17 +107,13 @@ const IngridientCard = ({ card }) => {
 };
 
 IngridientCard.propTypes = {
-  card: PropTypes.object.isRequired,
+  card: ingredientType,
 };
 
 const IngridientsBlock = (data) => {
   const ingredients  = React.useContext(IngredientsContext)
-
-  // React.useEffect(() => {
-  //   console.log(ingredients)
-  // }, [ingredients])
-
   const itemType = ingredients.filter((item) => item.type === data.type);
+  
   return (
     <li className="mt-10" id={data.type} ref={data.refElement}>
       <h2>{data.text}</h2>
@@ -136,11 +132,6 @@ IngridientsBlock.propTypes = {
 };
 
 export const BurgerIngredients = () => {
-// const date  = React.useContext(DataContext)
-
-// React.useEffect(() => {
-//   console.log(date)
-// }, [date])
 
   const buns = React.useRef("bun");
   const sause = React.useRef("sause");
@@ -182,6 +173,3 @@ export const BurgerIngredients = () => {
   );
 };
 
-BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientType),
-};

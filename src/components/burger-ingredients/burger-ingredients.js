@@ -7,16 +7,17 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { Modal } from "../modal/modal.js";
-import {IngredientDetails} from "../ingredient-details/ingredient-details.js"
-import {ingredientType} from '../../utils/types.js'
+import { IngredientDetails } from "../ingredient-details/ingredient-details.js";
+import { ingredientType } from "../../utils/types.js";
+import { IngredientsContext } from "../../services/ingredientsContext";
 
-const HeaderIngridients = (props) => {
+const HeaderIngredients = (props) => {
   return (
     <h1 className="mt-10 mb-5 text text_type_main-large">{props.children}</h1>
   );
 };
 
-HeaderIngridients.propTypes = {
+HeaderIngredients.propTypes = {
   children: PropTypes.string.isRequired,
 };
 
@@ -58,7 +59,7 @@ const TabConteiner = (props) => {
   );
 };
 
-const IngridientCard = ({ card }) => {
+const IngredientCard = ({ card }) => {
   const [isVisible, setIsVisible] = React.useState(false);
   const handleOpen = () => {
     setIsVisible(true);
@@ -66,14 +67,16 @@ const IngridientCard = ({ card }) => {
   const handleClose = () => {
     setIsVisible(false);
   };
-  const modal = <Modal onClose={handleClose} header='Детали ингредиента'>
-    <IngredientDetails {...card}/>
-  </Modal>;
+  const modal = (
+    <Modal onClose={handleClose} header="Детали ингредиента">
+      <IngredientDetails {...card} />
+    </Modal>
+  );
 
   return (
     <>
       <li
-        className={"mt-6 " + burgerIngredientsStyle.ingridientCard}
+        className={"mt-6 " + burgerIngredientsStyle.ingredientCard}
         onClick={handleOpen}
       >
         <img className="ml-4 mr-4 " src={card.image} alt={card.image} />
@@ -103,30 +106,32 @@ const IngridientCard = ({ card }) => {
   );
 };
 
-IngridientCard.propTypes = {
-  card: PropTypes.object.isRequired,
+IngredientCard.propTypes = {
+  card: ingredientType.isRequired,
 };
 
-const IngridientsBlock = (data) => {
-  const itemType = data.api.filter((item) => item.type === data.type);
+const IngredientsBlock = (data) => {
+  const ingredients = React.useContext(IngredientsContext);
+  const itemType = ingredients.filter((item) => item.type === data.type);
+
   return (
     <li className="mt-10" id={data.type} ref={data.refElement}>
-      <h2>{data.text}</h2>
-      <ul className={" pl-4 " + burgerIngredientsStyle.ingridientsList}>
+      <h2 className="text text_type_main-medium">{data.text}</h2>
+      <ul className={" pl-4 " + burgerIngredientsStyle.ingredientsList}>
         {itemType.map((item) => (
-          <IngridientCard key={item._id} card={item} />
+          <IngredientCard key={item._id} card={item} />
         ))}
       </ul>
     </li>
   );
 };
 
-IngridientsBlock.propTypes = {
+IngredientsBlock.propTypes = {
   type: PropTypes.oneOf(["bun", "sauce", "main"]).isRequired,
   text: PropTypes.string.isRequired,
 };
 
-export const BurgerIngredients = (props) => {
+export const BurgerIngredients = () => {
   const buns = React.useRef("bun");
   const sause = React.useRef("sause");
   const main = React.useRef("main");
@@ -135,33 +140,24 @@ export const BurgerIngredients = (props) => {
     item.current.scrollIntoView({ behavior: "smooth" });
   };
 
-
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>
-      <HeaderIngridients>Соберите бургер</HeaderIngridients>
+      <HeaderIngredients>Соберите бургер</HeaderIngredients>
       <TabConteiner
         buns={() => scroll(buns)}
         sauses={() => scroll(sause)}
         main={() => scroll(main)}
       />
       <ul className={burgerIngredientsStyle.box}>
-        <IngridientsBlock
-          refElement={buns}
-          api={props.ingredients}
-          key="bun"
-          type="bun"
-          text="Булки"
-        />
-        <IngridientsBlock
+        <IngredientsBlock refElement={buns} key="bun" type="bun" text="Булки" />
+        <IngredientsBlock
           refElement={sause}
-          api={props.ingredients}
           key="sauce"
           type="sauce"
           text="Соусы"
         />
-        <IngridientsBlock
+        <IngredientsBlock
           refElement={main}
-          api={props.ingredients}
           key="main"
           type="main"
           text="Начинки"
@@ -170,7 +166,3 @@ export const BurgerIngredients = (props) => {
     </section>
   );
 };
-
-BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientType).isRequired
-}

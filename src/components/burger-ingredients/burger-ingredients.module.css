@@ -21,7 +21,7 @@
   background-color: #8585AD;
 }
 
-.ingridientsList {
+.ingredientsList {
   max-width: 100%;
   list-style: none;
   margin: 0;
@@ -31,7 +31,7 @@
   row-gap: 32px;
 }
 
-.ingridientCard {
+.ingredientCard {
   position: relative;
   width: 270px;
   padding: 0;
@@ -41,7 +41,7 @@
   justify-content: center;
   overflow: hidden
 }
-.ingridientCard:hover {
+.ingredientCard:hover {
   cursor: pointer;
 }
 

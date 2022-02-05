@@ -1,0 +1,8 @@
+// export const ALL_INGREDIENTS = 'ALL_INGREDIENTS'
+// export const CONSTRUCTOR_INGREDIENTS = 'CONSTRUCTOR_INGREDIENTS'
+// export const VIEW_INGREDIENTS = 'VIEW_INGREDIENTS'
+// export const ORDER = ORDER
+
+
+
+

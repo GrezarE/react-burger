@@ -17,6 +17,8 @@ import {
 } from "../../services/constructorContext";
 import { BASE_URL } from "../../utils/base-url";
 import { OrderContext } from "../../services/orderContext";
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+
 
 const ConstructorItem = ({ ingredient }) => {
   return (
@@ -188,6 +190,8 @@ function reducer(state, action) {
 export const BurgerConstructor = () => {
   const [state, dispatch] = React.useReducer(reducer, priceInitialState);
   const componentsData = React.useContext(ComponentsDataContext);
+  const componentsDatas = useSelector(store => store.burger.constructor)
+  console.log(componentsDatas)
 
   const ingredients = React.useMemo(
     () => componentsData.components.concat(componentsData.buns),

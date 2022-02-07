@@ -9,7 +9,8 @@ import {
 import { Modal } from "../modal/modal.js";
 import { IngredientDetails } from "../ingredient-details/ingredient-details.js";
 import { ingredientType } from "../../utils/types.js";
-import { IngredientsContext } from "../../services/ingredientsContext";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
+import { OPEN_CARD, CLOSE_CARD } from "../../services/actions/burger";
 
 const HeaderIngredients = (props) => {
   return (
@@ -60,16 +61,27 @@ const TabConteiner = (props) => {
 };
 
 const IngredientCard = ({ card }) => {
+  const dispatch = useDispatch();
   const [isVisible, setIsVisible] = React.useState(false);
+  
+
   const handleOpen = () => {
+    dispatch({
+      type: OPEN_CARD,
+      view: card,
+    });
     setIsVisible(true);
   };
   const handleClose = () => {
+    dispatch({
+      type: CLOSE_CARD
+    })
     setIsVisible(false);
   };
+
   const modal = (
     <Modal onClose={handleClose} header="Детали ингредиента">
-      <IngredientDetails {...card} />
+      <IngredientDetails  />
     </Modal>
   );
 
@@ -111,7 +123,7 @@ IngredientCard.propTypes = {
 };
 
 const IngredientsBlock = (data) => {
-  const ingredients = React.useContext(IngredientsContext);
+  const ingredients = useSelector((store) => store.burger.ingredients);
   const itemType = ingredients.filter((item) => item.type === data.type);
 
   return (

@@ -10,14 +10,13 @@ import CurrencyIcon from "../../images/CurrencyIcon.svg";
 import { Modal } from "../modal/modal.js";
 import { OrderDetails } from "../order-details/order-details.js";
 import { ingredientType } from "../../utils/types.js";
-import { IngredientsContext } from "../../services/ingredientsContext";
 import {
   ConstructorPriceContext,
   ComponentsDataContext,
 } from "../../services/constructorContext";
-import { BASE_URL } from "../../utils/base-url";
-import { OrderContext } from "../../services/orderContext";
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOrder } from "../../services/actions/burger";
+import { ORDER_CLEAR } from "../../services/actions/burger";
 
 
 const ConstructorItem = ({ ingredient }) => {
@@ -62,7 +61,7 @@ ConstructorLockedItem.propTypes = {
 };
 
 const ConstructorBox = ({ ingredients }) => {
-  const ingredientsData = React.useContext(IngredientsContext);
+  const ingredientsData = useSelector(state => state.burger.ingredients)
   const { dispatch } = React.useContext(ConstructorPriceContext);
 
   const constructorData = ingredientsData.filter((item) =>
@@ -119,28 +118,13 @@ const ConstructorButtonBoxPrice = () => {
 };
 
 const ConstructorButtonBox = ({ ingredients }) => {
-  const [order, setOrder] = React.useState(null);
-
-  const fetchOrder = async () => {
-    await fetch(`${BASE_URL}/orders`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ingredients: ingredients,
-      }),
-    })
-      .then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка: ${res.statusText}`);
-      })
-      .then((data) => setOrder(data.order.number))
-      .catch((err) => console.log(err));
-  };
+  const dispatch = useDispatch()
+  const {order} = useSelector(store => store.burger)
 
   const handleClose = () => {
-    setOrder(null);
+    dispatch({
+      type: ORDER_CLEAR
+    })
   };
   const modal = (
     <Modal onClose={handleClose}>
@@ -150,19 +134,18 @@ const ConstructorButtonBox = ({ ingredients }) => {
 
   return (
     <div className={"mr-4 mt-10 " + burgerConstructorStyle.button_box}>
-      <OrderContext.Provider value={order}>
         <ConstructorButtonBoxPrice />
         <Button
           type="primary"
           size="large"
           onClick={async () => {
-            await fetchOrder();
+            // await fetchOrder();
+            dispatch(getOrder(ingredients))
           }}
         >
           Оформить заказ
         </Button>
         {order && modal}
-      </OrderContext.Provider>
     </div>
   );
 };
@@ -189,9 +172,7 @@ function reducer(state, action) {
 
 export const BurgerConstructor = () => {
   const [state, dispatch] = React.useReducer(reducer, priceInitialState);
-  const componentsData = React.useContext(ComponentsDataContext);
-  const componentsDatas = useSelector(store => store.burger.constructor)
-  console.log(componentsDatas)
+  const componentsData = useSelector(store => store.burger.components)
 
   const ingredients = React.useMemo(
     () => componentsData.components.concat(componentsData.buns),

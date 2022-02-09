@@ -9,8 +9,13 @@ import {
 import { Modal } from "../modal/modal.js";
 import { IngredientDetails } from "../ingredient-details/ingredient-details.js";
 import { ingredientType } from "../../utils/types.js";
-import { useDispatch, useSelector, shallowEqual } from "react-redux";
-import { OPEN_CARD, CLOSE_CARD } from "../../services/actions/burger";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  OPEN_CARD,
+  CLOSE_CARD,
+  getView,
+  ADD_COMPONENT,
+} from "../../services/actions/burger";
 
 const HeaderIngredients = (props) => {
   return (
@@ -63,25 +68,28 @@ const TabConteiner = (props) => {
 const IngredientCard = ({ card }) => {
   const dispatch = useDispatch();
   const [isVisible, setIsVisible] = React.useState(false);
-  
 
   const handleOpen = () => {
-    dispatch({
-      type: OPEN_CARD,
-      view: card,
-    });
+    dispatch(getView(card));
+    // if (card.type !== "bun") {
+    //   dispatch({
+    //     type: ADD_COMPONENT,
+    //     id: card._id,
+    //   });
+    // }
+
     setIsVisible(true);
   };
   const handleClose = () => {
     dispatch({
-      type: CLOSE_CARD
-    })
+      type: CLOSE_CARD,
+    });
     setIsVisible(false);
   };
 
   const modal = (
     <Modal onClose={handleClose} header="Детали ингредиента">
-      <IngredientDetails  />
+      <IngredientDetails />
     </Modal>
   );
 

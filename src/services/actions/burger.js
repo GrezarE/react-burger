@@ -6,9 +6,13 @@ export const GET_INGREDIENTS_FAIL = "GET_INGREDIENTS_FAIL";
 export const GET_ORDER_REQUEST = "GET_ORDER_REQUEST";
 export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
 export const GET_ORDER_FAIL = "GET_ORDER_FAIL";
-export const ORDER_CLEAR = 'ORDER_CLEAR'
-export const OPEN_CARD = 'OPEN_CARD'
-export const CLOSE_CARD = 'CLOSE_CARD'
+export const ORDER_CLEAR = "ORDER_CLEAR";
+export const OPEN_CARD = "OPEN_CARD";
+export const CLOSE_CARD = "CLOSE_CARD";
+export const GET_VIEW = "GET_VIEW";
+export const ADD_COMPONENT = "ADD_COMPONENT";
+export const REMOVE_COMPONENT = "REMOVE_COMPONENT";
+export const OVERALL_PRICE = "OVERALL_PRICE";
 
 export function getIngredient() {
   return function (dispatch) {
@@ -61,22 +65,26 @@ export function getOrder(ingredients) {
         return Promise.reject(`Ошибка: ${res.statusText}`);
       })
       .then((res) => {
-        if(res && res.success) {
+        if (res && res.success) {
           dispatch({
             type: GET_ORDER_SUCCESS,
-            order: res.order.number
-          })
+            order: res.order.number,
+          });
         } else {
           dispatch({
-            type: GET_ORDER_FAIL
-          })
+            type: GET_ORDER_FAIL,
+          });
         }
-      }).catch((err) => {
-        dispatch({
-          type: GET_ORDER_FAIL
-        })
       })
+      .catch((err) => {
+        dispatch({
+          type: GET_ORDER_FAIL,
+        });
+      });
   };
 }
 
-
+export const getView = (card) => ({
+  type: OPEN_CARD,
+  view: card,
+});

@@ -10,24 +10,30 @@ import CurrencyIcon from "../../images/CurrencyIcon.svg";
 import { Modal } from "../modal/modal.js";
 import { OrderDetails } from "../order-details/order-details.js";
 import { ingredientType } from "../../utils/types.js";
-import { ConstructorPriceContext } from "../../services/constructorContext";
+// import { ConstructorPriceContext } from "../../services/constructorContext";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrder } from "../../services/actions/burger";
 import { ORDER_CLEAR, OVERALL_PRICE } from "../../services/actions/burger";
 import { useDrag, useDrop } from "react-dnd";
 
-const ConstructorItem = ({ ingredient }) => {
-  // const [] = useDrag({
-  //   type: "component",
-  //   item: ingredient._id,
-  // });
+const ConstructorItem = ({ ingredient, ingredients }) => {
+  console.log(ingredient);
+  console.log(ingredients.filter(item => item === ingredient._id))
+
+  const [{ opacity }, ref] = useDrag({
+    type: "component",
+    item: ingredient._id,
+    collect: (monitor) => ({
+      opacity: monitor.isDragging() ? 0 : 1,
+    }),
+  });
 
   return (
-    <li className={"pl-8 " + burgerConstructorStyle.card}>
+    <li className={"pl-8 " + burgerConstructorStyle.card} ref={ref}>
       <div className={burgerConstructorStyle.drag}>
         <DragIcon type="primary" />
       </div>
-      <div className={burgerConstructorStyle.element}>
+      <div className={burgerConstructorStyle.element} style={{opacity}}>
         <ConstructorElement
           type={ingredient.type}
           text={ingredient.name}
@@ -63,6 +69,13 @@ ConstructorLockedItem.propTypes = {
 };
 
 const ConstructorBox = ({ ingredients }) => {
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: "component",
+    collect: monitor => ({
+      isHover: monitor.isOver()
+    })
+  });
+
   const ingredientsData = useSelector((state) => state.burger.ingredients);
   const dispatch = useDispatch();
   // const { dispatchState } = React.useContext(ConstructorPriceContext);
@@ -77,7 +90,7 @@ const ConstructorBox = ({ ingredients }) => {
 
   // const constructorData = ingredients.map(item => ingredientsData.find(el => el._id === item))
 
-  React.useEffect(() => {
+  useEffect(() => {
     let total = 0;
     ingredients.map((item) => {
       const ingridient = ingredientsData.find((el) => el._id === item);
@@ -86,14 +99,14 @@ const ConstructorBox = ({ ingredients }) => {
       }
     });
     dispatch({ type: OVERALL_PRICE, total: total });
-  }, [ingredientsData, ingredients]);
+  }, [ingredientsData, ingredients, dispatch]);
 
   // React.useEffect(() => {
   //   dispatchState({ type: "set", arr: constructorData });
   // }, [ingredientsData, ingredients]);
 
   return (
-    <ul className={burgerConstructorStyle.box}>
+    <ul className={burgerConstructorStyle.box} ref={dropTarget} style={{isHover}}>
       {constructorData.map(
         (item) =>
           item.type === "bun" && (
@@ -118,7 +131,11 @@ const ConstructorBox = ({ ingredients }) => {
             );
             return (
               ingridient && (
-                <ConstructorItem key={`${item}_${index} `} ingredient={ingridient} />
+                <ConstructorItem
+                  key={`${item}_${index}`}
+                  ingredient={ingridient}
+                  ingredients={ingredients}
+                />
               )
             );
           })}
@@ -193,24 +210,24 @@ ConstructorButtonBox.propTypes = {
   ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-const priceInitialState = { price: 0 };
-function reducer(state, action) {
-  switch (action.type) {
-    case "set":
-      let total = 0;
-      action.arr.forEach(function (item) {
-        total += item.price;
-      });
-      return { price: total };
-    case "reset":
-      return priceInitialState;
-    default:
-      throw new Error(`Wrong type of action: ${action.type}`);
-  }
-}
+// const priceInitialState = { price: 0 };
+// function reducer(state, action) {
+//   switch (action.type) {
+//     case "set":
+//       let total = 0;
+//       action.arr.forEach(function (item) {
+//         total += item.price;
+//       });
+//       return { price: total };
+//     case "reset":
+//       return priceInitialState;
+//     default:
+//       throw new Error(`Wrong type of action: ${action.type}`);
+//   }
+// }
 
 export const BurgerConstructor = () => {
-  const [state, dispatchState] = React.useReducer(reducer, priceInitialState);
+  // const [state, dispatchState] = React.useReducer(reducer, priceInitialState);
   const componentsData = useSelector((store) => store.burger.components);
 
   const ingredients = React.useMemo(
@@ -220,10 +237,10 @@ export const BurgerConstructor = () => {
 
   return (
     <section className={"pt-25 " + burgerConstructorStyle.constructor}>
-      <ConstructorPriceContext.Provider value={{ state, dispatchState }}>
-        <ConstructorBox ingredients={ingredients} />
-        <ConstructorButtonBox ingredients={ingredients} />
-      </ConstructorPriceContext.Provider>
+      {/* <ConstructorPriceContext.Provider value={{ state, dispatchState }}> */}
+      <ConstructorBox ingredients={ingredients} />
+      <ConstructorButtonBox ingredients={ingredients} />
+      {/* </ConstructorPriceContext.Provider> */}
     </section>
   );
 };

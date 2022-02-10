@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import {
@@ -16,6 +16,7 @@ import {
   getView,
   ADD_COMPONENT,
 } from "../../services/actions/burger";
+import { useDrag, useDrop } from "react-dnd";
 
 const HeaderIngredients = (props) => {
   return (
@@ -28,7 +29,7 @@ HeaderIngredients.propTypes = {
 };
 
 const TabConteiner = (props) => {
-  const [current, setCurrent] = React.useState("one");
+  const [current, setCurrent] = useState("one");
   return (
     <div style={{ display: "flex" }}>
       <Tab
@@ -67,7 +68,24 @@ const TabConteiner = (props) => {
 
 const IngredientCard = ({ card }) => {
   const dispatch = useDispatch();
-  const [isVisible, setIsVisible] = React.useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+// counter обратботчик
+  const componentsData = useSelector((store) => store.burger.components);
+  const ingredients = React.useMemo(
+    () => componentsData.component.concat(componentsData.buns),
+    [componentsData]
+  );
+  // const counter = componentsData.component.filter((item) => item === card._id).length;
+  const counter = ingredients.filter((item) => item === card._id).length;
+
+  const [{ opacity }, ref] = useDrag({
+    type: "component",
+    item: card._id,
+    collect: (monitor) => ({
+      opacity: monitor.isDragging() ? 0.1 : 1,
+    }),
+  });
 
   const handleOpen = () => {
     dispatch(getView(card));
@@ -98,6 +116,8 @@ const IngredientCard = ({ card }) => {
       <li
         className={"mt-6 " + burgerIngredientsStyle.ingredientCard}
         onClick={handleOpen}
+        ref={ref}
+        style={{ opacity }}
       >
         <img className="ml-4 mr-4 " src={card.image} alt={card.image} />
         <div className={"mt-1 mb-1 " + burgerIngredientsStyle.priceBox}>
@@ -114,11 +134,11 @@ const IngredientCard = ({ card }) => {
         <div
           className={
             "text text_type_digits-default " +
-            ((card.__v > 0 && burgerIngredientsStyle.count) ||
+            ((counter > 0 && burgerIngredientsStyle.count) ||
               burgerIngredientsStyle.countZero)
           }
         >
-          {card.__v}
+          {counter}
         </div>
       </li>
       {isVisible && modal}
@@ -152,9 +172,9 @@ IngredientsBlock.propTypes = {
 };
 
 export const BurgerIngredients = () => {
-  const buns = React.useRef("bun");
-  const sause = React.useRef("sause");
-  const main = React.useRef("main");
+  const buns = useRef("bun");
+  const sause = useRef("sause");
+  const main = useRef("main");
 
   const scroll = (item) => {
     item.current.scrollIntoView({ behavior: "smooth" });

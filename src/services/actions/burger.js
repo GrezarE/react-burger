@@ -13,6 +13,9 @@ export const GET_VIEW = "GET_VIEW";
 export const ADD_COMPONENT = "ADD_COMPONENT";
 export const REMOVE_COMPONENT = "REMOVE_COMPONENT";
 export const OVERALL_PRICE = "OVERALL_PRICE";
+export const CHANGE_BUN = 'CHANGE_BUN'
+export const ADD_SORT_COMPONENT = 'ADD_SORT_COMPONENT'
+export const REMOVE_SORT_COMPONENT = 'REMOVE_SORT_COMPONENT'
 
 export function getIngredient() {
   return function (dispatch) {

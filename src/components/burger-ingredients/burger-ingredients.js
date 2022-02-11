@@ -80,8 +80,8 @@ const IngredientCard = ({ card }) => {
   const counter = ingredients.filter((item) => item === card._id).length;
 
   const [{ opacity }, ref] = useDrag({
-    type: "component",
-    item: card._id,
+    type: "ingredient",
+    item: card,
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.1 : 1,
     }),

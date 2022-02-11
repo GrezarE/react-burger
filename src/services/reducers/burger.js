@@ -11,6 +11,9 @@ import {
   REMOVE_COMPONENT,
   ADD_COMPONENT,
   OVERALL_PRICE,
+  CHANGE_BUN,
+  ADD_SORT_COMPONENT,
+  REMOVE_SORT_COMPONENT,
 } from "../actions/burger";
 import { components } from "../initData";
 
@@ -102,21 +105,53 @@ export const burgerReducer = (state = initialState, action) => {
         },
       };
     }
+    case CHANGE_BUN: {
+      return {
+        ...state,
+        components: {
+          ...state.components,
+          buns: action.id,
+        },
+      };
+    }
     case REMOVE_COMPONENT: {
       return {
         ...state,
         components: {
           ...state.components,
           component: [...state.components.component].filter(
-            (item) => item !== action.id
+            // (item, index) => item !== action.id
+            (item, index) => index !== action.index
           ),
         },
       };
     }
-    case OVERALL_PRICE: {
+    // case OVERALL_PRICE: {
+    //   return {
+    //     ...state,
+    //     overallPrice: action.total,
+    //   };
+    // }
+    case ADD_SORT_COMPONENT: {
       return {
         ...state,
-        overallPrice: action.total,
+        components: {
+          ...state.components,
+          component: action.components
+
+        },
+      };
+    }
+    case REMOVE_SORT_COMPONENT: {
+      return {
+        ...state,
+        components: {
+          ...state.components,
+          component: [...state.components.component].splice(
+            action.dragIndex,
+            1
+          ),
+        },
       };
     }
     default: {

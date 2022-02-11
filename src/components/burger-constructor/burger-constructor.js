@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useCallback } from "react";
+import React, { useMemo, useRef } from "react";
 import PropTypes from "prop-types";
 import {
   ConstructorElement,
@@ -17,9 +17,7 @@ import {
   ADD_COMPONENT,
   CHANGE_BUN,
   REMOVE_COMPONENT,
-  // SORT_COMPONENTS,
-  ADD_SORT_COMPONENT,
-  REMOVE_SORT_COMPONENT,
+  SORT_COMPONENT,
 } from "../../services/actions/burger";
 import update from "immutability-helper";
 import { useDrag, useDrop } from "react-dnd";
@@ -31,12 +29,7 @@ const ConstructorItem = ({ ingredient, index }) => {
 
   const moveCard = (dragIndex, hoverIndex) => {
     const components = componentsData.component;
-    // console.log(components);
-    // const newComp = components.filter((item, index) => index !== dragIndex);
     const newComp = components.slice();
-    // newComp.splice(hoverIndex, 0, newItem);
-    // console.log(newComp);
-
     const spliced = update(newComp, {
       $splice: [
         [dragIndex, 1],
@@ -44,21 +37,10 @@ const ConstructorItem = ({ ingredient, index }) => {
       ],
     });
     dispatch({
-      type: ADD_SORT_COMPONENT,
+      type: SORT_COMPONENT,
       components: spliced,
     });
-    // dispatch({
-    //   type: ADD_SORT_COMPONENT,
-    //   components: newComp,
-    // });
-    // console.log(ingredient._id);
-    // dispatch({
-    //   type: REMOVE_SORT_COMPONENT,
-    //   dragIndex: dragIndex,
-    // });
   };
-
-  // console.log(ingredients.filter((item) => item === ingredient._id));
 
   const [{ opacity }, dragRef] = useDrag({
     type: "component",
@@ -81,7 +63,6 @@ const ConstructorItem = ({ ingredient, index }) => {
       if (!ref.current) {
         return;
       }
-      console.log(index);
       const dragIndex = item.index;
       const hoverIndex = index;
       // Don't replace items with themselves
@@ -119,9 +100,8 @@ const ConstructorItem = ({ ingredient, index }) => {
   });
 
   dragRef(dropRef(ref));
-  
+
   const deleteCard = () => {
-    // console.log(ingredient._id, index);
     dispatch({ type: REMOVE_COMPONENT, id: ingredient._id, index: index });
   };
 
@@ -149,6 +129,7 @@ const ConstructorItem = ({ ingredient, index }) => {
 
 ConstructorItem.propTypes = {
   ingredient: ingredientType.isRequired,
+  index: PropTypes.number.isRequired
 };
 
 const ConstructorLockedItem = ({ ingredient, position }) => {
@@ -187,52 +168,11 @@ const ConstructorBox = ({ ingredients }) => {
     },
   });
 
-  // const [, componentDropTarget] = useDrop({
-  //   accept: "component",
-  //   // collect: (monitor) => ({
-
-  //   // })
-  //   hover: (monitor) => ({
-  //     console: monitor.isOver,
-  //   }),
-  //   drop(card) {
-  //     console.log(card);
-  //   },
-  // });
-
   const ingredientsData = useSelector((state) => state.burger.ingredients);
-  // const dispatch = useDispatch();
-  // const { dispatchState } = React.useContext(ConstructorPriceContext);
-
-  // const qwe = ingredients.map((item) =>
-  //   ingredientsData.find((el) => el._id === item)
-  // );
 
   const constructorData = ingredientsData.filter((item) =>
     ingredients.find((el) => el === item._id)
   );
-
-  // const qwe = ingredients.map(function (item) {
-  //   ingredientsData.find((el) => el._id === item)
-  //   console.log(ingredientsData.find((el) => el._id === item))
-
-  // });
-  // console.log(qwe);
-
-  // useEffect(() => {
-  //   let total = 0;
-  //   ingredients.map((item) => {
-  //     const ingridient = ingredientsData.find((el) => el._id === item);
-  //     if (ingridient) {
-  //       total += ingridient.price;
-  //     }
-  //   });
-  //   dispatch({ type: OVERALL_PRICE, total: total });
-  // }, [ingredientsData, ingredients, dispatch]);
-
-  // React.useEffect(() => {
-  //   dispatchState({ type: "set", arr: constructorData });
-  // }, [ingredientsData, ingredients]);
 
   return (
     <ul
@@ -251,16 +191,7 @@ const ConstructorBox = ({ ingredients }) => {
           )
       )}
       <li>
-        <ul
-          className={burgerConstructorStyle.box_active}
-          // ref={componentDropTarget}
-        >
-          {/* {constructorData.map(
-            (item) =>
-              item.type !== "bun" && (
-                <ConstructorItem key={item._id} ingredient={item} />
-              )
-          )} */}
+        <ul className={burgerConstructorStyle.box_active}>
           {ingredients.map((item, index) => {
             const ingridient = ingredientsData.find(
               (el) => el._id === item && el.type !== "bun"
@@ -296,38 +227,11 @@ ConstructorBox.propTypes = {
 };
 
 const ConstructorButtonBoxPrice = ({ ingredients }) => {
-  // const { state } = React.useContext(ConstructorPriceContext);
-
   const ingredientsData = useSelector((state) => state.burger.ingredients);
-
-  // function priceCount() {
-  //   let total = 0;
-  //   ingredients.map((item) => {
-  //     const ingridient = ingredientsData.find((el) => el._id === item);
-  //     if (ingridient) {
-  //       total += ingridient.price;
-  //     }
-  //   });
-  //   return total;
-  // }
-  // const price = useMemo(
-  //   () => priceCount(),
-  //   [ingredients, ingredientsData]
-  //   // {
-  //   // let total = 0;
-  //   // ingredients.map((item) => {
-  //   //   const ingridient = ingredientsData.find((el) => el._id === item);
-  //   //   if (ingridient) {
-  //   //     total += ingridient.price;
-  //   //   }
-  //   // });
-  //   // return total;
-  //   // }
-  // );
 
   const price = useMemo(() => {
     let total = 0;
-    ingredients.map((item) => {
+    ingredients.forEach((item) => {
       const ingridient = ingredientsData.find((el) => el._id === item);
       if (ingridient) {
         total += ingridient.price;
@@ -336,25 +240,16 @@ const ConstructorButtonBoxPrice = ({ ingredients }) => {
     return total;
   }, [ingredients, ingredientsData]);
 
-  console.log(price);
-
-  // const price = ingredients.reduce(
-  //   (summ, item) => ingredientsData.find((el) => el._id === item).,
-  //   [0]
-  // );
-
-  // console.log(price);
-
-  // const { overallPrice } = useSelector((store) => store.burger);
-  // console.log(overallPrice);
-
   return (
     <div className={"mr-10 " + burgerConstructorStyle.price}>
-      {/* <p className="text text_type_digits-medium">{state.price}</p> */}
       <p className="text text_type_digits-medium">{price}</p>
       <img src={CurrencyIcon} alt="Самоцвет" />
     </div>
   );
+};
+
+ConstructorButtonBoxPrice.propTypes = {
+  ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const ConstructorButtonBox = ({ ingredients }) => {
@@ -393,47 +288,18 @@ ConstructorButtonBox.propTypes = {
   ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-// const priceInitialState = { price: 0 };
-// function reducer(state, action) {
-//   switch (action.type) {
-//     case "set":
-//       let total = 0;
-//       action.arr.forEach(function (item) {
-//         total += item.price;
-//       });
-//       return { price: total };
-//     case "reset":
-//       return priceInitialState;
-//     default:
-//       throw new Error(`Wrong type of action: ${action.type}`);
-//   }
-// }
-
 export const BurgerConstructor = () => {
-  // const [state, dispatchState] = React.useReducer(reducer, priceInitialState);
   const componentsData = useSelector((store) => store.burger.components);
-  console.log(componentsData);
 
   const ingredients = React.useMemo(
     () => componentsData.component.concat(componentsData.buns),
     [componentsData]
   );
 
-  // let qwe = [0, 1, 2, 3, 4, 5, 6];
-  // qwe.splice(1, 0, 6).splice(1, 1);
-  // console.log(qwe);
-  // useEffect(() => {
-  //   let qwe = [0, 1, 2, 3, 4, 5, 6];
-  //   qwe.splice(1, 0, 6).splice(1, 1);
-  //   console.log(qwe);
-  // }, [componentsData]);
-
   return (
     <section className={"pt-25 " + burgerConstructorStyle.constructor}>
-      {/* <ConstructorPriceContext.Provider value={{ state, dispatchState }}> */}
       <ConstructorBox ingredients={ingredients} />
       <ConstructorButtonBox ingredients={ingredients} />
-      {/* </ConstructorPriceContext.Provider> */}
     </section>
   );
 };

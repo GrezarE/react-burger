@@ -10,13 +10,8 @@ import { Modal } from "../modal/modal.js";
 import { IngredientDetails } from "../ingredient-details/ingredient-details.js";
 import { ingredientType } from "../../utils/types.js";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  OPEN_CARD,
-  CLOSE_CARD,
-  getView,
-  ADD_COMPONENT,
-} from "../../services/actions/burger";
-import { useDrag, useDrop } from "react-dnd";
+import { CLOSE_CARD, getView } from "../../services/actions/burger";
+import { useDrag } from "react-dnd";
 
 const HeaderIngredients = (props) => {
   return (
@@ -29,14 +24,12 @@ HeaderIngredients.propTypes = {
 };
 
 const TabConteiner = (props) => {
-  const [current, setCurrent] = useState("one");
   return (
     <div style={{ display: "flex" }}>
       <Tab
         value="one"
-        active={current === "one"}
+        active={props.tab === "one"}
         onClick={() => {
-          setCurrent("one");
           props.buns();
         }}
       >
@@ -44,9 +37,8 @@ const TabConteiner = (props) => {
       </Tab>
       <Tab
         value="two"
-        active={current === "two"}
+        active={props.tab === "two"}
         onClick={() => {
-          setCurrent("two");
           props.sauses();
         }}
       >
@@ -54,9 +46,8 @@ const TabConteiner = (props) => {
       </Tab>
       <Tab
         value="three"
-        active={current === "three"}
+        active={props.tab === "three"}
         onClick={() => {
-          setCurrent("three");
           props.main();
         }}
       >
@@ -66,17 +57,22 @@ const TabConteiner = (props) => {
   );
 };
 
+TabConteiner.propTypes = {
+  tab: PropTypes.string.isRequired,
+  sauses: PropTypes.func.isRequired,
+  buns: PropTypes.func.isRequired,
+  main: PropTypes.func.isRequired,
+};
+
 const IngredientCard = ({ card }) => {
   const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(false);
 
-// counter обратботчик
   const componentsData = useSelector((store) => store.burger.components);
   const ingredients = React.useMemo(
     () => componentsData.component.concat(componentsData.buns),
     [componentsData]
   );
-  // const counter = componentsData.component.filter((item) => item === card._id).length;
   const counter = ingredients.filter((item) => item === card._id).length;
 
   const [{ opacity }, ref] = useDrag({
@@ -89,13 +85,6 @@ const IngredientCard = ({ card }) => {
 
   const handleOpen = () => {
     dispatch(getView(card));
-    // if (card.type !== "bun") {
-    //   dispatch({
-    //     type: ADD_COMPONENT,
-    //     id: card._id,
-    //   });
-    // }
-
     setIsVisible(true);
   };
   const handleClose = () => {
@@ -175,9 +164,29 @@ export const BurgerIngredients = () => {
   const buns = useRef("bun");
   const sause = useRef("sause");
   const main = useRef("main");
+  const [tab, setTab] = useState("one");
 
   const scroll = (item) => {
     item.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const onScroll = (e) => {
+    let element = e.target;
+    if (
+      element.scrollTop > buns.current.scrollHeight &&
+      element.scrollTop < sause.current.scrollHeight + buns.current.scrollHeight
+    ) {
+      setTab("two");
+    }
+    if (
+      element.scrollTop >
+      sause.current.scrollHeight + buns.current.scrollHeight
+    ) {
+      setTab("three");
+    }
+    if (element.scrollTop <= buns.current.scrollHeight) {
+      setTab("one");
+    }
   };
 
   return (
@@ -187,8 +196,9 @@ export const BurgerIngredients = () => {
         buns={() => scroll(buns)}
         sauses={() => scroll(sause)}
         main={() => scroll(main)}
+        tab={tab}
       />
-      <ul className={burgerIngredientsStyle.box}>
+      <ul className={burgerIngredientsStyle.box} onScroll={(e) => onScroll(e)}>
         <IngredientsBlock refElement={buns} key="bun" type="bun" text="Булки" />
         <IngredientsBlock
           refElement={sause}

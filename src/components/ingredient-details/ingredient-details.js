@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import ingredientDetailsStyle from "./ingredient-details.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 
 
 const Nutrient = (props) => {
@@ -18,7 +18,7 @@ Nutrient.propTypes = {
 }
 
 
-export const IngredientDetails = (props) => {
+export const IngredientDetails = () => {
 const  view  = useSelector((store) => store.burger.openCard);
   return (
     <div className={ingredientDetailsStyle.box}>
@@ -34,11 +34,4 @@ const  view  = useSelector((store) => store.burger.openCard);
   );
 };
 
-IngredientDetails.propTypes = {
-  image: PropTypes.string,
-  name: PropTypes.string,
-  calories: PropTypes.number,
-  proteins: PropTypes.number,
-  fat: PropTypes.number,
-  carbohydrates: PropTypes.number
-}
+

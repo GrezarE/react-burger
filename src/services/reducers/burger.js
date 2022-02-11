@@ -10,10 +10,8 @@ import {
   OPEN_CARD,
   REMOVE_COMPONENT,
   ADD_COMPONENT,
-  OVERALL_PRICE,
   CHANGE_BUN,
-  ADD_SORT_COMPONENT,
-  REMOVE_SORT_COMPONENT,
+  SORT_COMPONENT,
 } from "../actions/burger";
 import { components } from "../initData";
 
@@ -30,7 +28,6 @@ const initialState = {
   orderRequest: false,
   orderFail: false,
 
-  overallPrice: 0,
 };
 
 export const burgerReducer = (state = initialState, action) => {
@@ -120,37 +117,17 @@ export const burgerReducer = (state = initialState, action) => {
         components: {
           ...state.components,
           component: [...state.components.component].filter(
-            // (item, index) => item !== action.id
-            (item, index) => index !== action.index
+            (index) => index !== action.index
           ),
         },
       };
     }
-    // case OVERALL_PRICE: {
-    //   return {
-    //     ...state,
-    //     overallPrice: action.total,
-    //   };
-    // }
-    case ADD_SORT_COMPONENT: {
+    case SORT_COMPONENT: {
       return {
         ...state,
         components: {
           ...state.components,
-          component: action.components
-
-        },
-      };
-    }
-    case REMOVE_SORT_COMPONENT: {
-      return {
-        ...state,
-        components: {
-          ...state.components,
-          component: [...state.components.component].splice(
-            action.dragIndex,
-            1
-          ),
+          component: action.components,
         },
       };
     }

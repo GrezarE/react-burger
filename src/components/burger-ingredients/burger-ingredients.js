@@ -10,7 +10,7 @@ import { Modal } from "../modal/modal.js";
 import { IngredientDetails } from "../ingredient-details/ingredient-details.js";
 import { ingredientType } from "../../utils/types.js";
 import { useDispatch, useSelector } from "react-redux";
-import { CLOSE_CARD, getView } from "../../services/actions/burger";
+import { CLOSE_CARD, OPEN_CARD } from "../../services/actions/view";
 import { useDrag } from "react-dnd";
 
 const HeaderIngredients = (props) => {
@@ -23,7 +23,7 @@ HeaderIngredients.propTypes = {
   children: PropTypes.string.isRequired,
 };
 
-const TabConteiner = (props) => {
+const TabContainer = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <Tab
@@ -57,7 +57,7 @@ const TabConteiner = (props) => {
   );
 };
 
-TabConteiner.propTypes = {
+TabContainer.propTypes = {
   tab: PropTypes.string.isRequired,
   sauses: PropTypes.func.isRequired,
   buns: PropTypes.func.isRequired,
@@ -68,23 +68,30 @@ const IngredientCard = ({ card }) => {
   const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(false);
 
-  const componentsData = useSelector((store) => store.burger.components);
+  const componentsData = useSelector((store) => store.construct.components);
+
   const ingredients = React.useMemo(
     () => componentsData.component.concat(componentsData.buns),
     [componentsData]
   );
-  const counter = ingredients.filter((item) => item === card._id).length;
+  const counter = React.useMemo(
+    () => ingredients.filter((item) => item === card._id).length,
+    [ingredients, card]
+  );
 
   const [{ opacity }, ref] = useDrag({
     type: "ingredient",
-    item: card,
+    item: { card },
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.1 : 1,
     }),
   });
 
   const handleOpen = () => {
-    dispatch(getView(card));
+    dispatch({
+      type: OPEN_CARD,
+      view: card,
+    });
     setIsVisible(true);
   };
   const handleClose = () => {
@@ -192,7 +199,7 @@ export const BurgerIngredients = () => {
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>
       <HeaderIngredients>Соберите бургер</HeaderIngredients>
-      <TabConteiner
+      <TabContainer
         buns={() => scroll(buns)}
         sauses={() => scroll(sause)}
         main={() => scroll(main)}

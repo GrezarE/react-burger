@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 
 export const OrderDetails = () => {
-  const {order} = useSelector(store => store.burger)
+  const {order} = useSelector(store => store.order)
 
 
   return (

@@ -11,21 +11,22 @@ import { Modal } from "../modal/modal.js";
 import { OrderDetails } from "../order-details/order-details.js";
 import { ingredientType } from "../../utils/types.js";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrder } from "../../services/actions/burger";
+import { ORDER_CLEAR, getOrder } from "../../services/actions/order";
 import {
-  ORDER_CLEAR,
   ADD_COMPONENT,
   CHANGE_BUN,
   REMOVE_COMPONENT,
   SORT_COMPONENT,
-} from "../../services/actions/burger";
+  CLEAR_COMPONENTS,
+} from "../../services/actions/construct";
 import update from "immutability-helper";
 import { useDrag, useDrop } from "react-dnd";
+import { v4 as uuidv4 } from "uuid";
 
 const ConstructorItem = ({ ingredient, index }) => {
   const dispatch = useDispatch();
   const ref = useRef(null);
-  const componentsData = useSelector((store) => store.burger.components);
+  const componentsData = useSelector((store) => store.construct.components);
 
   const moveCard = (dragIndex, hoverIndex) => {
     const components = componentsData.component;
@@ -129,7 +130,19 @@ const ConstructorItem = ({ ingredient, index }) => {
 
 ConstructorItem.propTypes = {
   ingredient: ingredientType.isRequired,
-  index: PropTypes.number.isRequired
+  index: PropTypes.number.isRequired,
+};
+
+const Plug = () => {
+  return (
+    <li className={"pl-8 " + burgerConstructorStyle.card}>
+      <div className={burgerConstructorStyle.plug}>
+        <p className="text text_type_digits-default">
+          Создайте здесь свой бургер
+        </p>
+      </div>
+    </li>
+  );
 };
 
 const ConstructorLockedItem = ({ ingredient, position }) => {
@@ -154,12 +167,9 @@ ConstructorLockedItem.propTypes = {
 const ConstructorBox = ({ ingredients }) => {
   const dispatch = useDispatch();
 
-  const [{ isHover }, dropTarget] = useDrop({
+  const [, dropTarget] = useDrop({
     accept: "ingredient",
-    collect: (monitor) => ({
-      isHover: monitor.isOver(),
-    }),
-    drop(card) {
+    drop({ card }) {
       if (card.type === "bun") {
         dispatch({ type: CHANGE_BUN, id: card._id });
       } else {
@@ -173,13 +183,10 @@ const ConstructorBox = ({ ingredients }) => {
   const constructorData = ingredientsData.filter((item) =>
     ingredients.find((el) => el === item._id)
   );
+  console.log(ingredients.length);
 
   return (
-    <ul
-      className={burgerConstructorStyle.box}
-      ref={dropTarget}
-      style={{ isHover }}
-    >
+    <ul className={burgerConstructorStyle.box} ref={dropTarget}>
       {constructorData.map(
         (item) =>
           item.type === "bun" && (
@@ -192,20 +199,24 @@ const ConstructorBox = ({ ingredients }) => {
       )}
       <li>
         <ul className={burgerConstructorStyle.box_active}>
-          {ingredients.map((item, index) => {
-            const ingridient = ingredientsData.find(
-              (el) => el._id === item && el.type !== "bun"
-            );
-            return (
-              ingridient && (
-                <ConstructorItem
-                  key={`${item}_${index}`}
-                  ingredient={ingridient}
-                  index={index}
-                />
-              )
-            );
-          })}
+          {ingredients.length === 1 ? (
+            <Plug />
+          ) : (
+            ingredients.map((item, index) => {
+              const ingredient = ingredientsData.find(
+                (el) => el._id === item && el.type !== "bun"
+              );
+              return (
+                ingredient && (
+                  <ConstructorItem
+                    key={uuidv4()}
+                    ingredient={ingredient}
+                    index={index}
+                  />
+                )
+              );
+            })
+          )}
         </ul>
       </li>
       {constructorData.map(
@@ -232,9 +243,9 @@ const ConstructorButtonBoxPrice = ({ ingredients }) => {
   const price = useMemo(() => {
     let total = 0;
     ingredients.forEach((item) => {
-      const ingridient = ingredientsData.find((el) => el._id === item);
-      if (ingridient) {
-        total += ingridient.price;
+      const ingredient = ingredientsData.find((el) => el._id === item);
+      if (ingredient) {
+        total += ingredient.price;
       }
     });
     return total;
@@ -254,11 +265,14 @@ ConstructorButtonBoxPrice.propTypes = {
 
 const ConstructorButtonBox = ({ ingredients }) => {
   const dispatch = useDispatch();
-  const { order } = useSelector((store) => store.burger);
+  const { order } = useSelector((store) => store.order);
 
   const handleClose = () => {
     dispatch({
       type: ORDER_CLEAR,
+    });
+    dispatch({
+      type: CLEAR_COMPONENTS,
     });
   };
   const modal = (
@@ -289,12 +303,14 @@ ConstructorButtonBox.propTypes = {
 };
 
 export const BurgerConstructor = () => {
-  const componentsData = useSelector((store) => store.burger.components);
+  const componentsData = useSelector((store) => store.construct.components);
 
   const ingredients = React.useMemo(
     () => componentsData.component.concat(componentsData.buns),
     [componentsData]
   );
+
+  console.log(componentsData.component.length);
 
   return (
     <section className={"pt-25 " + burgerConstructorStyle.constructor}>

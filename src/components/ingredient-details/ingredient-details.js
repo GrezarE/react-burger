@@ -19,7 +19,7 @@ Nutrient.propTypes = {
 
 
 export const IngredientDetails = () => {
-const  view  = useSelector((store) => store.burger.openCard);
+const  view  = useSelector((store) => store.view.openCard);
   return (
     <div className={ingredientDetailsStyle.box}>
       <img className={ingredientDetailsStyle.image} src={view.image} alt={view.name}/>

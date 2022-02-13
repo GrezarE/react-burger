@@ -131,6 +131,7 @@ const ConstructorItem = ({ ingredient, index, itemKey }) => {
 ConstructorItem.propTypes = {
   ingredient: ingredientType.isRequired,
   index: PropTypes.number.isRequired,
+  itemKey: PropTypes.string.isRequired
 };
 
 const Plug = () => {

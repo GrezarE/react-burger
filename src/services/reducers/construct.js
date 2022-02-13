@@ -7,52 +7,45 @@ import {
 } from "../actions/construct";
 
 const constructorInitialState = {
-  components: { buns: "60d3b41abdacab0026a733c7", component: [] },
+  bun: "60d3b41abdacab0026a733c7",
+  components: [],
 };
 
 export const constructorReducer = (state = constructorInitialState, action) => {
   switch (action.type) {
     case ADD_COMPONENT: {
       return {
-        components: {
-          ...state.components,
-          component: [...state.components.component].concat(action.id),
-        },
+        ...state,
+        components: [...state.components].concat({
+          id: action.id,
+          key: action.key,
+        }),
       };
     }
     case CHANGE_BUN: {
-      console.log(state, action);
       return {
-        components: {
-          ...state.components,
-          buns: action.id,
-        },
+        ...state,
+        bun: action.id,
       };
     }
     case REMOVE_COMPONENT: {
       return {
-        components: {
-          ...state.components,
-          component: [...state.components.component].filter(
-            (item, index) => index !== action.index
-          ),
-        },
+        ...state,
+        components: [...state.components].filter(
+          (item) => item.key !== action.key
+        ),
       };
     }
     case SORT_COMPONENT: {
       return {
-        components: {
-          ...state.components,
-          component: action.components,
-        },
+        ...state,
+        components: action.components,
       };
     }
     case CLEAR_COMPONENTS: {
       return {
-        components: {
-          buns: "60d3b41abdacab0026a733c7",
-          component: [],
-        },
+        bun: "60d3b41abdacab0026a733c7",
+        components: [],
       };
     }
     default: {

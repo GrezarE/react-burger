@@ -68,10 +68,20 @@ const IngredientCard = ({ card }) => {
   const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(false);
 
-  const componentsData = useSelector((store) => store.construct.components);
-
+  const componentsData = useSelector((store) => store.construct);
+  function getComponentsIdArray() {
+    let arr = [];
+    if (componentsData.components.length > 0) {
+      arr = componentsData.components.map((item) => item.id);
+    }
+    return arr;
+  }
+  const componentsIdArray = React.useMemo(
+    () => getComponentsIdArray(),
+    [componentsData]
+  );
   const ingredients = React.useMemo(
-    () => componentsData.component.concat(componentsData.buns),
+    () => componentsIdArray.concat(componentsData.bun),
     [componentsData]
   );
   const counter = React.useMemo(

@@ -23,13 +23,13 @@ import update from "immutability-helper";
 import { useDrag, useDrop } from "react-dnd";
 import { v4 as uuidv4 } from "uuid";
 
-const ConstructorItem = ({ ingredient, index }) => {
+const ConstructorItem = ({ ingredient, index, itemKey }) => {
   const dispatch = useDispatch();
   const ref = useRef(null);
-  const componentsData = useSelector((store) => store.construct.components);
+  const componentsData = useSelector((store) => store.construct);
 
   const moveCard = (dragIndex, hoverIndex) => {
-    const components = componentsData.component;
+    const components = componentsData.components;
     const newComp = components.slice();
     const spliced = update(newComp, {
       $splice: [
@@ -103,7 +103,7 @@ const ConstructorItem = ({ ingredient, index }) => {
   dragRef(dropRef(ref));
 
   const deleteCard = () => {
-    dispatch({ type: REMOVE_COMPONENT, id: ingredient._id, index: index });
+    dispatch({ type: REMOVE_COMPONENT, key: itemKey });
   };
 
   return (
@@ -173,23 +173,20 @@ const ConstructorBox = ({ ingredients }) => {
       if (card.type === "bun") {
         dispatch({ type: CHANGE_BUN, id: card._id });
       } else {
-        dispatch({ type: ADD_COMPONENT, id: card._id });
+        let key = uuidv4();
+        dispatch({ type: ADD_COMPONENT, id: card._id, key: key });
       }
     },
   });
 
   const ingredientsData = useSelector((state) => state.burger.ingredients);
-
-  const constructorData = ingredientsData.filter((item) =>
-    ingredients.find((el) => el === item._id)
-  );
-  console.log(ingredients.length);
+  const components = useSelector((store) => store.construct);
 
   return (
     <ul className={burgerConstructorStyle.box} ref={dropTarget}>
-      {constructorData.map(
+      {ingredientsData.map(
         (item) =>
-          item.type === "bun" && (
+          item._id === components.bun && (
             <ConstructorLockedItem
               key={item._id}
               ingredient={item}
@@ -202,15 +199,16 @@ const ConstructorBox = ({ ingredients }) => {
           {ingredients.length === 1 ? (
             <Plug />
           ) : (
-            ingredients.map((item, index) => {
+            components.components.map(({ id, key }, index) => {
               const ingredient = ingredientsData.find(
-                (el) => el._id === item && el.type !== "bun"
+                (el) => el._id === id && el.type !== "bun"
               );
               return (
                 ingredient && (
                   <ConstructorItem
-                    key={uuidv4()}
+                    key={key}
                     ingredient={ingredient}
+                    itemKey={key}
                     index={index}
                   />
                 )
@@ -219,9 +217,9 @@ const ConstructorBox = ({ ingredients }) => {
           )}
         </ul>
       </li>
-      {constructorData.map(
+      {ingredientsData.map(
         (item) =>
-          item.type === "bun" && (
+          item._id === components.bun && (
             <ConstructorLockedItem
               key={item._id}
               ingredient={item}
@@ -303,14 +301,23 @@ ConstructorButtonBox.propTypes = {
 };
 
 export const BurgerConstructor = () => {
-  const componentsData = useSelector((store) => store.construct.components);
+  const componentsData = useSelector((store) => store.construct);
 
-  const ingredients = React.useMemo(
-    () => componentsData.component.concat(componentsData.buns),
+  function getComponentsIdArray() {
+    let arr = [];
+    if (componentsData.components.length > 0) {
+      arr = componentsData.components.map((item) => item.id);
+    }
+    return arr;
+  }
+  const componentsIdArray = React.useMemo(
+    () => getComponentsIdArray(),
     [componentsData]
   );
-
-  console.log(componentsData.component.length);
+  const ingredients = React.useMemo(
+    () => componentsIdArray.concat(componentsData.bun),
+    [componentsData]
+  );
 
   return (
     <section className={"pt-25 " + burgerConstructorStyle.constructor}>

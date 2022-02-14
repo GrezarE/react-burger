@@ -138,7 +138,7 @@ const Plug = () => {
   return (
     <li className={"pl-8 " + burgerConstructorStyle.card}>
       <div className={burgerConstructorStyle.plug}>
-        <p className="text text_type_digits-default">
+        <p className="text text_type_main-medium">
           Создайте здесь свой бургер
         </p>
       </div>

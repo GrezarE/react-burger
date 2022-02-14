@@ -4,53 +4,26 @@ import { Header } from "../app-header/app-header";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
 import { BurgerConstructor } from "../burger-constructor/burger-constructor";
 import ErrorBoundary from "../error-boundary/error-boundary";
-import {
-  IngredientsContext,
-} from "../../services/ingredientsContext";
-import { BASE_URL } from "../../utils/base-url";
-import {
-  ComponentsDataContext,
-} from "../../services/constructorContext";
+import { useDispatch } from "react-redux";
+import { getIngredient } from "../../services/actions/burger";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 
 export const App = () => {
-  const [data, setData] = React.useState([]);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const getData = () => {
-      fetch(`${BASE_URL}/ingredients`)
-        .then(function (res) {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(`Ошибка: ${res.statusText}`);
-        })
-        .then((data) => setData(data.data))
-        .catch((err) => console.log(err));
-    };
-    getData();
-  }, []);
-
-  const [componentsData] = React.useState({
-    buns: ["60d3b41abdacab0026a733c7"],
-    components: [
-      "60d3b41abdacab0026a733ca",
-      "60d3b41abdacab0026a733ce",
-      "60d3b41abdacab0026a733d2",
-      "60d3b41abdacab0026a733d3",
-      "60d3b41abdacab0026a733cd",
-    ],
-  });
+    dispatch(getIngredient());
+  }, [dispatch]);
 
   return (
     <ErrorBoundary>
       <Header></Header>
       <main className={appStyle.main}>
-        <IngredientsContext.Provider value={data}>
-          <ComponentsDataContext.Provider value={componentsData}>
-            <BurgerIngredients />
-            <BurgerConstructor />
-          </ComponentsDataContext.Provider>
-        </IngredientsContext.Provider>
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
       </main>
     </ErrorBoundary>
   );

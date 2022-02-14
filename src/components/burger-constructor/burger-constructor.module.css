@@ -56,3 +56,11 @@
   align-items: center;
   gap: 10px;
 }
+
+.plug {
+  width: 536px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

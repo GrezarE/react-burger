@@ -1,4 +1,4 @@
-# Проект первого месяца React: "Stellar Burger"
+# Проект React: "Stellar Burger"
 
 ## Технологии
 

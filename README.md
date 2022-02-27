@@ -16,7 +16,7 @@
 
 
 ## Ссылка
-https://grezare.github.io/react-burger/
+[Link](https://grezare.github.io/react-burger/)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

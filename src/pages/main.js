@@ -13,9 +13,9 @@ export const Main = () => {
 
   const history = useHistory();
   useEffect(() => {
-    console.log(history);
-    console.log(location);
-    console.log(match);
+    // console.log(history);
+    // console.log(location);
+    // console.log(match);
   }, [history, location]);
 
   return (

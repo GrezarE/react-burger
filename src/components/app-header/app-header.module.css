@@ -28,3 +28,11 @@
   composes: navigation__link;
   margin-left: 289px;
 }
+
+.navigation__link_grey {
+  color: #8585AD;
+  text-decoration: none;
+}
+.navigation__link_white {
+  color: red;
+}

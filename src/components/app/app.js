@@ -8,6 +8,9 @@ import { useDispatch } from "react-redux";
 import { getIngredient } from "../../services/actions/burger";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Main } from "../../pages/main";
+import { Login } from "../../pages/login";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -18,13 +21,23 @@ export const App = () => {
 
   return (
     <ErrorBoundary>
-      <Header></Header>
-      <main className={appStyle.main}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </DndProvider>
-      </main>
+      {/* <Header></Header> */}
+      {/* <main className={appStyle.main}> */}
+      <Router>
+        <Switch>
+          <Route path="/" exact={true}>
+            <Main />
+            {/* <DndProvider backend={HTML5Backend}>
+                <BurgerIngredients />
+                <BurgerConstructor />
+              </DndProvider> */}
+          </Route>
+          <Route path="/login" exact={true}>
+            <Login></Login>
+          </Route>
+        </Switch>
+      </Router>
+      {/* </main> */}
     </ErrorBoundary>
   );
 };

@@ -17,3 +17,9 @@ code {
 .constructor-element {
   width: 488px;
 }
+
+.main {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}

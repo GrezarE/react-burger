@@ -4,6 +4,9 @@ import { BurgerIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ListIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { useEffect } from "react";
 
 const Navigation = (props) => {
   return <nav className={headerStyles.navigation}>{props.children}</nav>;
@@ -16,6 +19,7 @@ const NavigationLink = (props) => {
         "mt-4 mb-4 mr-2 pl-5 pr-5 " +
         [props.class || headerStyles.navigation__link]
       }
+      onClick={() => props.onClick()}
     >
       {props.children}
     </div>
@@ -27,6 +31,17 @@ const NaviText = (props) => {
 };
 
 export const Header = () => {
+  const history = useHistory();
+  
+  useEffect(() => {
+    console.log(history);
+  }, [history]);
+
+  const onClick = () => {
+    console.log("qwe");
+    history.replace({ pathname: "/login" });
+  };
+
   return (
     <header className={headerStyles.header} style={{}}>
       <Navigation>
@@ -40,7 +55,10 @@ export const Header = () => {
         </NavigationLink>
       </Navigation>
       <Logo />
-      <NavigationLink class={headerStyles.navigation__link_right}>
+      <NavigationLink
+        class={headerStyles.navigation__link_right}
+        onClick={onClick}
+      >
         <ProfileIcon type="primary" />
         <NaviText>Личный&nbsp;кабинет</NaviText>
       </NavigationLink>

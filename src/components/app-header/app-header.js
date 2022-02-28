@@ -38,11 +38,13 @@ export const Header = () => {
   }, [history]);
 
   const onClickLogin = () => {
-    console.log("qwe");
     history.replace({ pathname: "/login" });
   };
   const onClickMenu = () => {
     history.replace({ pathname: "/" });
+  };
+  const onClickProfile = () => {
+    history.replace({ pathname: "/profile" });
   };
 
   return (
@@ -52,7 +54,7 @@ export const Header = () => {
           <BurgerIcon type="primary" />
           <NaviText>Конструктор</NaviText>
         </NavigationLink>
-        <NavigationLink>
+        <NavigationLink onClick={onClickProfile}>
           <ListIcon type="primary" />
           <NaviText>Лента&nbsp;заказов</NaviText>
         </NavigationLink>

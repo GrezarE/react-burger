@@ -50,3 +50,15 @@ code {
   text-decoration: none;
   color: #4C4CFF;
 }
+
+.authorization__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 480px;
+}
+
+/* .authorization__header {
+  text-align: center;
+} */

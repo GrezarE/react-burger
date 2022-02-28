@@ -4,16 +4,15 @@ import {
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import style from "./login.module.css";
 import { Header } from "../components/app-header/app-header";
 import { Link } from "react-router-dom";
 
 export const Login = () => {
-  const [emailValue, setEmailValue] = React.useState("bob@example.com");
+  const [emailValue, setEmailValue] = React.useState("");
   const onChangeEmail = (e) => {
     setEmailValue(e.target.value);
   };
-  const [passwordValue, setPasswordValue] = React.useState("password");
+  const [passwordValue, setPasswordValue] = React.useState("");
   const onChangePassword = (e) => {
     setPasswordValue(e.target.value);
   };
@@ -22,16 +21,14 @@ export const Login = () => {
     <>
       <Header />
       <section className="input__box">
-        {/* <section className={style.login}> */}
-        <div className={style.box}>
-          <h1 className={"mb-6 text text_type_main-medium " + style.header}>
+        <div className='authorization__box'>
+          <h1 className="mb-6 text text_type_main-medium " >
             Вход
           </h1>
           <EmailInput
             onChange={onChangeEmail}
             value={emailValue}
             name={"email"}
-            className="input_size_large"
           />
           <PasswordInput
             onChange={onChangePassword}
@@ -43,13 +40,13 @@ export const Login = () => {
             <p className="text text_type_main-default">
               Вы - новый пользователь?
             </p>
-            <Link className="text text_type_main-default input__link" to="/">
+            <Link className="text text_type_main-default input__link" to="/register">
               Зарегистрироваться
             </Link>
           </div>
           <div className="mt-4 input__text-line">
             <p className="text text_type_main-default">Забыли пароль?</p>
-            <Link className="text text_type_main-default input__link" to="/">
+            <Link className="text text_type_main-default input__link" to="/forgot-password">
               Восстановить пароль
             </Link>
           </div>

@@ -11,6 +11,10 @@ import { DndProvider } from "react-dnd";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Main } from "../../pages/main";
 import { Login } from "../../pages/login";
+import { Registration } from "../../pages/register";
+import { ForgotPassword } from "../../pages/forgot-password";
+import { ResetPassword } from "../../pages/reset-password";
+import { Profile } from "../../pages/profile";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -34,6 +38,18 @@ export const App = () => {
           </Route>
           <Route path="/login" exact={true}>
             <Login />
+          </Route>
+          <Route path="/register" exact={true}>
+            <Registration />
+          </Route>
+          <Route path="/forgot-password" exact={true}>
+            <ForgotPassword />
+          </Route>
+          <Route path="/reset-password" exact={true}>
+            <ResetPassword />
+          </Route>
+          <Route path="/profile" exact={true}>
+            <Profile />
           </Route>
         </Switch>
       </Router>

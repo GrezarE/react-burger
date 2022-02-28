@@ -33,7 +33,7 @@ export const App = () => {
               </DndProvider> */}
           </Route>
           <Route path="/login" exact={true}>
-            <Login></Login>
+            <Login />
           </Route>
         </Switch>
       </Router>

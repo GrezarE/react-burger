@@ -32,20 +32,23 @@ const NaviText = (props) => {
 
 export const Header = () => {
   const history = useHistory();
-  
+
   useEffect(() => {
     console.log(history);
   }, [history]);
 
-  const onClick = () => {
+  const onClickLogin = () => {
     console.log("qwe");
     history.replace({ pathname: "/login" });
+  };
+  const onClickMenu = () => {
+    history.replace({ pathname: "/" });
   };
 
   return (
     <header className={headerStyles.header} style={{}}>
       <Navigation>
-        <NavigationLink>
+        <NavigationLink onClick={onClickMenu}>
           <BurgerIcon type="primary" />
           <NaviText>Конструктор</NaviText>
         </NavigationLink>
@@ -57,7 +60,7 @@ export const Header = () => {
       <Logo />
       <NavigationLink
         class={headerStyles.navigation__link_right}
-        onClick={onClick}
+        onClick={onClickLogin}
       >
         <ProfileIcon type="primary" />
         <NaviText>Личный&nbsp;кабинет</NaviText>

@@ -1,5 +1,5 @@
 import React from "react";
-import appStyle from "./app.module.css";
+// import appStyle from "./app.module.css";
 import { Header } from "../app-header/app-header";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
 import { BurgerConstructor } from "../burger-constructor/burger-constructor";
@@ -9,7 +9,7 @@ import { getIngredient } from "../../services/actions/burger";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Main } from "../../pages/main";
+import { MainPage } from "../../pages/main";
 import { Login } from "../../pages/login";
 import { Registration } from "../../pages/register";
 import { ForgotPassword } from "../../pages/forgot-password";
@@ -25,12 +25,16 @@ export const App = () => {
 
   return (
     <ErrorBoundary>
+      {/* <MainPage /> */}
       {/* <Header></Header> */}
-      {/* <main className={appStyle.main}> */}
+      {/* <DndProvider backend={HTML5Backend}>
+        <BurgerIngredients />
+        <BurgerConstructor />
+      </DndProvider> */}
       <Router>
         <Switch>
           <Route path="/" exact={true}>
-            <Main />
+            <MainPage />
             {/* <DndProvider backend={HTML5Backend}>
                 <BurgerIngredients />
                 <BurgerConstructor />
@@ -53,7 +57,6 @@ export const App = () => {
           </Route>
         </Switch>
       </Router>
-      {/* </main> */}
     </ErrorBoundary>
   );
 };

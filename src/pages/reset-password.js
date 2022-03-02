@@ -5,8 +5,11 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Header } from "../components/app-header/app-header";
 import { Link, useHistory } from "react-router-dom";
+import { BASE_URL } from "../utils/base-url";
 
 export const ResetPassword = () => {
+  const history = useHistory();
+
   const [passwordValue, setPasswordValue] = React.useState("");
   const onChangePassword = (e) => {
     setPasswordValue(e.target.value);
@@ -18,12 +21,47 @@ export const ResetPassword = () => {
     alert("Icon Click Callback");
   };
 
+  const resetPasswordClick = () => {
+    const sendPost = () => {
+      fetch(`${BASE_URL}/password-reset/reset`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password: passwordValue,
+          token: codeInput,
+        }),
+      })
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(`Ошибка: ${res.statusText}`);
+        })
+        .then((res) => {
+          if (res && res.success) {
+            console.log("qwe");
+            // history.replace({ pathname: "/reset-password" });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    if (passwordValue && codeInput) {
+      sendPost();
+    } else {
+      console.log();
+    }
+  };
+
   return (
     <>
       <Header />
       <section className="input__box">
         <div className="authorization__box">
-          <h1 className="mb-6 text text_type_main-medium ">Регистрация</h1>
+          <h1 className="mb-6 text text_type_main-medium ">
+            Восстановление пароля
+          </h1>
           <Input
             type="password"
             onChange={onChangePassword}
@@ -41,7 +79,7 @@ export const ResetPassword = () => {
             errorText={"Ошибка"}
             onIconClick={onIconClick}
           ></Input>
-          <Button>Сохранить</Button>
+          <Button onClick={resetPasswordClick}>Сохранить</Button>
           <div className="mt-20 input__text-line">
             <p className="text text_type_main-default">Вспомнили пароль?</p>
             <Link

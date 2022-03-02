@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   EmailInput,
   PasswordInput,
@@ -9,17 +9,25 @@ import {
 import { Header } from "../components/app-header/app-header";
 import { Link, useHistory } from "react-router-dom";
 import style from "./profile.module.css";
+import { useSelector } from "react-redux";
 
 export const Profile = () => {
+  const { email, userName } = useSelector((state) => state.user);
+
   const [emailValue, setEmailValue] = React.useState("");
-  const [passwordValue, setPasswordValue] = React.useState("");
+  const [passwordValue, setPasswordValue] = React.useState("********");
   const [nameInput, setNameInput] = React.useState("");
   const inputRef = React.useRef(null);
-  const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
-    alert("Icon Click Callback");
-  };
-  const [visible, setVisible] = React.useState(true);
+  // const onIconClick = () => {
+  //   setTimeout(() => inputRef.current.focus(), 0);
+  //   alert("Icon Click Callback");
+  // };
+  // const [visible, setVisible] = React.useState(true);
+
+  useEffect(() => {
+    setEmailValue(email);
+    setNameInput(userName);
+  }, [email, userName]);
 
   return (
     <>
@@ -50,7 +58,7 @@ export const Profile = () => {
             ref={inputRef}
             errorText={"Ошибка"}
             icon="EditIcon"
-            onIconClick={onIconClick}
+            // onIconClick={onIconClick}
           ></Input>
           <Input
             type={"email"}
@@ -61,7 +69,7 @@ export const Profile = () => {
             // ref={inputRef}
             errorText={"Ошибка"}
             icon="EditIcon"
-            onIconClick={onIconClick}
+            // onIconClick={onIconClick}
           ></Input>
           <Input
             type={"password"}
@@ -72,7 +80,7 @@ export const Profile = () => {
             // ref={inputRef}
             errorText={"Ошибка"}
             icon="EditIcon"
-            onIconClick={onIconClick}
+            // onIconClick={onIconClick}
           ></Input>
           {/* <EmailInput
             onChange={onChangeEmail}

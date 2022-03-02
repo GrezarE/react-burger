@@ -131,16 +131,14 @@ const ConstructorItem = ({ ingredient, index, itemKey }) => {
 ConstructorItem.propTypes = {
   ingredient: ingredientType.isRequired,
   index: PropTypes.number.isRequired,
-  itemKey: PropTypes.string.isRequired
+  itemKey: PropTypes.string.isRequired,
 };
 
 const Plug = () => {
   return (
     <li className={"pl-8 " + burgerConstructorStyle.card}>
       <div className={burgerConstructorStyle.plug}>
-        <p className="text text_type_main-medium">
-          Создайте здесь свой бургер
-        </p>
+        <p className="text text_type_main-medium">Создайте здесь свой бургер</p>
       </div>
     </li>
   );

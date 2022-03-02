@@ -2,8 +2,8 @@ import { LOGIN_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS } from "../actions/login";
 import { USER_LOGIN, USER_LOGOUT } from "../actions/user";
 
 const userInitState = {
-  userName: null,
-  email: null,
+  userName: '',
+  email: '',
 };
 
 export const userReducer = (state = userInitState, action) => {

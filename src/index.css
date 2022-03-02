@@ -18,7 +18,7 @@ code {
   width: 488px;
 }
 
-.main {
+.main__screen {
   display: flex;
   justify-content: center;
   gap: 40px;

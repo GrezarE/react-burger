@@ -6,6 +6,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Header } from "../components/app-header/app-header";
 import { Link, useHistory } from "react-router-dom";
+import { BASE_URL } from "../utils/base-url";
 
 export const ForgotPassword = () => {
   const [emailValue, setEmailValue] = React.useState("");
@@ -14,8 +15,39 @@ export const ForgotPassword = () => {
   };
   const history = useHistory();
 
-  const onClick = () => {
-    history.replace({ pathname: "/reset-password" });
+  // const onClick = () => {
+  //   history.replace({ pathname: "/reset-password" });
+  // };
+
+  console.log(emailValue);
+
+  const forgotPasswordClick = () => {
+    const sendPost = () => {
+      fetch(`${BASE_URL}/password-reset`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: emailValue,
+        }),
+      })
+        .then(function (res) {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(`Ошибка: ${res.statusText}`);
+        })
+        .then((res) => {
+          if (res && res.success) {
+            history.replace({ pathname: "/reset-password" });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    if (emailValue) {
+      sendPost();
+    }
   };
 
   return (
@@ -33,7 +65,7 @@ export const ForgotPassword = () => {
             name={"email"}
             placeholder="Укажите e-mail"
           />
-          <Button onClick={onClick}>Восстановить</Button>
+          <Button onClick={forgotPasswordClick}>Восстановить</Button>
           <div className="mt-20 input__text-line">
             <p className="text text_type_main-default">Вспомнили пароль?</p>
             <Link

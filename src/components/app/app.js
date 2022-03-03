@@ -4,7 +4,7 @@ import { Header } from "../app-header/app-header";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
 import { BurgerConstructor } from "../burger-constructor/burger-constructor";
 import ErrorBoundary from "../error-boundary/error-boundary";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getIngredient } from "../../services/actions/burger";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
@@ -18,6 +18,8 @@ import { Profile } from "../../pages/profile";
 
 export const App = () => {
   const dispatch = useDispatch();
+  const { email, userName, isAuthenticated } = useSelector((state) => state.user);
+
 
   React.useEffect(() => {
     dispatch(getIngredient());
@@ -52,8 +54,8 @@ export const App = () => {
           <Route path="/reset-password" exact={true}>
             <ResetPassword />
           </Route>
-          <Route path="/profile" exact={true}>
-            <Profile />
+          <Route path="/profile" exact={true} component={isAuthenticated ? Profile : Login}>
+            {/* <Profile /> */}
           </Route>
         </Switch>
       </Router>

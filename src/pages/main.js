@@ -6,8 +6,10 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { BurgerIngredients } from "../components/burger-ingredients/burger-ingredients";
 import { BurgerConstructor } from "../components/burger-constructor/burger-constructor";
 import { Header } from "../components/app-header/app-header";
+import { useSelector } from "react-redux";
 
 export const MainPage = () => {
+  const { userName, email, token } = useSelector(state => state.user)
   // const location = useLocation();
   // const match = useRouteMatch();
 
@@ -17,6 +19,7 @@ export const MainPage = () => {
   //   // console.log(location);
   //   // console.log(match);
   // }, [history, location]);
+  console.log(userName, email, token)
 
   return (
     <>

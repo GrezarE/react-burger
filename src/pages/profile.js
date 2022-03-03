@@ -12,7 +12,7 @@ import style from "./profile.module.css";
 import { useSelector } from "react-redux";
 
 export const Profile = () => {
-  const { email, userName } = useSelector((state) => state.user);
+  const { email, userName, isAuthenticated } = useSelector((state) => state.user);
 
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("********");

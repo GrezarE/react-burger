@@ -6,9 +6,23 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Header } from "../components/app-header/app-header";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { REGISTRATION_REQUEST } from "../services/actions/register";
+import { getRegistration } from "../services/actions/register";
 
 export const Registration = () => {
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const { isRequest, isFail } = useSelector(state => state.register)
+  const { isAuthenticated } = useSelector(state => state.user)
+
+  useEffect(() => {
+
+    console.log(isAuthenticated)
+    isAuthenticated ? history.replace({ pathname: '/' }) : console.log(isAuthenticated)
+  }, [isAuthenticated])
+
   const [emailValue, setEmailValue] = React.useState("");
   const onChangeEmail = (e) => {
     setEmailValue(e.target.value);
@@ -23,6 +37,18 @@ export const Registration = () => {
     setTimeout(() => inputRef.current.focus(), 0);
     alert("Icon Click Callback");
   };
+
+  const registerOnClick = () => {
+    const registerData = {
+      email: emailValue,
+      password: passwordValue,
+      name: nameInput
+    }
+    dispatch(getRegistration(registerData))
+
+
+
+  }
 
   return (
     <>
@@ -44,14 +70,14 @@ export const Registration = () => {
             onChange={onChangeEmail}
             value={emailValue}
             name={"email"}
-            // className="input_size_large"
+          // className="input_size_large"
           />
           <PasswordInput
             onChange={onChangePassword}
             value={passwordValue}
             name={"password"}
           />
-          <Button>Зарегистрироваться</Button>
+          <Button onClick={registerOnClick}>Зарегистрироваться</Button>
           <div className="mt-20 input__text-line">
             <p className="text text_type_main-default">Уже зарегистрированы?</p>
             <Link

@@ -9,9 +9,12 @@ import {
 import { Header } from "../components/app-header/app-header";
 import { Link, useHistory } from "react-router-dom";
 import style from "./profile.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getLogout } from "../services/actions/logout";
+import { getCookie } from "../utils/cookies";
 
 export const Profile = () => {
+  const dispatch = useDispatch()
   const { email, userName, isAuthenticated } = useSelector((state) => state.user);
 
   const [emailValue, setEmailValue] = React.useState("");
@@ -29,6 +32,12 @@ export const Profile = () => {
     setNameInput(userName);
   }, [email, userName]);
 
+  const logoutOnClick = () => {
+    const token = getCookie('refreshToken')
+    console.log(token)
+    dispatch(getLogout(token))
+  }
+
   return (
     <>
       <Header />
@@ -43,7 +52,7 @@ export const Profile = () => {
             </p>
           </li>
           <li className={style.box}>
-            <p className={"text text_type_main-medium " + style.grey_text}>
+            <p className={"text text_type_main-medium " + style.grey_text} onClick={logoutOnClick}>
               Выход
             </p>
           </li>
@@ -58,7 +67,7 @@ export const Profile = () => {
             ref={inputRef}
             errorText={"Ошибка"}
             icon="EditIcon"
-            // onIconClick={onIconClick}
+          // onIconClick={onIconClick}
           ></Input>
           <Input
             type={"email"}
@@ -69,7 +78,7 @@ export const Profile = () => {
             // ref={inputRef}
             errorText={"Ошибка"}
             icon="EditIcon"
-            // onIconClick={onIconClick}
+          // onIconClick={onIconClick}
           ></Input>
           <Input
             type={"password"}
@@ -80,7 +89,7 @@ export const Profile = () => {
             // ref={inputRef}
             errorText={"Ошибка"}
             icon="EditIcon"
-            // onIconClick={onIconClick}
+          // onIconClick={onIconClick}
           ></Input>
           {/* <EmailInput
             onChange={onChangeEmail}

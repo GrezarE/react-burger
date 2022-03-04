@@ -8,18 +8,14 @@ import {
 import { Header } from "../components/app-header/app-header";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { REGISTRATION_REQUEST } from "../services/actions/register";
 import { getRegistration } from "../services/actions/register";
 
 export const Registration = () => {
   const history = useHistory()
   const dispatch = useDispatch()
-  const { isRequest, isFail } = useSelector(state => state.register)
   const { isAuthenticated } = useSelector(state => state.user)
 
   useEffect(() => {
-
-    console.log(isAuthenticated)
     isAuthenticated ? history.replace({ pathname: '/' }) : console.log(isAuthenticated)
   }, [isAuthenticated])
 
@@ -45,9 +41,6 @@ export const Registration = () => {
       name: nameInput
     }
     dispatch(getRegistration(registerData))
-
-
-
   }
 
   return (

@@ -6,7 +6,6 @@ export function getCookie(name) {
 }
 
 export function setCookie(name, value, props) {
-  console.log(name, value, props)
   props = props || {};
   let exp = props.expires;
   if (typeof exp == 'number' && exp) {
@@ -20,17 +19,13 @@ export function setCookie(name, value, props) {
   value = encodeURIComponent(value);
   let updatedCookie = name + '=' + value;
   for (const propName in props) {
-    console.log(propName)
     updatedCookie += '; ' + propName;
     const propValue = props[propName];
-    console.log(propValue)
     if (propValue !== true) {
       updatedCookie += '=' + propValue;
     }
   }
-  console.log(updatedCookie)
-  console.log(exp)
-  // document.cookie = updatedCookie;
+  document.cookie = updatedCookie;
 }
 
 export function deleteCookie(name) {

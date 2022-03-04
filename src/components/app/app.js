@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 // import appStyle from "./app.module.css";
 import { Header } from "../app-header/app-header";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
@@ -20,10 +20,14 @@ export const App = () => {
   const dispatch = useDispatch();
   const { email, userName, isAuthenticated } = useSelector((state) => state.user);
 
-
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getIngredient());
   }, [dispatch]);
+
+  // useEffect(() => {
+
+  // })
+
 
   return (
     <ErrorBoundary>

@@ -5,9 +5,18 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Header } from "../components/app-header/app-header";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getLogin } from "../services/actions/login";
 
 export const Login = () => {
+  const history = useHistory()
+  const { isAuthenticated } = useSelector(state => state.user)
+  useEffect(() => {
+    isAuthenticated ? history.replace({ pathname: '/' }) : console.log(isAuthenticated)
+  }, [isAuthenticated])
+
+  const dispatch = useDispatch()
   const [emailValue, setEmailValue] = React.useState("");
   const onChangeEmail = (e) => {
     setEmailValue(e.target.value);
@@ -16,6 +25,16 @@ export const Login = () => {
   const onChangePassword = (e) => {
     setPasswordValue(e.target.value);
   };
+
+  const loginOnClick = () => {
+    const loginData = {
+      email: emailValue,
+      password: passwordValue
+    }
+    dispatch(getLogin(loginData))
+    
+  }
+
 
   return (
     <>
@@ -35,7 +54,7 @@ export const Login = () => {
             value={passwordValue}
             name={"password"}
           />
-          <Button>Войти</Button>
+          <Button onClick={loginOnClick}>Войти</Button>
           <div className="mt-20 input__text-line">
             <p className="text text_type_main-default">
               Вы - новый пользователь?

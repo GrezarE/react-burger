@@ -12,6 +12,7 @@ import {
   useParams,
 } from "react-router-dom";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Navigation = (props) => {
   return <nav className={headerStyles.navigation}>{props.children}</nav>;
@@ -36,6 +37,8 @@ const NavigationLink = (props) => {
 // };
 
 export const Header = () => {
+  const { isAuthenticated } = useSelector(state => state.user)
+
   const history = useHistory();
   const location = useLocation();
   const { path } = useRouteMatch();
@@ -49,7 +52,8 @@ export const Header = () => {
   }, [history]);
 
   const onClickLogin = () => {
-    history.replace({ pathname: "/login" });
+    const link = isAuthenticated ? 'profile' : 'login'
+    history.replace({ pathname: `/${link}` });
   };
   const onClickMenu = () => {
     history.replace({ pathname: "/" });

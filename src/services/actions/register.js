@@ -1,5 +1,5 @@
 import { AUTH_URL } from "../../utils/auth-url";
-import { USER_SET_DATA } from "./user";
+import { USER_SET_DATA, RESET_TOKEN } from "./user";
 import { setCookie } from "../../utils/cookies";
 
 export const REGISTRATION_REQUEST = "REGISTRATION_REQUEST";
@@ -38,8 +38,10 @@ export function getRegistration(data) {
             name: res.user.name,
             token: res.accessToken
           })
+          setTimeout(() => dispatch({ type: RESET_TOKEN }), [1000 * 1200])
           const refreshToken = res.refreshToken
           setCookie('refreshToken', refreshToken)
+
         } else {
           dispatch({
             type: REGISTRATION_FAIL,

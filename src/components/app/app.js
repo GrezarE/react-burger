@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 // import appStyle from "./app.module.css";
 import { Header } from "../app-header/app-header";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
@@ -9,25 +9,29 @@ import { getIngredient } from "../../services/actions/burger";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { MainPage } from "../../pages/main";
-import { Login } from "../../pages/login";
-import { Registration } from "../../pages/register";
-import { ForgotPassword } from "../../pages/forgot-password";
-import { ResetPassword } from "../../pages/reset-password";
-import { Profile } from "../../pages/profile";
+import { Profile, ResetPassword, ForgotPassword, Registration, Login, MainPage } from '../../pages/index'
+import { getCookie } from "../../utils/cookies";
+import { getUserData } from "../../services/actions/user";
 
 export const App = () => {
+
   const dispatch = useDispatch();
-  const { email, userName, isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, token } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getIngredient());
   }, [dispatch]);
 
-  // useEffect(() => {
+  useEffect(() => {
+    const refreshToken = getCookie('refreshToken')
+    if (refreshToken) {
+      dispatch(getUserData(refreshToken))
+    }
+  }, [])
 
-  // })
-
+  useEffect(() => {
+    console.log(token)
+  }, [token])
 
   return (
     <ErrorBoundary>

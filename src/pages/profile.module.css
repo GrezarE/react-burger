@@ -19,6 +19,7 @@
 
 .box:hover {
   cursor: pointer;
+  background-color: #2F2F37;
 }
 
 .list {
@@ -28,4 +29,11 @@
 
 .grey_text {
   color: #8585AD;
+}
+
+.button__box {
+  width: 480px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }

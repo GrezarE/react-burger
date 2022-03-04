@@ -12,8 +12,8 @@ import { useSelector } from "react-redux";
 export const MainPage = () => {
   const { userName, email, token } = useSelector(state => state.user)
 
-  const qwe = getCookie('refreshToken')
-  console.log(qwe)
+  // const qwe = getCookie('refreshToken')
+  // console.log(qwe)
 
   // const location = useLocation();
   // const match = useRouteMatch();
@@ -24,7 +24,7 @@ export const MainPage = () => {
   //   // console.log(location);
   //   // console.log(match);
   // }, [history, location]);
-  console.log(userName, email, token)
+  // console.log(userName, email, token)
 
   return (
     <>

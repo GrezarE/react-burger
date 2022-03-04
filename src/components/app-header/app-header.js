@@ -44,12 +44,12 @@ export const Header = () => {
   const { path } = useRouteMatch();
   const param = useParams();
 
-  useEffect(() => {
-    console.log(history);
-    console.log(location);
-    console.log(path);
-    console.log(param);
-  }, [history]);
+  // useEffect(() => {
+  //   console.log(history);
+  //   console.log(location);
+  //   console.log(path);
+  //   console.log(param);
+  // }, [history]);
 
   const onClickLogin = () => {
     const link = isAuthenticated ? 'profile' : 'login'

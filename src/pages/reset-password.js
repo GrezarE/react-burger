@@ -35,17 +35,20 @@ export const ResetPassword = () => {
           if (res.ok) {
             return res.json();
           }
-          return Promise.reject(`Ошибка: ${res.statusText}`);
+          return Promise.reject(res);
         })
         .then((res) => {
           if (res && res.success) {
             console.log("qwe");
-            // history.replace({ pathname: "/reset-password" });
+            history.replace({ pathname: "/login" });
           }
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((res) => {
+          return res.json()
+        }).then((res) => {
+          console.log(res.message)
+          alert(res.message)
+        })
     };
     if (passwordValue && codeInput) {
       sendPost();

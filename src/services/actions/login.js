@@ -1,5 +1,5 @@
 import { AUTH_URL } from "../../utils/auth-url";
-import { USER_SET_DATA } from "./user";
+import { USER_SET_DATA, RESET_TOKEN } from "./user";
 import { setCookie } from "../../utils/cookies";
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -36,6 +36,7 @@ export function getLogin(data) {
             name: res.user.name,
             token: res.accessToken
           })
+          setTimeout(() => dispatch({ type: RESET_TOKEN }), [1000 * 1200])
           const refreshToken = res.refreshToken
           setCookie('refreshToken', refreshToken)
         } else {

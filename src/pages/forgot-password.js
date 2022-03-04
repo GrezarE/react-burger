@@ -15,12 +15,6 @@ export const ForgotPassword = () => {
   };
   const history = useHistory();
 
-  // const onClick = () => {
-  //   history.replace({ pathname: "/reset-password" });
-  // };
-
-  console.log(emailValue);
-
   const forgotPasswordClick = () => {
     const sendPost = () => {
       fetch(`${BASE_URL}/password-reset`, {

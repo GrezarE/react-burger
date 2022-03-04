@@ -12,10 +12,11 @@ import style from "./profile.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogout } from "../services/actions/logout";
 import { getCookie } from "../utils/cookies";
+import { userDataUpdate } from "../services/actions/user";
 
 export const Profile = () => {
   const dispatch = useDispatch()
-  const { email, userName, isAuthenticated } = useSelector((state) => state.user);
+  const { email, userName, isAuthenticated, token } = useSelector((state) => state.user);
 
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("********");
@@ -30,12 +31,27 @@ export const Profile = () => {
   useEffect(() => {
     setEmailValue(email);
     setNameInput(userName);
-  }, [email, userName]);
+  }, []);
 
   const logoutOnClick = () => {
     const token = getCookie('refreshToken')
     console.log(token)
     dispatch(getLogout(token))
+  }
+
+  const userSaveDataOnClick = () => {
+    const userData = {
+      email: emailValue,
+      name: nameInput,
+    }
+    console.log(userData)
+    dispatch(userDataUpdate(userData, token))
+  }
+
+  const cancelButtonOnClick = () => {
+    setEmailValue(email);
+    setNameInput(userName);
+    setPasswordValue('********')
   }
 
   return (
@@ -51,8 +67,8 @@ export const Profile = () => {
               История заказов
             </p>
           </li>
-          <li className={style.box}>
-            <p className={"text text_type_main-medium " + style.grey_text} onClick={logoutOnClick}>
+          <li className={style.box} onClick={logoutOnClick}>
+            <p className={"text text_type_main-medium " + style.grey_text} >
               Выход
             </p>
           </li>
@@ -67,7 +83,6 @@ export const Profile = () => {
             ref={inputRef}
             errorText={"Ошибка"}
             icon="EditIcon"
-          // onIconClick={onIconClick}
           ></Input>
           <Input
             type={"email"}
@@ -75,10 +90,8 @@ export const Profile = () => {
             onChange={(e) => setEmailValue(e.target.value)}
             value={emailValue}
             name={"email"}
-            // ref={inputRef}
             errorText={"Ошибка"}
             icon="EditIcon"
-          // onIconClick={onIconClick}
           ></Input>
           <Input
             type={"password"}
@@ -86,23 +99,13 @@ export const Profile = () => {
             onChange={(e) => setPasswordValue(e.target.value)}
             value={passwordValue}
             name={"password"}
-            // ref={inputRef}
             errorText={"Ошибка"}
             icon="EditIcon"
-          // onIconClick={onIconClick}
           ></Input>
-          {/* <EmailInput
-            onChange={onChangeEmail}
-            value={emailValue}
-            name={"email"}
-            // className="input_size_large"
-          />
-          <PasswordInput
-            onChange={onChangePassword}
-            value={passwordValue}
-            name={"password"}
-            icon="EditIcon"
-          /> */}
+          <div className={style.button__box}>
+            <Button onClick={cancelButtonOnClick}>Отмена</Button>
+            <Button onClick={userSaveDataOnClick}>Сохранить</Button>
+          </div>
         </div>
       </section>
     </>

@@ -73,7 +73,6 @@ export const userDataUpdate = (data, token) => {
       return Promise.reject(`Ошибка: ${res.statusText}`);
     })
       .then((res) => {
-        console.log(res)
         if (res && res.success) {
           dispatch({
             type: USER_UPDATE_SUCCESS,

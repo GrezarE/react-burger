@@ -17,6 +17,7 @@ export const MainPage = () => {
           <BurgerConstructor />
         </section>
       </DndProvider>
+
     </>
   );
 };

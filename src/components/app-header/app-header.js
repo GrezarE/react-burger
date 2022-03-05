@@ -4,15 +4,10 @@ import { BurgerIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ListIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
-import { NavLink, Link } from "react-router-dom";
 import {
   useHistory,
-  useLocation,
   useRouteMatch,
-  useParams,
 } from "react-router-dom";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 const Navigation = (props) => {
   return <nav className={headerStyles.navigation}>{props.children}</nav>;
@@ -32,12 +27,7 @@ const NavigationLink = (props) => {
   );
 };
 
-// const NaviText = (props) => {
-//   return <p className="pl-2 text text_type_main-default"> {props.children}</p>;
-// };
-
 export const Header = () => {
-  const { isAuthenticated } = useSelector(state => state.user)
 
   const history = useHistory();
   const { path } = useRouteMatch();
@@ -49,6 +39,7 @@ export const Header = () => {
     history.replace({ pathname: "/" });
   };
   const onClickFeed = () => {
+    window.history.pushState({path: '/lock'}, '', '/lock')
   };
 
   const authLinks = [

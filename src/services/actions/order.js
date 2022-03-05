@@ -5,7 +5,7 @@ export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
 export const GET_ORDER_FAIL = "GET_ORDER_FAIL";
 export const ORDER_CLEAR = "ORDER_CLEAR";
 
-export function getOrder(ingredients) {
+export function getOrder(ingredients, token) {
   return function (dispatch) {
     dispatch({
       type: GET_ORDER_REQUEST,

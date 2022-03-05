@@ -104,12 +104,15 @@ const IngredientCard = ({ card }) => {
       view: card,
     });
     setIsVisible(true);
+    window.history.pushState({ path: `/ingredients/${card._id}` }, '', `/ingredients/${card._id}`)
   };
   const handleClose = () => {
     dispatch({
       type: CLOSE_CARD,
     });
     setIsVisible(false);
+    window.history.pushState({ path: `/` }, '', `/`)
+
   };
 
   const modal = (

@@ -22,6 +22,7 @@ import {
 import update from "immutability-helper";
 import { useDrag, useDrop } from "react-dnd";
 import { v4 as uuidv4 } from "uuid";
+import { Redirect, useHistory } from "react-router-dom";
 
 const ConstructorItem = ({ ingredient, index, itemKey }) => {
   const dispatch = useDispatch();
@@ -262,7 +263,10 @@ ConstructorButtonBoxPrice.propTypes = {
 
 const ConstructorButtonBox = ({ ingredients }) => {
   const dispatch = useDispatch();
+  const history = useHistory()
   const { order } = useSelector((store) => store.order);
+  const { isAuthenticated, token } = useSelector(state => state.user)
+
 
   const handleClose = () => {
     dispatch({
@@ -278,14 +282,19 @@ const ConstructorButtonBox = ({ ingredients }) => {
     </Modal>
   );
 
+
   return (
     <div className={"mr-4 mt-10 " + burgerConstructorStyle.button_box}>
       <ConstructorButtonBoxPrice ingredients={ingredients} />
       <Button
         type="primary"
         size="large"
-        onClick={async () => {
-          dispatch(getOrder(ingredients));
+        onClick={() => {
+          if (!isAuthenticated) {
+            history.replace({ pathname: `/login` });
+          } else {
+            dispatch(getOrder(ingredients, token));
+          }
         }}
       >
         Оформить заказ

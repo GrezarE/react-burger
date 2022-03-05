@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Header } from "../app-header/app-header";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
 import { BurgerConstructor } from "../burger-constructor/burger-constructor";
+import { ProtectedRoute } from "../protected-route/protected-route";
 import ErrorBoundary from "../error-boundary/error-boundary";
 import { useDispatch, useSelector } from "react-redux";
 import { getIngredient } from "../../services/actions/burger";
@@ -31,6 +32,9 @@ export const App = () => {
 
   useEffect(() => {
     console.log(token)
+    // if (!token) {
+
+    // }
   }, [token])
 
   return (
@@ -45,10 +49,6 @@ export const App = () => {
         <Switch>
           <Route path="/" exact={true}>
             <MainPage />
-            {/* <DndProvider backend={HTML5Backend}>
-                <BurgerIngredients />
-                <BurgerConstructor />
-              </DndProvider> */}
           </Route>
           <Route path="/login" exact={true}>
             <Login />
@@ -62,9 +62,9 @@ export const App = () => {
           <Route path="/reset-password" exact={true}>
             <ResetPassword />
           </Route>
-          <Route path="/profile" exact={true} component={isAuthenticated ? Profile : Login}>
-            {/* <Profile /> */}
-          </Route>
+          <ProtectedRoute path="/profile" exact={true}>
+            <Profile />
+          </ProtectedRoute>
         </Switch>
       </Router>
     </ErrorBoundary>

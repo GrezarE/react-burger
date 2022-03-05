@@ -12,21 +12,16 @@ import style from "./profile.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogout } from "../services/actions/logout";
 import { getCookie } from "../utils/cookies";
-import { userDataUpdate } from "../services/actions/user";
+import { userDataUpdate, tokenUpdate, userDataUpdateWithoutToken } from "../services/actions/user";
 
 export const Profile = () => {
   const dispatch = useDispatch()
   const { email, userName, isAuthenticated, token } = useSelector((state) => state.user);
 
   const [emailValue, setEmailValue] = React.useState("");
-  const [passwordValue, setPasswordValue] = React.useState("********");
+  const [passwordValue, setPasswordValue] = React.useState('');
   const [nameInput, setNameInput] = React.useState("");
   const inputRef = React.useRef(null);
-  // const onIconClick = () => {
-  //   setTimeout(() => inputRef.current.focus(), 0);
-  //   alert("Icon Click Callback");
-  // };
-  // const [visible, setVisible] = React.useState(true);
 
   useEffect(() => {
     setEmailValue(email);
@@ -34,24 +29,30 @@ export const Profile = () => {
   }, []);
 
   const logoutOnClick = () => {
-    const token = getCookie('refreshToken')
-    console.log(token)
-    dispatch(getLogout(token))
+    const refreshToken = getCookie('refreshToken')
+    dispatch(getLogout(refreshToken))
   }
 
   const userSaveDataOnClick = () => {
     const userData = {
       email: emailValue,
       name: nameInput,
+      password: passwordValue
     }
-    console.log(userData)
-    dispatch(userDataUpdate(userData, token))
+
+    if (!token) {
+      const refreshToken = getCookie('refreshToken')
+      dispatch(userDataUpdateWithoutToken(userData, refreshToken))
+
+    } else {
+      dispatch(userDataUpdate(userData, token))
+    }
   }
 
   const cancelButtonOnClick = () => {
     setEmailValue(email);
     setNameInput(userName);
-    setPasswordValue('********')
+    setPasswordValue('')
   }
 
   return (

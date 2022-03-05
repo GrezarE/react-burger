@@ -40,27 +40,20 @@ export const Header = () => {
   const { isAuthenticated } = useSelector(state => state.user)
 
   const history = useHistory();
-  const location = useLocation();
   const { path } = useRouteMatch();
-  const param = useParams();
-
-  // useEffect(() => {
-  //   console.log(history);
-  //   console.log(location);
-  //   console.log(path);
-  //   console.log(param);
-  // }, [history]);
 
   const onClickLogin = () => {
-    const link = isAuthenticated ? 'profile' : 'login'
-    history.replace({ pathname: `/${link}` });
+    history.replace({ pathname: `/profile` });
   };
   const onClickMenu = () => {
     history.replace({ pathname: "/" });
   };
-  const onClickProfile = () => {
-    history.replace({ pathname: "/profile" });
+  const onClickFeed = () => {
   };
+
+  const authLinks = [
+    '/login', '/forgot-password', '/register', '/profile', '/reset-password'
+  ]
 
   return (
     <header className={headerStyles.header} style={{}}>
@@ -77,11 +70,11 @@ export const Header = () => {
             Конструктор
           </p>
         </NavigationLink>
-        <NavigationLink onClick={onClickProfile}>
-          <ListIcon type={path === "/profile" ? "primary" : "secondary"} />
+        <NavigationLink onClick={onClickFeed}>
+          <ListIcon type={path === "/feed " ? "primary" : "secondary"} />
           <p
             className={
-              path === "/profile"
+              path === "/feed"
                 ? "pl-2 text text_type_main-default"
                 : "pl-2 text text_type_main-default text_color_inactive"
             }
@@ -95,10 +88,10 @@ export const Header = () => {
         class={headerStyles.navigation__link_right}
         onClick={onClickLogin}
       >
-        <ProfileIcon type={path === "/login" ? "primary" : "secondary"} />
+        <ProfileIcon type={path === authLinks.find(item => item === path) ? "primary" : "secondary"} />
         <p
           className={
-            path === "/login"
+            path === authLinks.find(item => item === path)
               ? "pl-2 text text_type_main-default"
               : "pl-2 text text_type_main-default text_color_inactive"
           }

@@ -6,18 +6,14 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Header } from "../components/app-header/app-header";
-import { Link, useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory, Redirect } from "react-router-dom";
+import { useDispatch, useSelector, } from "react-redux";
 import { getRegistration } from "../services/actions/register";
 
 export const Registration = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const { isAuthenticated } = useSelector(state => state.user)
-
-  useEffect(() => {
-    isAuthenticated ? history.replace({ pathname: '/' }) : console.log(isAuthenticated)
-  }, [isAuthenticated])
 
   const [emailValue, setEmailValue] = React.useState("");
   const onChangeEmail = (e) => {
@@ -29,10 +25,6 @@ export const Registration = () => {
   };
   const [nameInput, setNameInput] = React.useState("");
   const inputRef = React.useRef(null);
-  const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
-    alert("Icon Click Callback");
-  };
 
   const registerOnClick = () => {
     const registerData = {
@@ -41,6 +33,12 @@ export const Registration = () => {
       name: nameInput
     }
     dispatch(getRegistration(registerData))
+  }
+
+  if (isAuthenticated) {
+    return (
+      <Redirect to='/' />
+    )
   }
 
   return (
@@ -57,7 +55,7 @@ export const Registration = () => {
             name={"name"}
             ref={inputRef}
             errorText={"Ошибка"}
-            onIconClick={onIconClick}
+            // onIconClick={onIconClick}
           ></Input>
           <EmailInput
             onChange={onChangeEmail}

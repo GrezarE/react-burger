@@ -63,7 +63,8 @@ export const userDataUpdate = (data, token) => {
       headers: { authorization: token, "Content-Type": "application/json" },
       body: JSON.stringify({
         email: data.email,
-        name: data.name
+        name: data.name,
+        password: data.password
       }),
     }).then(function (res) {
       if (res.ok) {
@@ -79,7 +80,6 @@ export const userDataUpdate = (data, token) => {
             email: res.user.email,
             name: res.user.name,
           })
-
         } else {
           dispatch({
             type: USER_UPDATE_FAIL,
@@ -154,5 +154,68 @@ export const getUserData = (token) => {
           type: USER_UPDATE_FAIL,
         });
       });
+  }
+}
+
+export const userDataUpdateWithoutToken = (data, token) => {
+  return function (dispatch) {
+    fetch(`${AUTH_URL}/token`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: token
+      }),
+    }).then(function (res) {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.statusText}`);
+    }).then((res) => {
+      if (res && res.success) {
+        dispatch({
+          type: TOKEN_UPDATE_SUCCESS,
+          token: res.accessToken
+        })
+        const refreshToken = res.refreshToken
+        setCookie('refreshToken', refreshToken)
+        setTimeout(() => dispatch({ type: RESET_TOKEN }), [1000 * 1200])
+        return res
+      }
+    }).then((res) => {
+      console.log(res)
+      fetch(`${AUTH_URL}/user`, {
+        method: "PATCH",
+        headers: { authorization: res.accessToken, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: data.email,
+          name: data.name
+        }),
+      }).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.statusText}`);
+      })
+        .then((res) => {
+          console.log(res)
+          if (res && res.success) {
+            dispatch({
+              type: USER_UPDATE_SUCCESS,
+              email: res.user.email,
+              name: res.user.name,
+            })
+
+          } else {
+            dispatch({
+              type: USER_UPDATE_FAIL,
+            });
+          }
+        })
+        .catch((err) => {
+          dispatch({
+            type: USER_UPDATE_FAIL,
+          });
+        });
+    })
   }
 }

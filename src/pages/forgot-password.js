@@ -5,15 +5,20 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Header } from "../components/app-header/app-header";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, Redirect, useLocation } from "react-router-dom";
 import { BASE_URL } from "../utils/base-url";
+import { useSelector } from "react-redux";
 
 export const ForgotPassword = () => {
+  const { isAuthenticated } = useSelector(state => state.user)
+
+
   const [emailValue, setEmailValue] = React.useState("");
   const onChangeEmail = (e) => {
     setEmailValue(e.target.value);
   };
   const history = useHistory();
+  const location = useLocation()
 
   const forgotPasswordClick = () => {
     const sendPost = () => {
@@ -32,7 +37,7 @@ export const ForgotPassword = () => {
         })
         .then((res) => {
           if (res && res.success) {
-            history.replace({ pathname: "/reset-password" });
+            history.replace({ pathname: "/reset-password", state: {from: location} });
           }
         })
         .catch((err) => {
@@ -43,6 +48,12 @@ export const ForgotPassword = () => {
       sendPost();
     }
   };
+
+  if (isAuthenticated) {
+    return (
+      <Redirect to='/profile' />
+    )
+  }
 
   return (
     <>

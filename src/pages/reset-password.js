@@ -4,11 +4,14 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Header } from "../components/app-header/app-header";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, Redirect, useLocation } from "react-router-dom";
 import { BASE_URL } from "../utils/base-url";
+import { useSelector } from "react-redux";
 
 export const ResetPassword = () => {
   const history = useHistory();
+  const { state } = useLocation()
+  const { isAuthenticated } = useSelector(state => state.user)
 
   const [passwordValue, setPasswordValue] = React.useState("");
   const onChangePassword = (e) => {
@@ -39,7 +42,6 @@ export const ResetPassword = () => {
         })
         .then((res) => {
           if (res && res.success) {
-            console.log("qwe");
             history.replace({ pathname: "/login" });
           }
         })
@@ -50,12 +52,23 @@ export const ResetPassword = () => {
           alert(res.message)
         })
     };
+
     if (passwordValue && codeInput) {
       sendPost();
-    } else {
-      console.log();
     }
   };
+
+  if (isAuthenticated) {
+    return (
+      <Redirect to='/profile' />
+    )
+  }
+
+  if (!isAuthenticated && state?.from.pathname !== '/forgot-password') {
+    return (
+      <Redirect to='/' />
+    )
+  }
 
   return (
     <>

@@ -63,7 +63,7 @@ export const userReducer = (state = userInitState, action) => {
       return {
         ...state,
         isRequest: false,
-        token: action.token
+        token: action.token,
       }
     }
     case TOKEN_UPDATE_FAIL: {

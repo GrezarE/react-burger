@@ -5,16 +5,13 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Header } from "../components/app-header/app-header";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, Redirect, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogin } from "../services/actions/login";
 
 export const Login = () => {
-  const history = useHistory()
+  const { state } = useLocation()
   const { isAuthenticated } = useSelector(state => state.user)
-  useEffect(() => {
-    isAuthenticated ? history.replace({ pathname: '/' }) : console.log(isAuthenticated)
-  }, [isAuthenticated])
 
   const dispatch = useDispatch()
   const [emailValue, setEmailValue] = React.useState("");
@@ -32,9 +29,14 @@ export const Login = () => {
       password: passwordValue
     }
     dispatch(getLogin(loginData))
-    
   }
 
+
+  if (isAuthenticated) {
+    return (
+      <Redirect to={state?.from || '/'} />
+    )
+  }
 
   return (
     <>

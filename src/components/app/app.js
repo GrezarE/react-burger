@@ -47,7 +47,7 @@ export const App = () => {
           <ProtectedRoute path="/profile" exact={true}>
             <Profile />
           </ProtectedRoute>
-          <Route path={`/ingredients/:id`} exact={true}>
+          <Route path="/ingredients/:id" exact={true}>
             <Ingredient />
           </Route>
         </Switch>

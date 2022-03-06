@@ -7,7 +7,7 @@ import {
 } from "../actions/construct";
 
 const constructorInitialState = {
-  bun: "60d3b41abdacab0026a733c7",
+  bun: "",
   components: [],
 };
 
@@ -44,7 +44,7 @@ export const constructorReducer = (state = constructorInitialState, action) => {
     }
     case CLEAR_COMPONENTS: {
       return {
-        bun: "60d3b41abdacab0026a733c7",
+        bun: "",
         components: [],
       };
     }

@@ -1,0 +1,39 @@
+.profile {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 180px;
+
+  margin-left: 380px;
+  margin-right: 760px;
+  gap: 60px;
+}
+
+.box {
+  list-style: none;
+  width: 320px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.box:hover {
+  cursor: pointer;
+  background-color: #2F2F37;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+}
+
+.grey_text {
+  color: #8585AD;
+}
+
+.button__box {
+  width: 480px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}

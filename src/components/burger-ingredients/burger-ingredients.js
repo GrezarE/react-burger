@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState} from "react";
 import PropTypes from "prop-types";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import {
@@ -12,6 +12,7 @@ import { ingredientType } from "../../utils/types.js";
 import { useDispatch, useSelector } from "react-redux";
 import { CLOSE_CARD, OPEN_CARD } from "../../services/actions/view";
 import { useDrag } from "react-dnd";
+
 
 const HeaderIngredients = (props) => {
   return (
@@ -103,12 +104,15 @@ const IngredientCard = ({ card }) => {
       view: card,
     });
     setIsVisible(true);
+    window.history.pushState({ path: `/ingredients/${card._id}` }, '', `/ingredients/${card._id}`)
   };
   const handleClose = () => {
     dispatch({
       type: CLOSE_CARD,
     });
     setIsVisible(false);
+    window.history.pushState({ path: `/` }, '', `/`)
+
   };
 
   const modal = (
@@ -205,6 +209,8 @@ export const BurgerIngredients = () => {
       setTab("one");
     }
   };
+
+
 
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>

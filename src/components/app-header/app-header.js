@@ -4,6 +4,12 @@ import { BurgerIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ListIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  useHistory,
+  useRouteMatch,
+  Link
+} from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navigation = (props) => {
   return <nav className={headerStyles.navigation}>{props.children}</nav>;
@@ -16,33 +22,80 @@ const NavigationLink = (props) => {
         "mt-4 mb-4 mr-2 pl-5 pr-5 " +
         [props.class || headerStyles.navigation__link]
       }
+      onClick={() => props.onClick()}
     >
       {props.children}
     </div>
   );
 };
 
-const NaviText = (props) => {
-  return <p className="pl-2 text text_type_main-default"> {props.children}</p>;
-};
-
 export const Header = () => {
+
+  const history = useHistory();
+  const { path } = useRouteMatch();
+  const { forgotSuccess } = useSelector(state => state.password)
+  console.log(forgotSuccess)
+
+
+  const onClickLogin = () => {
+    history.replace({ pathname: `/profile` });
+  };
+  const onClickMenu = () => {
+    history.replace({ pathname: "/" });
+  };
+  const onClickFeed = () => {
+    window.history.pushState({ path: '/lock' }, '', '/lock')
+  };
+
+  const authLinks = [
+    '/login', '/forgot-password', '/register', '/profile', '/reset-password'
+  ]
+
   return (
     <header className={headerStyles.header} style={{}}>
       <Navigation>
-        <NavigationLink>
-          <BurgerIcon type="primary" />
-          <NaviText>Конструктор</NaviText>
+        <NavigationLink onClick={onClickMenu}>
+          <BurgerIcon type={path === "/" ? "primary" : "secondary"} />
+          <p
+            className={
+              path === "/"
+                ? "pl-2 text text_type_main-default"
+                : "pl-2 text text_type_main-default text_color_inactive"
+            }
+          >
+            Конструктор
+          </p>
         </NavigationLink>
-        <NavigationLink>
-          <ListIcon type="primary" />
-          <NaviText>Лента&nbsp;заказов</NaviText>
+        <NavigationLink onClick={onClickFeed}>
+          <ListIcon type={path === "/feed " ? "primary" : "secondary"} />
+          <p
+            className={
+              path === "/feed"
+                ? "pl-2 text text_type_main-default"
+                : "pl-2 text text_type_main-default text_color_inactive"
+            }
+          >
+            Лента&nbsp;заказов
+          </p>
         </NavigationLink>
       </Navigation>
-      <Logo />
-      <NavigationLink class={headerStyles.navigation__link_right}>
-        <ProfileIcon type="primary" />
-        <NaviText>Личный&nbsp;кабинет</NaviText>
+      <Link to='/'>
+        <Logo />
+      </Link>
+      <NavigationLink
+        class={headerStyles.navigation__link_right}
+        onClick={onClickLogin}
+      >
+        <ProfileIcon type={path === authLinks.find(item => item === path) ? "primary" : "secondary"} />
+        <p
+          className={
+            path === authLinks.find(item => item === path)
+              ? "pl-2 text text_type_main-default"
+              : "pl-2 text text_type_main-default text_color_inactive"
+          }
+        >
+          Личный&nbsp;кабинет
+        </p>
       </NavigationLink>
     </header>
   );

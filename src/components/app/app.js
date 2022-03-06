@@ -1,30 +1,61 @@
-import React from "react";
-import appStyle from "./app.module.css";
-import { Header } from "../app-header/app-header";
-import { BurgerIngredients } from "../burger-ingredients/burger-ingredients.js";
-import { BurgerConstructor } from "../burger-constructor/burger-constructor";
+import { useEffect } from "react";
+import { ProtectedRoute } from "../protected-route/protected-route";
 import ErrorBoundary from "../error-boundary/error-boundary";
 import { useDispatch } from "react-redux";
 import { getIngredient } from "../../services/actions/burger";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
+
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Profile, ResetPassword, ForgotPassword, Registration, Login, MainPage } from '../../pages/index'
+import { getCookie } from "../../utils/cookies";
+import { getUserData } from "../../services/actions/user";
+import { Ingredient } from "../../pages/ingredient";
+import { Header } from "../app-header/app-header";
 
 export const App = () => {
+
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getIngredient());
   }, [dispatch]);
 
+  useEffect(() => {
+    const refreshToken = getCookie('refreshToken')
+    if (refreshToken) {
+      dispatch(getUserData(refreshToken))
+    }
+  }, [])
+
   return (
     <ErrorBoundary>
-      <Header></Header>
-      <main className={appStyle.main}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </DndProvider>
-      </main>
+
+      <Router>
+        <Header />
+
+        <Switch>
+          <Route path="/" exact={true}>
+            <MainPage />
+          </Route>
+          <Route path="/login" exact={true}>
+            <Login />
+          </Route>
+          <Route path="/register" exact={true}>
+            <Registration />
+          </Route>
+          <Route path="/forgot-password" exact={true}>
+            <ForgotPassword />
+          </Route>
+          <Route path="/reset-password" exact={true}>
+            <ResetPassword />
+          </Route>
+          <ProtectedRoute path="/profile" exact={true}>
+            <Profile />
+          </ProtectedRoute>
+          <Route path="/ingredients/:id" exact={true}>
+            <Ingredient />
+          </Route>
+        </Switch>
+      </Router>
     </ErrorBoundary>
   );
 };

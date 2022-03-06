@@ -15,8 +15,6 @@
 
 .navigation__link {
   height: 56px;
-  /* border: 1px dashed #4C4CFF; */
-  /* border-radius: 40px; */
   display: flex;
   align-Items: center;
   justify-content: center;
@@ -29,4 +27,12 @@
 .navigation__link_right {
   composes: navigation__link;
   margin-left: 289px;
+}
+
+.navigation__link_grey {
+  color: #8585AD;
+  text-decoration: none;
+}
+.navigation__link_white {
+  color: red;
 }

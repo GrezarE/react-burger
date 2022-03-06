@@ -7,6 +7,7 @@ import { compose, createStore, applyMiddleware } from "redux";
 import { rootReducer } from "./services/reducers";
 import thunk from "redux-thunk";
 
+
 declare const window: any;
 
 const composeEnhancers =

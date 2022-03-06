@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import PropTypes from "prop-types";
 import {
   ConstructorElement,
@@ -22,6 +22,7 @@ import {
 import update from "immutability-helper";
 import { useDrag, useDrop } from "react-dnd";
 import { v4 as uuidv4 } from "uuid";
+import { Redirect, useHistory } from "react-router-dom";
 
 const ConstructorItem = ({ ingredient, index, itemKey }) => {
   const dispatch = useDispatch();
@@ -131,27 +132,26 @@ const ConstructorItem = ({ ingredient, index, itemKey }) => {
 ConstructorItem.propTypes = {
   ingredient: ingredientType.isRequired,
   index: PropTypes.number.isRequired,
-  itemKey: PropTypes.string.isRequired
+  itemKey: PropTypes.string.isRequired,
 };
 
-const Plug = () => {
+const Plug = ({ type }) => {
   return (
     <li className={"pl-8 " + burgerConstructorStyle.card}>
       <div className={burgerConstructorStyle.plug}>
-        <p className="text text_type_main-medium">
-          Создайте здесь свой бургер
-        </p>
+        <p className={"text text_type_main-medium " + burgerConstructorStyle.plug__text}>{type !== 'bun' ? 'Пожалуйста, перенесите сюда ингредиенты для создания заказа' : 'Пожалуйста, перенесите сюда булку для создания заказа'}</p>
       </div>
     </li>
   );
 };
 
-const ConstructorLockedItem = ({ ingredient, position }) => {
+const ConstructorLockedItem = ({ ingredient, position, type }) => {
+  console.log(type)
   return (
     <li className="pl-8">
       <ConstructorElement
         isLocked={true}
-        type={ingredient.type}
+        type={type}
         text={ingredient.name + position}
         price={ingredient.price / 2}
         thumbnail={ingredient.image}
@@ -182,23 +182,26 @@ const ConstructorBox = ({ ingredients }) => {
 
   const ingredientsData = useSelector((state) => state.burger.ingredients);
   const components = useSelector((store) => store.construct);
+  console.log(components.bun)
 
   return (
     <ul className={burgerConstructorStyle.box} ref={dropTarget}>
-      {ingredientsData.map(
+      {components.bun ? ingredientsData.map(
         (item) =>
           item._id === components.bun && (
             <ConstructorLockedItem
               key={item._id}
               ingredient={item}
               position={" (верх)"}
+              type={'top'}
             />
           )
+      ) : (<Plug type='bun' />
       )}
       <li>
         <ul className={burgerConstructorStyle.box_active}>
           {ingredients.length === 1 ? (
-            <Plug />
+            <Plug type='main' />
           ) : (
             components.components.map(({ id, key }, index) => {
               const ingredient = ingredientsData.find(
@@ -225,6 +228,7 @@ const ConstructorBox = ({ ingredients }) => {
               key={item._id}
               ingredient={item}
               position={" (низ)"}
+              type={'bottom'}
             />
           )
       )}
@@ -264,7 +268,11 @@ ConstructorButtonBoxPrice.propTypes = {
 
 const ConstructorButtonBox = ({ ingredients }) => {
   const dispatch = useDispatch();
+  const history = useHistory()
   const { order } = useSelector((store) => store.order);
+  const { bun } = useSelector((store) => store.construct);
+  const { isAuthenticated, token } = useSelector(state => state.user)
+
 
   const handleClose = () => {
     dispatch({
@@ -280,14 +288,20 @@ const ConstructorButtonBox = ({ ingredients }) => {
     </Modal>
   );
 
+
   return (
     <div className={"mr-4 mt-10 " + burgerConstructorStyle.button_box}>
       <ConstructorButtonBoxPrice ingredients={ingredients} />
       <Button
+        disabled={bun ? false : true}
         type="primary"
         size="large"
-        onClick={async () => {
-          dispatch(getOrder(ingredients));
+        onClick={() => {
+          if (!isAuthenticated) {
+            history.replace({ pathname: `/login` });
+          } else {
+            dispatch(getOrder(ingredients, token));
+          }
         }}
       >
         Оформить заказ

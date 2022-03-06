@@ -17,3 +17,48 @@ code {
 .constructor-element {
   width: 488px;
 }
+
+.main__screen {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.input {
+  min-width: 480px;
+  margin-bottom: 24px;
+}
+
+.input__box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* height: 100vh; */
+  width: 100vw;
+  margin-top: 180px;
+}
+
+.input__text-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.input__link {
+  text-decoration: none;
+  color: #4C4CFF;
+}
+
+.authorization__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 480px;
+}
+
+/* .authorization__header {
+  text-align: center;
+} */

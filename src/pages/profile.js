@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
-  EmailInput,
-  PasswordInput,
   Button,
   Input,
-  EditIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Header } from "../components/app-header/app-header";
-import { Link, useHistory } from "react-router-dom";
 import style from "./profile.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogout } from "../services/actions/logout";
 import { getCookie } from "../utils/cookies";
-import { userDataUpdate, tokenUpdate, userDataUpdateWithoutToken } from "../services/actions/user";
+import { userDataUpdate,  userDataUpdateWithoutToken } from "../services/actions/user";
 
 export const Profile = () => {
   const dispatch = useDispatch()
-  const { email, userName, isAuthenticated, token } = useSelector((state) => state.user);
+  const { email, userName,  token } = useSelector((state) => state.user);
 
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState('');
@@ -33,7 +28,10 @@ export const Profile = () => {
     dispatch(getLogout(refreshToken))
   }
 
-  const userSaveDataOnClick = () => {
+  const userSaveDataOnClick = (e) => {
+    e.preventDefault()
+    console.log(e)
+
     const userData = {
       email: emailValue,
       name: nameInput,
@@ -49,7 +47,10 @@ export const Profile = () => {
     }
   }
 
-  const cancelButtonOnClick = () => {
+  const cancelButtonOnClick = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    console.log(e)
     setEmailValue(email);
     setNameInput(userName);
     setPasswordValue('')
@@ -57,7 +58,6 @@ export const Profile = () => {
 
   return (
     <>
-      <Header />
       <section className={style.profile}>
         <ul className={style.list}>
           <li className={style.box}>
@@ -74,7 +74,7 @@ export const Profile = () => {
             </p>
           </li>
         </ul>
-        <div className="authorization__box">
+        <form className="authorization__box" onSubmit={(e) => userSaveDataOnClick(e)}>
           <Input
             type={"text"}
             placeholder={"Имя"}
@@ -104,10 +104,10 @@ export const Profile = () => {
             icon="EditIcon"
           ></Input>
           <div className={style.button__box}>
-            <Button onClick={cancelButtonOnClick}>Отмена</Button>
-            <Button onClick={userSaveDataOnClick}>Сохранить</Button>
+            <Button type="primary">Сохранить</Button>
+            <Button type="primary" onClick={(e) => cancelButtonOnClick(e)} >Отмена</Button>
           </div>
-        </div>
+        </form>
       </section>
     </>
   );

@@ -1,6 +1,8 @@
-import { AUTH_URL } from "../../utils/auth-url";
+import { BASE_URL } from "../../utils/base-url";
 import { USER_SET_DATA, RESET_TOKEN } from "./user";
 import { setCookie } from "../../utils/cookies";
+import { checkResponse } from "../../utils/check-response";
+
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -11,7 +13,7 @@ export function getLogin(data) {
     dispatch({
       type: LOGIN_REQUEST,
     });
-    fetch(`${AUTH_URL}/login`, {
+    fetch(`${BASE_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -19,12 +21,7 @@ export function getLogin(data) {
         password: data.password,
       }),
     })
-      .then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка: ${res.statusText}`);
-      })
+      .then(checkResponse)
       .then((res) => {
         if (res && res.success) {
           dispatch({

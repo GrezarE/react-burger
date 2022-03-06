@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import style from './ingredient.module.css'
 import PropTypes from "prop-types";
-import { Header } from "../components/app-header/app-header";
 
 const Nutrient = (props) => {
   return (
@@ -25,7 +24,6 @@ export const Ingredient = () => {
 
   return (
     <>
-      <Header />
       <section className={style.section}>
         <h1 className={"text text_type_main-large  " + style.header}>Детали ингредиента</h1>
         <div className={style.box}>

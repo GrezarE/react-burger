@@ -1,17 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   EmailInput,
   PasswordInput,
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Header } from "../components/app-header/app-header";
-import { Link, useHistory, Redirect } from "react-router-dom";
+import { Link,  Redirect } from "react-router-dom";
 import { useDispatch, useSelector, } from "react-redux";
 import { getRegistration } from "../services/actions/register";
 
 export const Registration = () => {
-  const history = useHistory()
   const dispatch = useDispatch()
   const { isAuthenticated } = useSelector(state => state.user)
 
@@ -26,7 +24,9 @@ export const Registration = () => {
   const [nameInput, setNameInput] = React.useState("");
   const inputRef = React.useRef(null);
 
-  const registerOnClick = () => {
+  const registerOnClick = (e) => {
+    e.preventDefault()
+
     const registerData = {
       email: emailValue,
       password: passwordValue,
@@ -43,9 +43,8 @@ export const Registration = () => {
 
   return (
     <>
-      <Header />
       <section className="input__box">
-        <div className="authorization__box">
+        <form className="authorization__box" onSubmit={(e) => registerOnClick(e)}>
           <h1 className="mb-6 text text_type_main-medium ">Регистрация</h1>
           <Input
             type={"text"}
@@ -55,20 +54,18 @@ export const Registration = () => {
             name={"name"}
             ref={inputRef}
             errorText={"Ошибка"}
-            // onIconClick={onIconClick}
           ></Input>
           <EmailInput
             onChange={onChangeEmail}
             value={emailValue}
             name={"email"}
-          // className="input_size_large"
           />
           <PasswordInput
             onChange={onChangePassword}
             value={passwordValue}
             name={"password"}
           />
-          <Button onClick={registerOnClick}>Зарегистрироваться</Button>
+          <Button >Зарегистрироваться</Button>
           <div className="mt-20 input__text-line">
             <p className="text text_type_main-default">Уже зарегистрированы?</p>
             <Link
@@ -78,7 +75,7 @@ export const Registration = () => {
               Войти
             </Link>
           </div>
-        </div>
+        </form>
       </section>
     </>
   );

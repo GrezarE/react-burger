@@ -9,6 +9,7 @@ import { Profile, ResetPassword, ForgotPassword, Registration, Login, MainPage }
 import { getCookie } from "../../utils/cookies";
 import { getUserData } from "../../services/actions/user";
 import { Ingredient } from "../../pages/ingredient";
+import { Header } from "../app-header/app-header";
 
 export const App = () => {
 
@@ -27,7 +28,10 @@ export const App = () => {
 
   return (
     <ErrorBoundary>
+
       <Router>
+        <Header />
+
         <Switch>
           <Route path="/" exact={true}>
             <MainPage />

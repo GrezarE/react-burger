@@ -7,7 +7,9 @@ import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
   useHistory,
   useRouteMatch,
+  Link
 } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navigation = (props) => {
   return <nav className={headerStyles.navigation}>{props.children}</nav>;
@@ -31,6 +33,9 @@ export const Header = () => {
 
   const history = useHistory();
   const { path } = useRouteMatch();
+  const { forgotSuccess } = useSelector(state => state.password)
+  console.log(forgotSuccess)
+
 
   const onClickLogin = () => {
     history.replace({ pathname: `/profile` });
@@ -39,7 +44,7 @@ export const Header = () => {
     history.replace({ pathname: "/" });
   };
   const onClickFeed = () => {
-    window.history.pushState({path: '/lock'}, '', '/lock')
+    window.history.pushState({ path: '/lock' }, '', '/lock')
   };
 
   const authLinks = [
@@ -74,7 +79,9 @@ export const Header = () => {
           </p>
         </NavigationLink>
       </Navigation>
-      <Logo />
+      <Link to='/'>
+        <Logo />
+      </Link>
       <NavigationLink
         class={headerStyles.navigation__link_right}
         onClick={onClickLogin}

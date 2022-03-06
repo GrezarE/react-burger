@@ -1,6 +1,9 @@
-import { AUTH_URL } from "../../utils/auth-url";
+import { BASE_URL } from "../../utils/base-url";
+
 import { USER_LOGOUT } from "./user";
 import { deleteCookie } from "../../utils/cookies";
+import { checkResponse } from "../../utils/check-response";
+
 
 export const LOGOUT_REQUEST = "LOGIN_REQUEST";
 export const LOGOUT_SUCCESS = "LOGIN_SUCCESS";
@@ -11,19 +14,14 @@ export function getLogout(token) {
     dispatch({
       type: LOGOUT_REQUEST,
     });
-    fetch(`${AUTH_URL}/logout`, {
+    fetch(`${BASE_URL}/auth/logout`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         token: token
       }),
     })
-      .then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка: ${res.statusText}`);
-      })
+      .then(checkResponse)
       .then((res) => {
         if (res && res.success) {
           dispatch({

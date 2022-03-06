@@ -1,4 +1,6 @@
 import { BASE_URL } from "../../utils/base-url";
+import { checkResponse } from "../../utils/check-response";
+
 
 export const GET_ORDER_REQUEST = "GET_ORDER_REQUEST";
 export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
@@ -17,12 +19,7 @@ export function getOrder(ingredients, token) {
         ingredients: ingredients,
       }),
     })
-      .then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка: ${res.statusText}`);
-      })
+      .then(checkResponse)
       .then((res) => {
         if (res && res.success) {
           dispatch({

@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Header } from "../components/app-header/app-header";
-import { Link, useHistory, Redirect, useLocation } from "react-router-dom";
-import { BASE_URL } from "../utils/base-url";
-import { useSelector } from "react-redux";
+import { Link, Redirect, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { passwordReset } from "../services/actions/password-reset";
 
 export const ResetPassword = () => {
-  const history = useHistory();
   const { state } = useLocation()
+  const dispatch = useDispatch()
   const { isAuthenticated } = useSelector(state => state.user)
+  const { resetSuccess } = useSelector(state => state.password)
 
   const [passwordValue, setPasswordValue] = React.useState("");
   const onChangePassword = (e) => {
@@ -19,48 +19,28 @@ export const ResetPassword = () => {
   };
   const [codeInput, setCodeInput] = React.useState("");
   const inputRef = React.useRef(null);
-  const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
-    alert("Icon Click Callback");
-  };
 
-  const resetPasswordClick = () => {
-    const sendPost = () => {
-      fetch(`${BASE_URL}/password-reset/reset`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          password: passwordValue,
-          token: codeInput,
-        }),
-      })
-        .then(function (res) {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(res);
-        })
-        .then((res) => {
-          if (res && res.success) {
-            history.replace({ pathname: "/login" });
-          }
-        })
-        .catch((res) => {
-          return res.json()
-        }).then((res) => {
-          console.log(res.message)
-          alert(res.message)
-        })
-    };
 
+  const resetPasswordSubmit = (e) => {
+    e.preventDefault()
     if (passwordValue && codeInput) {
-      sendPost();
+      const data = {
+        password: passwordValue,
+        code: codeInput
+      }
+      dispatch(passwordReset(data))
     }
   };
 
   if (isAuthenticated) {
     return (
       <Redirect to='/profile' />
+    )
+  }
+
+  if (resetSuccess && !isAuthenticated) {
+    return (
+      <Redirect to='/login' />
     )
   }
 
@@ -72,9 +52,8 @@ export const ResetPassword = () => {
 
   return (
     <>
-      <Header />
       <section className="input__box">
-        <div className="authorization__box">
+        <form className="authorization__box" onSubmit={(e) => resetPasswordSubmit(e)}>
           <h1 className="mb-6 text text_type_main-medium ">
             Восстановление пароля
           </h1>
@@ -93,9 +72,8 @@ export const ResetPassword = () => {
             name={"code"}
             ref={inputRef}
             errorText={"Ошибка"}
-            onIconClick={onIconClick}
           ></Input>
-          <Button onClick={resetPasswordClick}>Сохранить</Button>
+          <Button onClick={resetPasswordSubmit}>Сохранить</Button>
           <div className="mt-20 input__text-line">
             <p className="text text_type_main-default">Вспомнили пароль?</p>
             <Link
@@ -105,7 +83,7 @@ export const ResetPassword = () => {
               Войти
             </Link>
           </div>
-        </div>
+        </form>
       </section>
     </>
   );

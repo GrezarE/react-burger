@@ -1,6 +1,9 @@
-import { AUTH_URL } from "../../utils/auth-url";
+import { BASE_URL } from "../../utils/base-url";
+
 import { USER_SET_DATA, RESET_TOKEN } from "./user";
 import { setCookie } from "../../utils/cookies";
+import { checkResponse } from "../../utils/check-response";
+
 
 export const REGISTRATION_REQUEST = "REGISTRATION_REQUEST";
 export const REGISTRATION_SUCCESS = "LOGIN_SUCCESS";
@@ -12,7 +15,7 @@ export function getRegistration(data) {
     dispatch({
       type: REGISTRATION_REQUEST,
     });
-    fetch(`${AUTH_URL}/register`, {
+    fetch(`${BASE_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -21,12 +24,7 @@ export function getRegistration(data) {
         name: data.name
       }),
     })
-      .then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка: ${res.statusText}`);
-      })
+      .then(checkResponse)
       .then((res) => {
         if (res && res.success) {
           dispatch({

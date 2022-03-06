@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   EmailInput,
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Header } from "../components/app-header/app-header";
-import { Link, useHistory, Redirect, useLocation } from "react-router-dom";
+import { Link,  Redirect, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogin } from "../services/actions/login";
 
@@ -23,7 +22,8 @@ export const Login = () => {
     setPasswordValue(e.target.value);
   };
 
-  const loginOnClick = () => {
+  const loginOnClick = (e) => {
+    e.preventDefault()
     const loginData = {
       email: emailValue,
       password: passwordValue
@@ -40,9 +40,8 @@ export const Login = () => {
 
   return (
     <>
-      <Header />
-      <section className="input__box">
-        <div className='authorization__box'>
+      <section className="input__box" >
+        <form className='authorization__box' onSubmit={(e) => loginOnClick(e)}>
           <h1 className="mb-6 text text_type_main-medium " >
             Вход
           </h1>
@@ -56,7 +55,7 @@ export const Login = () => {
             value={passwordValue}
             name={"password"}
           />
-          <Button onClick={loginOnClick}>Войти</Button>
+          <Button  >Войти</Button>
           <div className="mt-20 input__text-line">
             <p className="text text_type_main-default">
               Вы - новый пользователь?
@@ -71,7 +70,7 @@ export const Login = () => {
               Восстановить пароль
             </Link>
           </div>
-        </div>
+        </form>
       </section>
     </>
   );

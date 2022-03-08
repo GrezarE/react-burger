@@ -14,13 +14,13 @@ import { CLOSE_CARD, OPEN_CARD } from "../../services/actions/view";
 import { useDrag } from "react-dnd";
 
 
-const HeaderIngredients = (props) => {
+export const Header = (props) => {
   return (
     <h1 className="mt-10 mb-5 text text_type_main-large">{props.children}</h1>
   );
 };
 
-HeaderIngredients.propTypes = {
+Header.propTypes = {
   children: PropTypes.string.isRequired,
 };
 
@@ -214,7 +214,7 @@ export const BurgerIngredients = () => {
 
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>
-      <HeaderIngredients>Соберите бургер</HeaderIngredients>
+      <Header>Соберите бургер</Header>
       <TabContainer
         buns={() => scroll(buns)}
         sauses={() => scroll(sause)}

@@ -44,7 +44,8 @@ export const Header = () => {
     history.replace({ pathname: "/" });
   };
   const onClickFeed = () => {
-    window.history.pushState({ path: '/lock' }, '', '/lock')
+    history.replace({ pathname: `/feed` });
+
   };
 
   const authLinks = [

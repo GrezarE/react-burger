@@ -24,6 +24,12 @@ code {
   gap: 40px;
 }
 
+.feeds__page {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
 .input {
   min-width: 480px;
   margin-bottom: 24px;

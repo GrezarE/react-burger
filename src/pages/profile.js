@@ -21,6 +21,7 @@ export const Profile = () => {
   useEffect(() => {
     setEmailValue(email);
     setNameInput(userName);
+    setPasswordValue('')
   }, []);
 
   const logoutOnClick = () => {
@@ -30,7 +31,6 @@ export const Profile = () => {
 
   const userSaveDataOnClick = (e) => {
     e.preventDefault()
-    console.log(e)
 
     const userData = {
       email: emailValue,
@@ -50,7 +50,6 @@ export const Profile = () => {
   const cancelButtonOnClick = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    console.log(e)
     setEmailValue(email);
     setNameInput(userName);
     setPasswordValue('')

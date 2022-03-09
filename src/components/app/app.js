@@ -13,6 +13,7 @@ import { Header } from "../app-header/app-header";
 import { Modal } from "../modal/modal";
 import { CLOSE_FEED } from "../../services/actions/feed-view";
 import { FeedDetails } from "../feed-details/feed-details";
+import { FeedDetailsPage } from "../../pages/feed-details-page";
 
 
 export const App = () => {
@@ -23,11 +24,12 @@ export const App = () => {
 
   const background = location.state && location.state.background;
 
-  // useEffect(() => {
-  //   console.log(background)
-  //   console.log(location)
-  //   console.log(feed)
-  // }, [background, feed])
+
+  useEffect(() => {
+    console.log(background)
+    // console.log(location)
+    // console.log(feed)
+  }, [background, feed])
 
   useEffect(() => {
     dispatch(getIngredient());
@@ -68,19 +70,25 @@ export const App = () => {
         <Route path="/reset-password" exact={true}>
           <ResetPassword />
         </Route>
-        <Route path="/feed">
+        <Route path="/feed" exact={true}>
           <FeedsPage />
         </Route>
         <ProtectedRoute path="/profile" exact={true}>
           <Profile />
         </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders" exact={true}>
+          <Profile />
+        </ProtectedRoute>
         <Route path="/ingredients/:id" exact={true}>
           <Ingredient />
         </Route>
+        <Route path="/feed/:id" exact={true}>
+          <FeedDetailsPage />
+        </Route>
         {/* <Route></Route> */}
       </Switch>
+      {background && <ProtectedRoute path="/profile/orders/:id" exact={true}><Modal onClose={onClose} header={`#${feed}`} ><FeedDetails /></Modal></ProtectedRoute>}
       {background && <Route path="/feed/:id" children={<Modal onClose={onClose} header={`#${feed}`} ><FeedDetails /></Modal>} />}
-
       {/* </Router> */}
     </ErrorBoundary>
   );

@@ -34,7 +34,7 @@ export const Header = () => {
 
   const history = useHistory();
   const { path, url } = useRouteMatch();
-  const {pathname} = useLocation()
+  const { pathname } = useLocation()
   const { forgotSuccess } = useSelector(state => state.password)
   // console.log(pathname)
 

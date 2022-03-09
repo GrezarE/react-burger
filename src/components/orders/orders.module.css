@@ -1,0 +1,25 @@
+.orders__box {
+  display: flex;
+  flex-direction: row;
+  gap: 36px;
+}
+
+.orders__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px
+}
+
+.list__box {
+  width: 272px;
+  display: flex;
+  flex-direction: column;
+  justify-content: baseline;
+}
+
+.ready {
+  color: #00CCCC;
+}

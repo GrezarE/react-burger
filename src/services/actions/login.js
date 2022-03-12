@@ -35,7 +35,7 @@ export function getLogin(data) {
           })
           setTimeout(() => dispatch({ type: RESET_TOKEN }), [1000 * 1200])
           const refreshToken = res.refreshToken
-          setCookie('refreshToken', refreshToken)
+          setCookie('refreshToken', refreshToken, {path: '/'})
         } else {
           dispatch({
             type: LOGIN_FAIL,

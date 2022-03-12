@@ -1,4 +1,4 @@
-import React, { useRef, useState} from "react";
+import React, { useCallback, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import {
@@ -187,6 +187,7 @@ export const BurgerIngredients = () => {
   const main = useRef("main");
   const [tab, setTab] = useState("one");
 
+
   const scroll = (item) => {
     item.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -221,7 +222,9 @@ export const BurgerIngredients = () => {
         main={() => scroll(main)}
         tab={tab}
       />
-      <ul className={burgerIngredientsStyle.box} onScroll={(e) => onScroll(e)}>
+      <ul className={burgerIngredientsStyle.box}
+        onScroll={(e) => onScroll(e)}
+      >
         <IngredientsBlock refElement={buns} key="bun" type="bun" text="Булки" />
         <IngredientsBlock
           refElement={sause}

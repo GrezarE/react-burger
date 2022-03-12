@@ -21,15 +21,19 @@ export const App = () => {
   const dispatch = useDispatch();
   const history = useHistory()
   const feed = useSelector(state => state.feed.feedView)
+  const { email, userName, token, isAuthenticated } = useSelector((state) => state.user);
 
   const background = location.state && location.state.background;
 
+  const refreshToken = getCookie('refreshToken')
 
   useEffect(() => {
-    console.log(background)
-    // console.log(location)
+    // console.log(background)
+    // console.log(email, userName)
     // console.log(feed)
-  }, [background, feed])
+    console.log('refresh token', refreshToken)
+    console.log(isAuthenticated)
+  }, [isAuthenticated, refreshToken])
 
   useEffect(() => {
     dispatch(getIngredient());
@@ -37,6 +41,7 @@ export const App = () => {
 
   useEffect(() => {
     const refreshToken = getCookie('refreshToken')
+    console.log('refresh token', refreshToken)
     if (refreshToken) {
       dispatch(getUserData(refreshToken))
     }
@@ -78,6 +83,9 @@ export const App = () => {
         </ProtectedRoute>
         <ProtectedRoute path="/profile/orders" exact={true}>
           <Profile />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders/:id" exact={true}>
+          <FeedDetailsPage />
         </ProtectedRoute>
         <Route path="/ingredients/:id" exact={true}>
           <Ingredient />

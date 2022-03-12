@@ -182,7 +182,6 @@ const ConstructorBox = ({ ingredients }) => {
 
   const ingredientsData = useSelector((state) => state.burger.ingredients);
   const components = useSelector((store) => store.construct);
-  console.log(components.bun)
 
   return (
     <ul className={burgerConstructorStyle.box} ref={dropTarget}>

@@ -7,7 +7,43 @@ export const Orders = () => {
   return (
     <section className='pt-25'>
       <div className={style.orders__box}>
-        <div className={style.list__box}><h2 className="mb-6 text text_type_main-default">Готовы:</h2><ul className={style.orders__list}><li className={"text text_type_digits-default " + style.ready}>034533</li><li className={"text text_type_digits-default " + style.ready}>034532</li></ul></div>
+        <div className={style.list__box}><h2 className="mb-6 text text_type_main-default">Готовы:</h2>
+        <ul className={style.orders__list}>
+          <li className={"text text_type_digits-default " + style.ready}>034533</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+          <li className={"text text_type_digits-default " + style.ready}>034532</li>
+        </ul>
+        </div>
         <div className={style.list__box}><h2 className="mb-6 text text_type_main-default">В работе:</h2><ul className={style.orders__list}><li className="text text_type_digits-default">034538</li><li className="text text_type_digits-default">034541</li></ul></div>
       </div>
       <div >

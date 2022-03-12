@@ -68,6 +68,8 @@ export const Profile = () => {
   const history = useHistory()
   const match = useRouteMatch()
 
+
+
   useEffect(() => {
     setEmailValue(email);
     setNameInput(userName);
@@ -78,6 +80,7 @@ export const Profile = () => {
     console.log(param)
     console.log(location)
     console.log(match)
+    console.log(getCookie('refreshToken'))
   }, [param])
 
   const logoutOnClick = () => {
@@ -120,7 +123,6 @@ export const Profile = () => {
 
   const onClick = (item) => {
     dispatch({ type: OPEN_FEED, view: item })
-    console.log(item)
   }
 
   return (

@@ -14,6 +14,7 @@ import { Modal } from "../modal/modal";
 import { CLOSE_FEED } from "../../services/actions/feed-view";
 import { FeedDetails } from "../feed-details/feed-details";
 import { FeedDetailsPage } from "../../pages/feed-details-page";
+import { WS_CONNECTION_START } from "../../services/actions/ws-actions";
 
 
 export const App = () => {
@@ -21,19 +22,30 @@ export const App = () => {
   const dispatch = useDispatch();
   const history = useHistory()
   const feed = useSelector(state => state.feed.feedView)
+
   const { email, userName, token, isAuthenticated } = useSelector((state) => state.user);
+  // const ws = new WebSocket("wss://norma.nomoreparties.space/chat")
+  // const ws = new WebSocket(`wss://norma.nomoreparties.space/chat?token=${token.split('Bearer ')[1]}`)
+  const ws = new WebSocket("wss://norma.nomoreparties.space/api/orders/all")
+
+  ws.onopen = event => {
+    console.log('connect', event)
+  }
+  ws.onmessage = (event) => {
+    console.log('message', event)
+  }
 
   const background = location.state && location.state.background;
 
   const refreshToken = getCookie('refreshToken')
 
-  useEffect(() => {
-    // console.log(background)
-    // console.log(email, userName)
-    // console.log(feed)
-    console.log('refresh token', refreshToken)
-    console.log(isAuthenticated)
-  }, [isAuthenticated, refreshToken])
+  // useEffect(() => {
+  //   // console.log(background)
+  //   console.log(token?.split('Bearer ')[1])
+  //   // console.log(feed)
+  //   console.log('refresh token', refreshToken)
+  //   console.log(isAuthenticated)
+  // }, [isAuthenticated, refreshToken])
 
   useEffect(() => {
     dispatch(getIngredient());
@@ -52,6 +64,11 @@ export const App = () => {
     history.goBack()
     dispatch({ type: CLOSE_FEED })
   }
+
+
+  // useEffect(() => {
+  //   dispatch({ type: WS_CONNECTION_START });
+  // }, [])
 
   return (
     <ErrorBoundary>

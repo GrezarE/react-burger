@@ -36,7 +36,6 @@ export const Header = () => {
   const { path, url } = useRouteMatch();
   const { pathname } = useLocation()
   const { forgotSuccess } = useSelector(state => state.password)
-  // console.log(pathname)
 
 
   const onClickLogin = () => {

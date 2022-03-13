@@ -58,7 +58,7 @@ const testFeed = {
 export const Profile = () => {
   const dispatch = useDispatch()
   const { email, userName, token } = useSelector((state) => state.user);
-
+  const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState('');
   const [nameInput, setNameInput] = React.useState("");
@@ -178,9 +178,14 @@ export const Profile = () => {
           </div>
         </form>}
         {location.pathname === '/profile/orders' && <ul className={style.feeds__list}>
-          {testFeed.orders.map(item =>
+          {/* {testFeed.orders.map(item =>
             <Link key={item._id} className={style.link} to={{ pathname: `/profile/orders/${item._id}`, state: { background: location } }} onClick={(e) => onClick(item._id)}>
               <Feed key={item._id} feed={item} />
+            </Link>
+          )} */}
+          {orders?.map(item =>
+            <Link key={item._id} className={style.link} to={{ pathname: `/feed/${item._id}`, state: { background: location } }} onClick={(e) => onClick(item._id)}>
+              <Feed key={item._id} feed={item} place='orders'/>
             </Link>
           )}
         </ul>}

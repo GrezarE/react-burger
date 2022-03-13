@@ -38,8 +38,8 @@ const wsActions = {
   onMessage: WS_GET_MESSAGE,
 };
 // const wsUrl = "wss://norma.nomoreparties.space/chat";
-const wsUrl = "wss://norma.nomoreparties.space/api/orders";
-// const wsUrl = "wss://norma.nomoreparties.space/chat";
+// const wsUrl = "wss://norma.nomoreparties.space/api/orders";
+const wsUrl = "wss://norma.nomoreparties.space/api/orders/all";
 
 const enhancer = composeEnhancers(
   applyMiddleware(thunk, socketMiddleware(wsUrl, wsActions))

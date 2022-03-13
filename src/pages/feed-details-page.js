@@ -69,19 +69,21 @@ const IngredientDetail = ({ item }) => {
 
 export const FeedDetailsPage = () => {
   const { id } = useParams()
+  const { orders } = useSelector(state => state.temporaryOrder)
 
-  const feed = useSelector(state => state.feed.feedView)
-  const data = testFeed.orders.find(item => item._id === id)
+  // const feed = useSelector(state => state.feed.feedView)
+  const data = orders?.find(item => item._id === id)
   const ingredientsData = useSelector((state) => state.burger.ingredients);
 
-  const location = useLocation()
-  const match = useRouteMatch()
 
-  useEffect(() => {
-    console.log(location)
-    console.log(id)
-    console.log(match)
-  })
+  // const location = useLocation()
+  // const match = useRouteMatch()
+
+  // useEffect(() => {
+  //   console.log(location)
+  //   console.log(id)
+  //   console.log(match)
+  // })
 
   const price = useMemo(() => {
     let total = 0;
@@ -102,8 +104,8 @@ export const FeedDetailsPage = () => {
   return (
     <section className={style.section}>
       <div className={style.feed__details}>
-        <h1 className={'text text_type_digits-default ' + style.header}>{`#${id}`}</h1>
-        <h2 className="mt-10 text text_type_main-medium">Black Hole Singularity острый бургер</h2>
+        <h1 className={'text text_type_digits-default ' + style.header}>{`#${data?.number}`}</h1>
+        <h2 className="mt-10 text text_type_main-medium">{data?.name}</h2>
         <p className='mt-3 text text_type_main-default' style={data?.status === 'done' ? { color: '#00CCCC' } : { color: 'red' }}>{doneStatus()}</p>
         <div>
           <h2 className="mt-15 mb-6 text text_type_main-medium">Состав:</h2>

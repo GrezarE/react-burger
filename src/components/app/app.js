@@ -15,40 +15,44 @@ import { CLOSE_FEED } from "../../services/actions/feed-view";
 import { FeedDetails } from "../feed-details/feed-details";
 import { FeedDetailsPage } from "../../pages/feed-details-page";
 import { WS_CONNECTION_START } from "../../services/actions/ws-actions";
+import { getOrdersTemporary } from "../../services/actions/feeds-list-temporary";
 
 
 export const App = () => {
   let location = useLocation()
   const dispatch = useDispatch();
   const history = useHistory()
+  const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
   const feed = useSelector(state => state.feed.feedView)
+  const data = orders.find(item => item._id === feed)
 
   const { email, userName, token, isAuthenticated } = useSelector((state) => state.user);
   // const ws = new WebSocket("wss://norma.nomoreparties.space/chat")
   // const ws = new WebSocket(`wss://norma.nomoreparties.space/chat?token=${token.split('Bearer ')[1]}`)
-  const ws = new WebSocket("wss://norma.nomoreparties.space/api/orders/all")
+  // const ws = new WebSocket("wss://norma.nomoreparties.space/api/orders/all")
 
-  ws.onopen = event => {
-    console.log('connect', event)
-  }
-  ws.onmessage = (event) => {
-    console.log('message', event)
-  }
+  // ws.onopen = event => {
+  //   console.log('connect', event)
+  // }
+  // ws.onmessage = (event) => {
+  //   console.log('message', event)
+  // }
 
   const background = location.state && location.state.background;
 
   const refreshToken = getCookie('refreshToken')
 
-  // useEffect(() => {
-  //   // console.log(background)
-  //   console.log(token?.split('Bearer ')[1])
-  //   // console.log(feed)
-  //   console.log('refresh token', refreshToken)
-  //   console.log(isAuthenticated)
-  // }, [isAuthenticated, refreshToken])
+  useEffect(() => {
+    // console.log(background)
+    console.log(token?.split('Bearer ')[1])
+    // console.log(feed)
+    // console.log('refresh token', refreshToken)
+    // console.log(isAuthenticated)
+  }, [isAuthenticated, refreshToken])
 
   useEffect(() => {
     dispatch(getIngredient());
+    dispatch(getOrdersTemporary())
   }, [dispatch]);
 
   useEffect(() => {
@@ -112,8 +116,8 @@ export const App = () => {
         </Route>
         {/* <Route></Route> */}
       </Switch>
-      {background && <ProtectedRoute path="/profile/orders/:id" exact={true}><Modal onClose={onClose} header={`#${feed}`} ><FeedDetails /></Modal></ProtectedRoute>}
-      {background && <Route path="/feed/:id" children={<Modal onClose={onClose} header={`#${feed}`} ><FeedDetails /></Modal>} />}
+      {background && <ProtectedRoute path="/profile/orders/:id" exact={true}><Modal onClose={onClose} header={`#${data?.number}`} ><FeedDetails /></Modal></ProtectedRoute>}
+      {background && <Route path="/feed/:id" children={<Modal onClose={onClose} header={`#${data?.number}`} ><FeedDetails /></Modal>} />}
       {/* </Router> */}
     </ErrorBoundary>
   );

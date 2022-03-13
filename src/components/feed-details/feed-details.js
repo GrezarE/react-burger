@@ -56,8 +56,8 @@ const IngredientDetail = ({ item }) => {
   return (
     <li className={'pr-6 ' + style.ingr__details}>
       <div className={style.name__box}>
-        <img className={style.ingr__image} src={data.image}></img>
-        <p className="ml-4 text text_type_main-default">{data.name}</p>
+        <img className={style.ingr__image} src={data?.image}></img>
+        <p className="ml-4 text text_type_main-default">{data?.name}</p>
       </div>
       <div className={style.price__box}>
         <p className="text text_type_digits-default">{`1 x ${data?.price}`}</p>
@@ -68,8 +68,9 @@ const IngredientDetail = ({ item }) => {
 }
 
 export const FeedDetails = () => {
+  const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
   const feed = useSelector(state => state.feed.feedView)
-  const data = testFeed.orders.find(item => item._id === feed)
+  const data = orders.find(item => item._id === feed)
   const ingredientsData = useSelector((state) => state.burger.ingredients);
 
   const location = useLocation()
@@ -100,7 +101,7 @@ export const FeedDetails = () => {
 
   return (
     <div className={style.feed__details}>
-      <h2 className="mt-10 text text_type_main-medium">Black Hole Singularity острый бургер</h2>
+      <h2 className="mt-10 text text_type_main-medium">{data?.name}</h2>
       <p className='mt-3 text text_type_main-default' style={data?.status === 'done' ? { color: 'green' } : { color: 'red' }}>{doneStatus()}</p>
       <div>
         <h2 className="mt-15 mb-6 text text_type_main-medium">Состав:</h2>

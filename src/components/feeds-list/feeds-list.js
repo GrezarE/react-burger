@@ -7,7 +7,7 @@ import { Header } from "../burger-ingredients/burger-ingredients";
 import { Feed } from "../feed.js/feed";
 import style from './feeds-list.module.css'
 import { Link, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { OPEN_FEED } from "../../services/actions/feed-view";
 
 export const FeedsList = () => {
@@ -19,6 +19,12 @@ export const FeedsList = () => {
     dispatch({ type: OPEN_FEED, view: item })
     console.log(item)
   }
+
+  const {orders, total, totalToday} = useSelector(state => state.temporaryOrder)
+
+  useEffect(() => {
+    console.log(orders)
+  }, [orders])
 
   const testFeed = {
     "success": true,
@@ -66,11 +72,16 @@ export const FeedsList = () => {
     <section className="pl-2 pr-2">
       <Header>Лента заказов</Header>
       <ul className={style.feeds__list}>
-        {testFeed.orders.map(item =>
+        {orders?.map(item =>
           <Link key={item._id} className={style.link} to={{ pathname: `/feed/${item._id}`, state: { background: location } }} onClick={(e) => onClick(item._id)}>
             <Feed key={item._id} feed={item} />
           </Link>
         )}
+        {/* {testFeed.orders.map(item =>
+          <Link key={item._id} className={style.link} to={{ pathname: `/feed/${item._id}`, state: { background: location } }} onClick={(e) => onClick(item._id)}>
+            <Feed key={item._id} feed={item} />
+          </Link>
+        )} */}
       </ul>
 
     </section>)

@@ -10,7 +10,7 @@
 
 .profile__orders {
   composes: profile;
-  margin-right: 655px;
+  margin-right: 385px;
 
 }
 
@@ -51,7 +51,11 @@
   list-style: none;
   padding: 0;
   margin: 0;
-
+  max-height: 850px;
+  /* scrollbar-width: thin;
+  scrollbar-color: #8585AD #2F2F37;
+  overflow-y: auto; */
+  /* overflow-y: auto;  */
 }
 
 .link {

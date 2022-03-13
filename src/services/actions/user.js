@@ -46,6 +46,8 @@ export const tokenUpdate = (token) => {
           const refreshToken = res.refreshToken
           deleteCookie('refreshToken')
           setCookie('refreshToken', refreshToken, { path: '/' })
+          setCookie('refreshToken', refreshToken, { path: '/profile', expires: -1 })
+          setCookie('refreshToken', refreshToken, { path: '/feed', expires: -1 })
         } else {
           dispatch({
             type: TOKEN_UPDATE_FAIL,
@@ -166,6 +168,8 @@ export const userDataUpdateWithoutToken = (data, token) => {
           const refreshToken = res.refreshToken
           deleteCookie('refreshToken')
           setCookie('refreshToken', refreshToken, { path: '/' })
+          setCookie('refreshToken', refreshToken, { path: '/profile', expires: -1 })
+          setCookie('refreshToken', refreshToken, { path: '/feed', expires: -1 })
           setTimeout(() => dispatch({ type: RESET_TOKEN }), [1000 * 1200])
           return res
         }

@@ -1,8 +1,4 @@
-import {
-  Button,
-  Input,
-} from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import style from './feed.module.css'
 import bunTest from '../../images/bunTest.png'
 import CurrencyIcon from "../../images/CurrencyIcon.svg";
@@ -23,14 +19,10 @@ const IngredientIcon = ({ item, length }) => {
   )
 }
 
-export const Feed = ({ feed }) => {
+export const Feed = ({ feed, place }) => {
 
-
-  const testData = ["60d3b41abdacab0026a733c6",
-    "60d3b41abdacab0026a733c9",
-    "60d3b41abdacab0026a733ce",
-    "60d3b41abdacab0026a733d1"]
-  const ingredients = useSelector(state => state.burger.ingredients)
+  const ingredientsData = useSelector((state) => state.burger.ingredients);
+  // const ingredients = useSelector(state => state.burger.ingredients)
   // const qwe = testData.map(item => console.log(ingredients.find(ingr => ingr._id === item)))
 
   useEffect(() => {
@@ -39,23 +31,42 @@ export const Feed = ({ feed }) => {
     // console.log(ingredients)
     // console.log(feed)
     // console.log(qwe)
-  }, [testData, ingredients,])
+  }, [ingredientsData])
 
+
+  const price = useMemo(() => {
+    let total = 0;
+    feed.ingredients.forEach((item) => {
+      const ingredient = ingredientsData.find((el) => el._id === item);
+      if (ingredient) {
+        total += ingredient.price;
+      }
+    });
+    return total;
+  }, [feed, ingredientsData])
+
+  const doneStatus = () => {
+    const doneStatus = feed?.status === 'done' ? 'Выполнен' : feed?.status === 'created' ? 'Создан' : feed?.status === 'created' ? 'Готовится' : 'Отменен'
+    return doneStatus
+  }
 
   return (
-    <li className={style.feed}>
+    <li className={place === 'orders' ? style.feed__orders : style.feed}>
       <div className={style.numbers}>
-        <h3 className="text text_type_digits-default">#034535</h3>
-        <p className="text text_type_main-default text_color_inactive">Сегодня, 16:20 i-GMT+3</p>
+        <h3 className="text text_type_digits-default">{feed.number}</h3>
+        <p className="text text_type_main-default text_color_inactive">{feed.createdAt}</p>
       </div>
-      <h2 className="text text_type_main-medium ml-6 mr-6">Death Star Starship Main бургер</h2>
+      <div className="pl-6 pr-6">
+        <h2 className={"text text_type_main-medium " + style.feed__name}>{feed.name}</h2>
+        {place === 'orders' && <p className="text text_type_main-default pt-2" style={feed?.status === 'done' ? { color: '#00CCCC' } : { color: 'red' }}>{doneStatus()}</p>}
+      </div>
       <div className={style.last__box}>
         <ul className={style.pic__box}>
           {feed.ingredients.map((item, index) => (<IngredientIcon key={index} item={item} length={feed.ingredients.length} />
           ))}
         </ul>
         <div className={style.price__box}>
-          <p className="text text_type_digits-medium">480</p>
+          <p className="text text_type_digits-medium">{price}</p>
           <img src={CurrencyIcon} alt="Самоцвет" />
         </div>
       </div>

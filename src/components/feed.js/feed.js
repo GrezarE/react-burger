@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
+import PropTypes from "prop-types";
 import style from './feed.module.css'
 import bunTest from '../../images/bunTest.png'
 import CurrencyIcon from "../../images/CurrencyIcon.svg";
@@ -8,7 +9,6 @@ import { useSelector } from "react-redux";
 const IngredientIcon = ({ item, length }) => {
   const ingredients = useSelector(state => state.burger.ingredients)
   const image = ingredients.find(ingr => ingr._id === item)
-  // console.log(image)
 
 
   return (
@@ -19,20 +19,14 @@ const IngredientIcon = ({ item, length }) => {
   )
 }
 
+IngredientIcon.propTypes = {
+  item: PropTypes.string,
+  length: PropTypes.number
+}
+
 export const Feed = ({ feed, place }) => {
 
   const ingredientsData = useSelector((state) => state.burger.ingredients);
-  // const ingredients = useSelector(state => state.burger.ingredients)
-  // const qwe = testData.map(item => console.log(ingredients.find(ingr => ingr._id === item)))
-
-  useEffect(() => {
-    // testData.forEach(item => console.log(item))
-    // console.log(testData.forEach(item => ingredients.find(ingr => ingr._id === item)))
-    // console.log(ingredients)
-    // console.log(feed)
-    // console.log(qwe)
-  }, [ingredientsData])
-
 
   const price = useMemo(() => {
     let total = 0;
@@ -46,7 +40,7 @@ export const Feed = ({ feed, place }) => {
   }, [feed, ingredientsData])
 
   const doneStatus = () => {
-    const doneStatus = feed?.status === 'done' ? 'Выполнен' : feed?.status === 'created' ? 'Создан' : feed?.status === 'created' ? 'Готовится' : 'Отменен'
+    const doneStatus = feed?.status === 'done' ? 'Выполнен' : feed?.status === 'created' ? 'Создан' : feed?.status === 'pending' ? 'Готовится' : 'Отменен'
     return doneStatus
   }
 
@@ -58,7 +52,7 @@ export const Feed = ({ feed, place }) => {
       </div>
       <div className="pl-6 pr-6">
         <h2 className={"text text_type_main-medium " + style.feed__name}>{feed.name}</h2>
-        {place === 'orders' && <p className="text text_type_main-default pt-2" style={feed?.status === 'done' ? { color: '#00CCCC' } : { color: 'red' }}>{doneStatus()}</p>}
+        {place === 'orders' && <p className="text text_type_main-default pt-2" style={feed?.status === 'done' ? { color: '#00CCCC' } : feed?.status === 'cancel' ? { color: 'red' } : { color: '#F2F2F3' }}>{doneStatus()}</p>}
       </div>
       <div className={style.last__box}>
         <ul className={style.pic__box}>
@@ -70,7 +64,11 @@ export const Feed = ({ feed, place }) => {
           <img src={CurrencyIcon} alt="Самоцвет" />
         </div>
       </div>
-
-
     </li>)
+}
+
+
+Feed.propTypes = {
+  feed: PropTypes.object,
+  length: PropTypes.string
 }

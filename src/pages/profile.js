@@ -8,75 +8,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLogout } from "../services/actions/logout";
 import { getCookie } from "../utils/cookies";
 import { userDataUpdate, userDataUpdateWithoutToken } from "../services/actions/user";
-import { useLocation, useParams, Link, useHistory, useRouteMatch } from "react-router-dom";
-import { FeedDetails } from "../components/feed-details/feed-details";
+import { useLocation, Link, useHistory, } from "react-router-dom";
 import { Feed } from "../components/feed.js/feed";
 import { OPEN_FEED } from "../services/actions/feed-view";
 import { WS_CONNECTION_START_ORDER, WS_CONNECTION_END } from "../services/actions/ws-feed-actions";
 
-const testFeed = {
-  "success": true,
-  "orders": [
-    {
-      "ingredients": [
-        "60d3b41abdacab0026a733c6",
-        "60d3b41abdacab0026a733c9",
-        "60d3b41abdacab0026a733ce",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-      ],
-      "_id": "345",
-      "status": "done",
-      "number": 0,
-      "createdAt": "2021-06-23T14:43:22.587Z",
-      "updatedAt": "2021-06-23T14:43:22.603Z"
-    },
-    {
-      "ingredients": [
-        "60d3b41abdacab0026a733c6",
-        "60d3b41abdacab0026a733c9",
-        "60d3b41abdacab0026a733ce",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-      ],
-      "_id": "346",
-      "status": "done",
-      "number": 0,
-      "createdAt": "2021-06-23T14:43:22.587Z",
-      "updatedAt": "2021-06-23T14:43:22.603Z"
-    }
-  ],
-  "total": 1,
-  "totalToday": 1
-}
-
 export const Profile = () => {
   const dispatch = useDispatch()
   const { email, userName, token } = useSelector((state) => state.user);
-  // const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
-  const { total, orders, totalToday } = useSelector(state => state.websocket)
+  const { orders } = useSelector(state => state.websocket)
 
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState('');
   const [nameInput, setNameInput] = React.useState("");
   const inputRef = React.useRef(null);
-  const param = useParams()
   const location = useLocation()
   const history = useHistory()
-  const match = useRouteMatch()
 
   useEffect(() => {
     if (location.pathname === '/profile/orders') {
-      console.log('open page profile orders')
       dispatch({ type: WS_CONNECTION_START_ORDER });
       return () => {
-        console.log('close page profile orders')
         dispatch({ type: WS_CONNECTION_END });
       }
     }
@@ -88,18 +40,7 @@ export const Profile = () => {
     setPasswordValue('')
   }, []);
 
-  useEffect(() => {
-    console.log(param)
-    console.log(location)
-    console.log(match)
-    console.log(orders)
-    // console.log(getCookie('refreshToken'))
-  }, [orders])
 
-  useEffect(() => {
-    console.log(total, totalToday)
-    console.log(orders)
-  }, [orders, total, totalToday])
 
   const logoutOnClick = () => {
     const refreshToken = getCookie('refreshToken')
@@ -140,7 +81,6 @@ export const Profile = () => {
   }
 
   const onClick = (item) => {
-    console.log(item)
     dispatch({ type: OPEN_FEED, view: item._id, number: item.number })
   }
 
@@ -197,11 +137,6 @@ export const Profile = () => {
           </div>
         </form>}
         {location.pathname === '/profile/orders' && <ul className={style.feeds__list}>
-          {/* {testFeed.orders.map(item =>
-            <Link key={item._id} className={style.link} to={{ pathname: `/profile/orders/${item._id}`, state: { background: location } }} onClick={(e) => onClick(item._id)}>
-              <Feed key={item._id} feed={item} />
-            </Link>
-          )} */}
           {orders?.map(item =>
             <Link key={item._id} className={style.link} to={{ pathname: `/profile/orders/${item._id}`, state: { background: location } }} onClick={(e) => onClick(item)}>
               <Feed key={item._id} feed={item} place='orders' />

@@ -14,14 +14,11 @@ import {
   WS_GET_MESSAGE,
   WS_SEND_MESSAGE,
   WS_CONNECTION_END,
-  WS_CONNECTION_START_ORDER
+  WS_CONNECTION_START_ORDER,
 } from "./services/actions/ws-feed-actions";
 import { socketMiddleware } from "./services/middleware/socketMiddleware";
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  useLocation,
 } from "react-router-dom";
 
 declare const window: any;
@@ -41,8 +38,6 @@ const wsActions = {
   onMessage: WS_GET_MESSAGE,
   wsClose: WS_CONNECTION_END,
 };
-// const wsUrl = "wss://norma.nomoreparties.space/chat";
-// const wsUrl = "wss://norma.nomoreparties.space/orders";
 const wsUrl = "wss://norma.nomoreparties.space/orders";
 
 const enhancer = composeEnhancers(

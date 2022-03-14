@@ -12,9 +12,7 @@ export function getOrdersTemporary() {
     fetch(`${BASE_URL}/orders/all`)
       .then(checkResponse)
       .then((res) => {
-        console.log(res)
         if (res && res.success) {
-          console.log(res)
           dispatch({
             type: GET_ORDERS_TEMPORARY,
             orders: res.orders,

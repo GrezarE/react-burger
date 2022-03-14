@@ -26,17 +26,18 @@ const IngredientDetail = ({ item }) => {
   )
 }
 
+IngredientDetail.propTypes = {
+  item: PropTypes.string
+}
+
 export const FeedDetailsPage = () => {
   const dispatch = useDispatch()
-  const location = useLocation()
   const match = useRouteMatch()
 
   useEffect(() => {
     if (match.path === '/profile/orders/:id') {
-      console.log('open page details profile')
       dispatch({ type: WS_CONNECTION_START_ORDER });
       return () => {
-        console.log('close page profile orders')
         dispatch({ type: WS_CONNECTION_END });
       }
     }
@@ -45,27 +46,11 @@ export const FeedDetailsPage = () => {
   const { orders } = useSelector(state => state.temporaryOrder)
   const wsData = useSelector(state => state.websocket)
 
-  const func = () => {
+  const getData = () => {
     return match.path === '/profile/orders/:id' ? wsData?.orders.find(item => item._id === id) : orders?.find(item => item._id === id)
   }
-  // const feed = useSelector(state => state.feed.feedView)
-  const data = func()
-  // const data = orders?.find(item => item._id === id)
+  const data = getData()
   const ingredientsData = useSelector((state) => state.burger.ingredients);
-
-
-  // const location = useLocation()
-
-  useEffect(() => {
-    console.log(match)
-    console.log(location)
-    console.log(data)
-    // console.log(id)
-    // console.log(orders)
-
-  }, [data])
-
-
 
   const price = useMemo(() => {
     let total = 0;

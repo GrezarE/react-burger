@@ -2,8 +2,7 @@ import PropTypes from "prop-types";
 import CurrencyIcon from "../../images/CurrencyIcon.svg";
 import style from './feed-details.module.css'
 import { useSelector } from "react-redux";
-import { useEffect, useMemo } from "react";
-import { useLocation, useParams, useRouteMatch } from "react-router-dom";
+import { useMemo } from "react";
 
 const IngredientDetail = ({ item }) => {
   const ingredients = useSelector(state => state.burger.ingredients)
@@ -23,24 +22,16 @@ const IngredientDetail = ({ item }) => {
   )
 }
 
+IngredientDetail.propTypes = {
+  item: PropTypes.string
+}
+
 export const FeedDetails = () => {
-  // const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
-  const { total, orders, totalToday } = useSelector(state => state.websocket)
+  const { orders } = useSelector(state => state.websocket)
 
   const feed = useSelector(state => state.feed.feedView)
   const data = orders.find(item => item._id === feed)
   const ingredientsData = useSelector((state) => state.burger.ingredients);
-
-  const location = useLocation()
-  const param = useParams()
-  const match = useRouteMatch()
-
-  useEffect(() => {
-    console.log(location)
-    console.log(param)
-    console.log(match)
-    console.log(feed)
-  }, [])
 
   const price = useMemo(() => {
     let total = 0;

@@ -174,7 +174,6 @@ export const userDataUpdateWithoutToken = (data, token) => {
           return res
         }
       }).then((res) => {
-        console.log(res)
         fetch(`${BASE_URL}/auth/user`, {
           method: "PATCH",
           headers: { authorization: res.accessToken, "Content-Type": "application/json" },
@@ -185,7 +184,6 @@ export const userDataUpdateWithoutToken = (data, token) => {
         })
           .then(checkResponse)
           .then((res) => {
-            console.log(res)
             if (res && res.success) {
               dispatch(addUserUpdate(res))
             } else {

@@ -10,7 +10,6 @@ export const socketMiddleware = (wsUrl, wsActions) => {
       const { token } = getState().user;
       if (type === wsInit) {
         socket = new WebSocket(`${wsUrl}/all`);
-        console.log(socket.readyState)
       } else if (type === wsInitOrder && token) {
         socket = new WebSocket(`${wsUrl}?token=${token.split('Bearer ')[1]}`);
       }
@@ -19,31 +18,18 @@ export const socketMiddleware = (wsUrl, wsActions) => {
       }
       if (socket) {
         socket.onopen = event => {
-          console.log(socket.readyState)
-
-          console.log('onopen', event)
-
           dispatch({ type: onOpen, payload: event });
         };
-
         socket.onerror = event => {
-          console.log('onerror')
-
           dispatch({ type: onError, payload: event });
         };
-
         socket.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
           const { success, ...restParsedData } = parsedData;
-          console.log('onMessage', restParsedData)
-
-          dispatch({ type: onMessage, payload: parsedData });
+          dispatch({ type: onMessage, payload: restParsedData });
         };
-
         socket.onclose = event => {
-          console.log('onclose', event)
-
           dispatch({ type: onClose, payload: event });
         };
 

@@ -7,8 +7,6 @@ import { useSelector } from 'react-redux'
 export const Orders = () => {
   const { total, orders, totalToday } = useSelector(state => state.websocket)
 
-
-
   return (
     <section className='pt-25'>
       <div className={style.orders__box}>

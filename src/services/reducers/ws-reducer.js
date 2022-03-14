@@ -41,9 +41,6 @@ export const wsReducer = (state = initialState, action) => {
     case WS_CONNECTION_END: {
       return {
         wsConnected: false,
-        // orders: [],
-        // total: 0,
-        // totalToday: 0
       }
     }
     default:

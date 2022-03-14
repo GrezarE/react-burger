@@ -13,7 +13,6 @@ export const FeedsList = () => {
 
   const onClick = (item) => {
     dispatch({ type: OPEN_FEED, view: item._id, number: item.number })
-    console.log(item)
   }
   const { orders } = useSelector(state => state.websocket)
 

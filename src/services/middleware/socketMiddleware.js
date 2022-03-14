@@ -6,14 +6,16 @@ export const socketMiddleware = (wsUrl, wsActions) => {
     return next => action => {
       const { dispatch, getState } = store;
       const { type, payload } = action;
-      const { wsInit, wsSendMessage, onOpen, onClose, onError, onMessage } = wsActions;
-      const { token, isAuthenticated, email } = getState().user;
-      // if (type === wsInit) {
-      // console.log(token, isAuthenticated, email)
-      if (type === wsInit && isAuthenticated) {
-        // socket = new WebSocket(wsUrl);
-        socket = new WebSocket(`${wsUrl}?token=${token.split('Bearer ')[1]}`);
+      const { wsInit, wsInitOrder, wsSendMessage, onOpen, onClose, onError, onMessage, wsClose } = wsActions;
+      const { token } = getState().user;
+      if (type === wsInit) {
+        socket = new WebSocket(`${wsUrl}/all`);
         console.log(socket.readyState)
+      } else if (type === wsInitOrder && token) {
+        socket = new WebSocket(`${wsUrl}?token=${token.split('Bearer ')[1]}`);
+      }
+      if (type === wsClose && socket) {
+        socket.close(1000, 'Закрытие страницы')
       }
       if (socket) {
         socket.onopen = event => {
@@ -33,8 +35,8 @@ export const socketMiddleware = (wsUrl, wsActions) => {
         socket.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
-          console.log('onMessage', parsedData)
-          // const { success, ...restParsedData } = parsedData;
+          const { success, ...restParsedData } = parsedData;
+          console.log('onMessage', restParsedData)
 
           dispatch({ type: onMessage, payload: parsedData });
         };
@@ -45,10 +47,10 @@ export const socketMiddleware = (wsUrl, wsActions) => {
           dispatch({ type: onClose, payload: event });
         };
 
-        // if (type === wsSendMessage) {
-        //   const message = { ...payload, token: token };
-        //   socket.send(JSON.stringify(message));
-        // }
+        if (type === wsSendMessage) {
+          const message = { ...payload, token: token };
+          socket.send(JSON.stringify(message));
+        }
       }
 
       next(action);

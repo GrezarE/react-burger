@@ -1,4 +1,4 @@
-import { GET_ORDERS_TEMPORARY, GET_ORDERS_TEMPORARY_REQUEST } from "../actions/feeds-list-temporary";
+import { GET_ORDERS_TEMPORARY, GET_ORDERS_TEMPORARY_REQUEST, GET_ORDERS_TEMPORARY_FAIL } from "../actions/feeds-list-temporary";
 
 
 const initStateTemp = {
@@ -22,6 +22,14 @@ export const ordersReducerTemporary = (state = initStateTemp, action) => {
         orders: action.orders,
         total: action.total,
         totalToday: action.today,
+        request: false
+      }
+    }
+    case GET_ORDERS_TEMPORARY_FAIL: {
+      return {
+        orders: [],
+        total: 0,
+        totalToday: 0,
         request: false
       }
     }

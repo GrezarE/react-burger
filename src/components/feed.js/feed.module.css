@@ -11,7 +11,9 @@
 
 .feed__orders {
   composes: feed;
-  width: 844px;
+  width: 100%;
+  max-width: 844px;
+  /* width: 844px; */
   height: 244px;
 }
 

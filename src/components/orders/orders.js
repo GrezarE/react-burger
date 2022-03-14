@@ -5,19 +5,19 @@ import { useSelector } from 'react-redux'
 
 
 export const Orders = () => {
-  const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
+  const { total, orders, totalToday } = useSelector(state => state.websocket)
+
 
 
   return (
     <section className='pt-25'>
       <div className={style.orders__box}>
         <div className={style.list__box}><h2 className="mb-6 text text_type_main-default">Готовы:</h2>
-          <ul className={style.orders__list}>
+          <ul className={style.orders__list} style={orders?.length < 29 ? { maxHeight: 320 } : { maxHeight: 275 }}>
             {orders?.map(item => {
-              console.log(item.status)
               if (item.status === 'done') {
                 return (
-                  <li className={"text text_type_digits-default " + style.ready} key={item._id}>{item.number}</li>)
+                  <li className={orders?.length < 29 ? ("text text_type_digits-default " + style.ready) : ("text text_type_digits-small " + style.ready)} key={item._id}>{item.number}</li>)
               }
             }
             )}
@@ -26,7 +26,6 @@ export const Orders = () => {
         <div className={style.list__box}><h2 className="mb-6 text text_type_main-default">В работе:</h2>
           <ul className={style.orders__list}>
             {orders?.map(item => {
-              console.log(item.status)
               if (item.status !== 'done') {
                 return (
                   <li className={"text text_type_digits-default "} key={item._id}>{item.number}</li>)

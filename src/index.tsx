@@ -13,7 +13,9 @@ import {
   WS_CONNECTION_CLOSED,
   WS_GET_MESSAGE,
   WS_SEND_MESSAGE,
-} from "./services/actions/ws-actions";
+  WS_CONNECTION_END,
+  WS_CONNECTION_START_ORDER
+} from "./services/actions/ws-feed-actions";
 import { socketMiddleware } from "./services/middleware/socketMiddleware";
 import {
   BrowserRouter as Router,
@@ -31,15 +33,17 @@ const composeEnhancers =
 
 const wsActions = {
   wsInit: WS_CONNECTION_START,
+  wsInitOrder: WS_CONNECTION_START_ORDER,
   wsSendMessage: WS_SEND_MESSAGE,
   onOpen: WS_CONNECTION_SUCCESS,
   onClose: WS_CONNECTION_CLOSED,
   onError: WS_CONNECTION_ERROR,
   onMessage: WS_GET_MESSAGE,
+  wsClose: WS_CONNECTION_END,
 };
 // const wsUrl = "wss://norma.nomoreparties.space/chat";
-// const wsUrl = "wss://norma.nomoreparties.space/api/orders";
-const wsUrl = "wss://norma.nomoreparties.space/api/orders/all";
+// const wsUrl = "wss://norma.nomoreparties.space/orders";
+const wsUrl = "wss://norma.nomoreparties.space/orders";
 
 const enhancer = composeEnhancers(
   applyMiddleware(thunk, socketMiddleware(wsUrl, wsActions))

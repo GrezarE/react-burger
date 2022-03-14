@@ -3,14 +3,18 @@
   flex-direction: row;
   justify-content: center;
   margin-top: 180px;
+  /* margin-left: 19%; */
   margin-left: 380px;
+  /* margin-right: 38%; */
   margin-right: 760px;
   gap: 60px;
 }
 
 .profile__orders {
   composes: profile;
-  margin-right: 385px;
+  /* margin-right: 385px; */
+  margin-left: 19%;
+  margin-right: 19.25%;
 
 }
 
@@ -52,10 +56,9 @@
   padding: 0;
   margin: 0;
   max-height: 850px;
-  /* scrollbar-width: thin;
+  scrollbar-width: thin;
   scrollbar-color: #8585AD #2F2F37;
-  overflow-y: auto; */
-  /* overflow-y: auto;  */
+  overflow-y: auto;
 }
 
 .link {

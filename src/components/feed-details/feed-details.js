@@ -5,53 +5,9 @@ import { useSelector } from "react-redux";
 import { useEffect, useMemo } from "react";
 import { useLocation, useParams, useRouteMatch } from "react-router-dom";
 
-const testFeed = {
-  "success": true,
-  "orders": [
-    {
-      "ingredients": [
-        "60d3b41abdacab0026a733c6",
-        "60d3b41abdacab0026a733c9",
-        "60d3b41abdacab0026a733ce",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-      ],
-      "_id": "345",
-      "status": "done",
-      "number": 0,
-      "createdAt": "2021-06-23T14:43:22.587Z",
-      "updatedAt": "2021-06-23T14:43:22.603Z"
-    },
-    {
-      "ingredients": [
-        "60d3b41abdacab0026a733c6",
-        "60d3b41abdacab0026a733c9",
-        "60d3b41abdacab0026a733ce",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-      ],
-      "_id": "346",
-      "status": "done",
-      "number": 0,
-      "createdAt": "2021-06-23T14:43:22.587Z",
-      "updatedAt": "2021-06-23T14:43:22.603Z"
-    }
-  ],
-  "total": 1,
-  "totalToday": 1
-}
-
-
 const IngredientDetail = ({ item }) => {
   const ingredients = useSelector(state => state.burger.ingredients)
   const data = ingredients?.find((ingr) => ingr._id === item)
-
 
   return (
     <li className={'pr-6 ' + style.ingr__details}>
@@ -68,7 +24,9 @@ const IngredientDetail = ({ item }) => {
 }
 
 export const FeedDetails = () => {
-  const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
+  // const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
+  const { total, orders, totalToday } = useSelector(state => state.websocket)
+
   const feed = useSelector(state => state.feed.feedView)
   const data = orders.find(item => item._id === feed)
   const ingredientsData = useSelector((state) => state.burger.ingredients);
@@ -81,7 +39,8 @@ export const FeedDetails = () => {
     console.log(location)
     console.log(param)
     console.log(match)
-  })
+    console.log(feed)
+  }, [])
 
   const price = useMemo(() => {
     let total = 0;

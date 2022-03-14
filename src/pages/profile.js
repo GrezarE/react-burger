@@ -12,6 +12,7 @@ import { useLocation, useParams, Link, useHistory, useRouteMatch } from "react-r
 import { FeedDetails } from "../components/feed-details/feed-details";
 import { Feed } from "../components/feed.js/feed";
 import { OPEN_FEED } from "../services/actions/feed-view";
+import { WS_CONNECTION_START_ORDER, WS_CONNECTION_END } from "../services/actions/ws-feed-actions";
 
 const testFeed = {
   "success": true,
@@ -58,7 +59,9 @@ const testFeed = {
 export const Profile = () => {
   const dispatch = useDispatch()
   const { email, userName, token } = useSelector((state) => state.user);
-  const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
+  // const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
+  const { total, orders, totalToday } = useSelector(state => state.websocket)
+
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState('');
   const [nameInput, setNameInput] = React.useState("");
@@ -68,7 +71,16 @@ export const Profile = () => {
   const history = useHistory()
   const match = useRouteMatch()
 
-
+  useEffect(() => {
+    if (location.pathname === '/profile/orders') {
+      console.log('open page profile orders')
+      dispatch({ type: WS_CONNECTION_START_ORDER });
+      return () => {
+        console.log('close page profile orders')
+        dispatch({ type: WS_CONNECTION_END });
+      }
+    }
+  }, [location.pathname])
 
   useEffect(() => {
     setEmailValue(email);
@@ -80,8 +92,14 @@ export const Profile = () => {
     console.log(param)
     console.log(location)
     console.log(match)
-    console.log(getCookie('refreshToken'))
-  }, [param])
+    console.log(orders)
+    // console.log(getCookie('refreshToken'))
+  }, [orders])
+
+  useEffect(() => {
+    console.log(total, totalToday)
+    console.log(orders)
+  }, [orders, total, totalToday])
 
   const logoutOnClick = () => {
     const refreshToken = getCookie('refreshToken')
@@ -122,7 +140,8 @@ export const Profile = () => {
   }
 
   const onClick = (item) => {
-    dispatch({ type: OPEN_FEED, view: item })
+    console.log(item)
+    dispatch({ type: OPEN_FEED, view: item._id, number: item.number })
   }
 
   return (
@@ -184,8 +203,8 @@ export const Profile = () => {
             </Link>
           )} */}
           {orders?.map(item =>
-            <Link key={item._id} className={style.link} to={{ pathname: `/feed/${item._id}`, state: { background: location } }} onClick={(e) => onClick(item._id)}>
-              <Feed key={item._id} feed={item} place='orders'/>
+            <Link key={item._id} className={style.link} to={{ pathname: `/profile/orders/${item._id}`, state: { background: location } }} onClick={(e) => onClick(item)}>
+              <Feed key={item._id} feed={item} place='orders' />
             </Link>
           )}
         </ul>}

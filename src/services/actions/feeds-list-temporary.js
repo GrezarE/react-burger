@@ -3,6 +3,7 @@ import { checkResponse } from "../../utils/check-response"
 
 export const GET_ORDERS_TEMPORARY = 'GET_ORDERS_TEMPORARY'
 export const GET_ORDERS_TEMPORARY_REQUEST = 'GET_ORDERS_TEMPORARY_REQUEST'
+export const GET_ORDERS_TEMPORARY_FAIL = 'GET_ORDERS_TEMPORARY_FAIL'
 
 export function getOrdersTemporary() {
   return function (dispatch) {
@@ -20,7 +21,15 @@ export function getOrdersTemporary() {
             total: res.total,
             today: res.totalToday
           })
+        } else {
+          dispatch({
+            type: GET_ORDERS_TEMPORARY_FAIL
+          })
         }
+      }).catch((err) => {
+        dispatch({
+          type: GET_ORDERS_TEMPORARY_FAIL
+        })
       })
   }
 }

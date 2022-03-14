@@ -14,7 +14,7 @@ import { Modal } from "../modal/modal";
 import { CLOSE_FEED } from "../../services/actions/feed-view";
 import { FeedDetails } from "../feed-details/feed-details";
 import { FeedDetailsPage } from "../../pages/feed-details-page";
-import { WS_CONNECTION_START } from "../../services/actions/ws-actions";
+import { WS_CONNECTION_START } from "../../services/actions/ws-feed-actions";
 import { getOrdersTemporary } from "../../services/actions/feeds-list-temporary";
 
 
@@ -23,8 +23,8 @@ export const App = () => {
   const dispatch = useDispatch();
   const history = useHistory()
   const { orders, total, totalToday } = useSelector(state => state.temporaryOrder)
-  const feed = useSelector(state => state.feed.feedView)
-  const data = orders.find(item => item._id === feed)
+  const { number } = useSelector(state => state.feed)
+  // const data = orders.find(item => item._id === feed.feedView)
 
   const { email, userName, token, isAuthenticated } = useSelector((state) => state.user);
   // const ws = new WebSocket("wss://norma.nomoreparties.space/chat")
@@ -33,6 +33,8 @@ export const App = () => {
 
   // ws.onopen = event => {
   //   console.log('connect', event)
+  //   ws.send('ping')
+  //   ws.send(JSON.stringify({ "message": "123123", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg1ODE0ZmRjLWYzMDQtNDI3Zi1iNWFkLTU0MjQ0ZDg2OGQwZSIsImlhdCI6MTY0NzIyNDEyMX0.CvACYYErREJv3n-N-WxZWjDG2Izm-IvPLuncKsfmmb4" }))
   // }
   // ws.onmessage = (event) => {
   //   console.log('message', event)
@@ -44,11 +46,11 @@ export const App = () => {
 
   useEffect(() => {
     // console.log(background)
-    console.log(token?.split('Bearer ')[1])
-    // console.log(feed)
+    // console.log(token?.split('Bearer ')[1])
+    console.log(number)
     // console.log('refresh token', refreshToken)
     // console.log(isAuthenticated)
-  }, [isAuthenticated, refreshToken])
+  }, [isAuthenticated, refreshToken, number])
 
   useEffect(() => {
     dispatch(getIngredient());
@@ -116,8 +118,8 @@ export const App = () => {
         </Route>
         {/* <Route></Route> */}
       </Switch>
-      {background && <ProtectedRoute path="/profile/orders/:id" exact={true}><Modal onClose={onClose} header={`#${data?.number}`} ><FeedDetails /></Modal></ProtectedRoute>}
-      {background && <Route path="/feed/:id" children={<Modal onClose={onClose} header={`#${data?.number}`} ><FeedDetails /></Modal>} />}
+      {background && <ProtectedRoute path="/profile/orders/:id" exact={true}><Modal onClose={onClose} header={`#${number}`} ><FeedDetails /></Modal></ProtectedRoute>}
+      {background && <Route path="/feed/:id" children={<Modal onClose={onClose} header={`#${number}`} ><FeedDetails /></Modal>} />}
       {/* </Router> */}
     </ErrorBoundary>
   );

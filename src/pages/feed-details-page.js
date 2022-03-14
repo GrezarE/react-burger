@@ -1,51 +1,10 @@
 import PropTypes from "prop-types";
 import CurrencyIcon from "../images/CurrencyIcon.svg";
 import style from './feed-details-page.module.css'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo } from "react";
 import { useLocation, useParams, useRouteMatch } from "react-router-dom";
-
-const testFeed = {
-  "success": true,
-  "orders": [
-    {
-      "ingredients": [
-        "60d3b41abdacab0026a733c6",
-        "60d3b41abdacab0026a733c9",
-        "60d3b41abdacab0026a733ce",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-      ],
-      "_id": "345",
-      "status": "done",
-      "number": 0,
-      "createdAt": "2021-06-23T14:43:22.587Z",
-      "updatedAt": "2021-06-23T14:43:22.603Z"
-    },
-    {
-      "ingredients": [
-        "60d3b41abdacab0026a733c6",
-        "60d3b41abdacab0026a733c9",
-        "60d3b41abdacab0026a733ce",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-        "60d3b41abdacab0026a733d1",
-      ],
-      "_id": "346",
-      "status": "done",
-      "number": 0,
-      "createdAt": "2021-06-23T14:43:22.587Z",
-      "updatedAt": "2021-06-23T14:43:22.603Z"
-    }
-  ],
-  "total": 1,
-  "totalToday": 1
-}
+import { WS_CONNECTION_START_ORDER, WS_CONNECTION_END } from "../services/actions/ws-feed-actions";
 
 
 const IngredientDetail = ({ item }) => {
@@ -68,22 +27,45 @@ const IngredientDetail = ({ item }) => {
 }
 
 export const FeedDetailsPage = () => {
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const match = useRouteMatch()
+
+  useEffect(() => {
+    if (match.path === '/profile/orders/:id') {
+      console.log('open page details profile')
+      dispatch({ type: WS_CONNECTION_START_ORDER });
+      return () => {
+        console.log('close page profile orders')
+        dispatch({ type: WS_CONNECTION_END });
+      }
+    }
+  }, [match])
   const { id } = useParams()
   const { orders } = useSelector(state => state.temporaryOrder)
+  const wsData = useSelector(state => state.websocket)
 
+  const func = () => {
+    return match.path === '/profile/orders/:id' ? wsData?.orders.find(item => item._id === id) : orders?.find(item => item._id === id)
+  }
   // const feed = useSelector(state => state.feed.feedView)
-  const data = orders?.find(item => item._id === id)
+  const data = func()
+  // const data = orders?.find(item => item._id === id)
   const ingredientsData = useSelector((state) => state.burger.ingredients);
 
 
   // const location = useLocation()
-  // const match = useRouteMatch()
 
-  // useEffect(() => {
-  //   console.log(location)
-  //   console.log(id)
-  //   console.log(match)
-  // })
+  useEffect(() => {
+    console.log(match)
+    console.log(location)
+    console.log(data)
+    // console.log(id)
+    // console.log(orders)
+
+  }, [data])
+
+
 
   const price = useMemo(() => {
     let total = 0;

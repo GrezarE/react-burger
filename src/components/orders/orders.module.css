@@ -27,10 +27,3 @@
   color: #00CCCC;
 }
 
-.ready:nth-child(30) {
-  opacity: 0.5;
-}
-
-.ready:nth-child(1n+ 31) {
-  display: none;
-}

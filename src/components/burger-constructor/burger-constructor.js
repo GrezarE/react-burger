@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import PropTypes from "prop-types";
 import {
   ConstructorElement,
@@ -22,7 +22,8 @@ import {
 import update from "immutability-helper";
 import { useDrag, useDrop } from "react-dnd";
 import { v4 as uuidv4 } from "uuid";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { Loader } from "../loader/loader";
 
 const ConstructorItem = ({ ingredient, index, itemKey }) => {
   const dispatch = useDispatch();
@@ -287,7 +288,6 @@ const ConstructorButtonBox = ({ ingredients }) => {
     </Modal>
   );
 
-
   return (
     <div className={"mr-4 mt-10 " + burgerConstructorStyle.button_box}>
       <ConstructorButtonBoxPrice ingredients={ingredients} />
@@ -316,6 +316,8 @@ ConstructorButtonBox.propTypes = {
 
 export const BurgerConstructor = () => {
   const componentsData = useSelector((store) => store.construct);
+  const { orderRequest } = useSelector((store) => store.order);
+
 
   function getComponentsIdArray() {
     let arr = [];
@@ -335,6 +337,7 @@ export const BurgerConstructor = () => {
 
   return (
     <section className={"pt-25 " + burgerConstructorStyle.constructor}>
+      {orderRequest && <Loader text="Заказ создается" />}
       <ConstructorBox ingredients={ingredients} />
       <ConstructorButtonBox ingredients={ingredients} />
     </section>

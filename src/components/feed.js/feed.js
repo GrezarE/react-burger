@@ -27,7 +27,6 @@ IngredientIcon.propTypes = {
 export const Feed = ({ feed, place }) => {
 
   const ingredientsData = useSelector((state) => state.burger.ingredients);
-
   const price = useMemo(() => {
     let total = 0;
     feed.ingredients.forEach((item) => {
@@ -48,7 +47,7 @@ export const Feed = ({ feed, place }) => {
     <li className={place === 'orders' ? style.feed__orders : style.feed}>
       <div className={style.numbers}>
         <h3 className="text text_type_digits-default">{feed.number}</h3>
-        <p className="text text_type_main-default text_color_inactive">{feed.createdAt}</p>
+        <p className="text text_type_main-default text_color_inactive">{feed.createdAt.replace(/[A-Za-z]/gi, ' ').split('.')[0]}</p>
       </div>
       <div className="pl-6 pr-6">
         <h2 className={"text text_type_main-medium " + style.feed__name}>{feed.name}</h2>

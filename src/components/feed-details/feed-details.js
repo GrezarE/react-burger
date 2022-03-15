@@ -61,7 +61,7 @@ export const FeedDetails = () => {
         </ul>
       </div>
       <div className={'mt-10 mb-10 ' + style.date__box}>
-        <p className="text text_type_main-default text_color_inactive">{data?.createdAt}</p>
+        <p className="text text_type_main-default text_color_inactive">{data?.createdAt.replace(/[A-Za-z]/gi, ' ').split('.')[0]}</p>
         <div className={style.price__box}>
           <p className="text text_type_digits-medium">{price}</p>
           <img src={CurrencyIcon} alt="Самоцвет" />

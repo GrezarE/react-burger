@@ -39,10 +39,14 @@ export const App = () => {
 
   const onClose = (e) => {
     e.preventDefault()
+    e.stopPropagation()
     history.goBack()
     dispatch({ type: CLOSE_FEED })
   }
 
+  useEffect(() => {
+    history.replace({ pathname: location.pathname, state: undefined })
+  }, [])
 
   return (
     <ErrorBoundary>

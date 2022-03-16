@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.0004ca96.css",
-    "main.js": "./static/js/main.91b270cd.js",
+    "main.css": "./static/css/main.10243fe2.css",
+    "main.js": "./static/js/main.cc8a4483.js",
     "static/media/JetBrainsMono-Bold.woff": "./static/media/JetBrainsMono-Bold.3914674f1cb2335acf26.woff",
     "static/media/JetBrainsMono-Regular.woff": "./static/media/JetBrainsMono-Regular.f52bee61d00ce995b89f.woff",
     "static/media/done.svg": "./static/media/done.3ba9e5cd3e425ccd87f6c48cb38cd1f5.svg",
@@ -11,11 +11,11 @@
     "static/media/iceland.woff2": "./static/media/iceland.4ae67a017a5ff82bbbb7.woff2",
     "static/media/CurrencyIcon.svg": "./static/media/CurrencyIcon.9c1486179358f987e416987276d658fd.svg",
     "index.html": "./index.html",
-    "main.0004ca96.css.map": "./static/css/main.0004ca96.css.map",
-    "main.91b270cd.js.map": "./static/js/main.91b270cd.js.map"
+    "main.10243fe2.css.map": "./static/css/main.10243fe2.css.map",
+    "main.cc8a4483.js.map": "./static/js/main.cc8a4483.js.map"
   },
   "entrypoints": [
-    "static/css/main.0004ca96.css",
-    "static/js/main.91b270cd.js"
+    "static/css/main.10243fe2.css",
+    "static/js/main.cc8a4483.js"
   ]
 }

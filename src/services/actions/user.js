@@ -1,6 +1,6 @@
 import { BASE_URL } from "../../utils/base-url";
 
-import { setCookie } from "../../utils/cookies"
+import { deleteCookie, setCookie } from "../../utils/cookies"
 import { checkResponse } from "../../utils/check-response";
 
 
@@ -23,8 +23,6 @@ const addUserUpdate = (data) => {
   }
 }
 
-
-
 export const tokenUpdate = (token) => {
   return function (dispatch) {
     dispatch({
@@ -46,7 +44,10 @@ export const tokenUpdate = (token) => {
           })
           setTimeout(() => dispatch({ type: RESET_TOKEN }), [1000 * 1200])
           const refreshToken = res.refreshToken
-          setCookie('refreshToken', refreshToken)
+          deleteCookie('refreshToken')
+          setCookie('refreshToken', refreshToken, { path: '/' })
+          setCookie('refreshToken', refreshToken, { path: '/profile', expires: -1 })
+          setCookie('refreshToken', refreshToken, { path: '/feed', expires: -1 })
         } else {
           dispatch({
             type: TOKEN_UPDATE_FAIL,
@@ -113,7 +114,10 @@ export const getUserData = (token) => {
             token: res.accessToken
           })
           const refreshToken = res.refreshToken
-          setCookie('refreshToken', refreshToken)
+          deleteCookie('refreshToken')
+          setCookie('refreshToken', refreshToken, { path: '/' })
+          setCookie('refreshToken', refreshToken, { path: '/profile', expires: -1 })
+          setCookie('refreshToken', refreshToken, { path: '/feed', expires: -1 })
           setTimeout(() => dispatch({ type: RESET_TOKEN }), [1000 * 1200])
           return res
         }
@@ -162,12 +166,14 @@ export const userDataUpdateWithoutToken = (data, token) => {
             token: res.accessToken
           })
           const refreshToken = res.refreshToken
-          setCookie('refreshToken', refreshToken)
+          deleteCookie('refreshToken')
+          setCookie('refreshToken', refreshToken, { path: '/' })
+          setCookie('refreshToken', refreshToken, { path: '/profile', expires: -1 })
+          setCookie('refreshToken', refreshToken, { path: '/feed', expires: -1 })
           setTimeout(() => dispatch({ type: RESET_TOKEN }), [1000 * 1200])
           return res
         }
       }).then((res) => {
-        console.log(res)
         fetch(`${BASE_URL}/auth/user`, {
           method: "PATCH",
           headers: { authorization: res.accessToken, "Content-Type": "application/json" },
@@ -178,7 +184,6 @@ export const userDataUpdateWithoutToken = (data, token) => {
         })
           .then(checkResponse)
           .then((res) => {
-            console.log(res)
             if (res && res.success) {
               dispatch(addUserUpdate(res))
             } else {

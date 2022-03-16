@@ -7,21 +7,40 @@ import style from "./profile.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogout } from "../services/actions/logout";
 import { getCookie } from "../utils/cookies";
-import { userDataUpdate,  userDataUpdateWithoutToken } from "../services/actions/user";
+import { userDataUpdate, userDataUpdateWithoutToken } from "../services/actions/user";
+import { useLocation, Link, useHistory, } from "react-router-dom";
+import { Feed } from "../components/feed.js/feed";
+import { OPEN_FEED } from "../services/actions/feed-view";
+import { WS_CONNECTION_START_ORDER, WS_CONNECTION_END } from "../services/actions/ws-feed-actions";
 
 export const Profile = () => {
   const dispatch = useDispatch()
-  const { email, userName,  token } = useSelector((state) => state.user);
+  const { email, userName, token } = useSelector((state) => state.user);
+  const { orders } = useSelector(state => state.websocket)
 
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState('');
   const [nameInput, setNameInput] = React.useState("");
   const inputRef = React.useRef(null);
+  const location = useLocation()
+  const history = useHistory()
+
+  useEffect(() => {
+    if (location.pathname === '/profile/orders') {
+      dispatch({ type: WS_CONNECTION_START_ORDER });
+      return () => {
+        dispatch({ type: WS_CONNECTION_END });
+      }
+    }
+  }, [location.pathname])
 
   useEffect(() => {
     setEmailValue(email);
     setNameInput(userName);
+    setPasswordValue('')
   }, []);
+
+
 
   const logoutOnClick = () => {
     const refreshToken = getCookie('refreshToken')
@@ -30,7 +49,6 @@ export const Profile = () => {
 
   const userSaveDataOnClick = (e) => {
     e.preventDefault()
-    console.log(e)
 
     const userData = {
       email: emailValue,
@@ -50,21 +68,31 @@ export const Profile = () => {
   const cancelButtonOnClick = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    console.log(e)
     setEmailValue(email);
     setNameInput(userName);
     setPasswordValue('')
   }
 
+  const ordersClick = () => {
+    history.replace({ pathname: `/profile/orders` });
+  }
+  const profileClick = () => {
+    history.replace({ pathname: `/profile` });
+  }
+
+  const onClick = (item) => {
+    dispatch({ type: OPEN_FEED, view: item._id, number: item.number })
+  }
+
   return (
     <>
-      <section className={style.profile}>
+      <section className={location.pathname === '/profile' ? style.profile : style.profile__orders}>
         <ul className={style.list}>
-          <li className={style.box}>
-            <p className="text text_type_main-medium">Профиль</p>
+          <li className={style.box} onClick={profileClick}>
+            <p className={"text text_type_main-medium " + (location.pathname === '/profile' ? '' : style.grey_text)}>Профиль</p>
           </li>
-          <li className={style.box}>
-            <p className={"text text_type_main-medium " + style.grey_text}>
+          <li className={style.box} onClick={ordersClick}>
+            <p className={"text text_type_main-medium " + (location.pathname === '/profile' ? style.grey_text : '')}>
               История заказов
             </p>
           </li>
@@ -74,7 +102,7 @@ export const Profile = () => {
             </p>
           </li>
         </ul>
-        <form className="authorization__box" onSubmit={(e) => userSaveDataOnClick(e)}>
+        {location.pathname === '/profile' && <form className="authorization__box" onSubmit={(e) => userSaveDataOnClick(e)}>
           <Input
             type={"text"}
             placeholder={"Имя"}
@@ -107,7 +135,14 @@ export const Profile = () => {
             <Button type="primary">Сохранить</Button>
             <Button type="primary" onClick={(e) => cancelButtonOnClick(e)} >Отмена</Button>
           </div>
-        </form>
+        </form>}
+        {location.pathname === '/profile/orders' && <ul className={style.feeds__list}>
+          {orders?.map(item =>
+            <Link key={item._id} className={style.link} to={{ pathname: `/profile/orders/${item._id}`, state: { background: location } }} onClick={(e) => onClick(item)}>
+              <Feed key={item._id} feed={item} place='orders' />
+            </Link>
+          )}
+        </ul>}
       </section>
     </>
   );

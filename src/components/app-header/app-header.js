@@ -7,7 +7,8 @@ import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
   useHistory,
   useRouteMatch,
-  Link
+  Link,
+  useLocation
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -32,9 +33,7 @@ const NavigationLink = (props) => {
 export const Header = () => {
 
   const history = useHistory();
-  const { path } = useRouteMatch();
-  const { forgotSuccess } = useSelector(state => state.password)
-  console.log(forgotSuccess)
+  const { pathname } = useLocation()
 
 
   const onClickLogin = () => {
@@ -44,7 +43,8 @@ export const Header = () => {
     history.replace({ pathname: "/" });
   };
   const onClickFeed = () => {
-    window.history.pushState({ path: '/lock' }, '', '/lock')
+    history.replace({ pathname: `/feed` });
+
   };
 
   const authLinks = [
@@ -55,10 +55,10 @@ export const Header = () => {
     <header className={headerStyles.header} style={{}}>
       <Navigation>
         <NavigationLink onClick={onClickMenu}>
-          <BurgerIcon type={path === "/" ? "primary" : "secondary"} />
+          <BurgerIcon type={pathname === "/" ? "primary" : "secondary"} />
           <p
             className={
-              path === "/"
+              pathname === "/"
                 ? "pl-2 text text_type_main-default"
                 : "pl-2 text text_type_main-default text_color_inactive"
             }
@@ -67,10 +67,10 @@ export const Header = () => {
           </p>
         </NavigationLink>
         <NavigationLink onClick={onClickFeed}>
-          <ListIcon type={path === "/feed " ? "primary" : "secondary"} />
+          <ListIcon type={pathname === "/feed" ? "primary" : "secondary"} />
           <p
             className={
-              path === "/feed"
+              pathname === "/feed"
                 ? "pl-2 text text_type_main-default"
                 : "pl-2 text text_type_main-default text_color_inactive"
             }
@@ -86,10 +86,10 @@ export const Header = () => {
         class={headerStyles.navigation__link_right}
         onClick={onClickLogin}
       >
-        <ProfileIcon type={path === authLinks.find(item => item === path) ? "primary" : "secondary"} />
+        <ProfileIcon type={pathname === authLinks.find(item => item === pathname) ? "primary" : "secondary"} />
         <p
           className={
-            path === authLinks.find(item => item === path)
+            pathname === authLinks.find(item => item === pathname)
               ? "pl-2 text text_type_main-default"
               : "pl-2 text text_type_main-default text_color_inactive"
           }

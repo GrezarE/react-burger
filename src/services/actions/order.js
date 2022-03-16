@@ -14,7 +14,7 @@ export function getOrder(ingredients, token) {
     });
     fetch(`${BASE_URL}/orders`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { authorization: token, "Content-Type": "application/json" },
       body: JSON.stringify({
         ingredients: ingredients,
       }),

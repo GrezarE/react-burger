@@ -24,6 +24,12 @@ code {
   gap: 40px;
 }
 
+.feeds__page {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+}
+
 .input {
   min-width: 480px;
   margin-bottom: 24px;
@@ -33,7 +39,6 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* height: 100vh; */
   width: 100vw;
   margin-top: 180px;
 }

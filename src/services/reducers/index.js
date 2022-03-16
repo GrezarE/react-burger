@@ -8,6 +8,9 @@ import { registrationReducer } from "./register";
 import { loginReducer } from "./login";
 import { logoutReducer } from "./logout";
 import { passwordReserReducer } from "./password-reset";
+import { feedReducer } from "./feed-view";
+import { wsReducer } from "./ws-reducer";
+import { ordersReducerTemporary } from "./feeds-list-temporary";
 
 export const rootReducer = combineReducers({
   burger: burgerReducer,
@@ -18,5 +21,8 @@ export const rootReducer = combineReducers({
   register: registrationReducer,
   login: loginReducer,
   logout: logoutReducer,
-  password: passwordReserReducer
+  password: passwordReserReducer,
+  feed: feedReducer,
+  websocket: wsReducer,
+  temporaryOrder: ordersReducerTemporary
 });

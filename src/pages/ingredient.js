@@ -23,20 +23,18 @@ export const Ingredient = () => {
   const ingredientData = ingredients.find((item) => item._id === params.id)
 
   return (
-    <>
-      <section className={style.section}>
-        <h1 className={"text text_type_main-large  " + style.header}>Детали ингредиента</h1>
-        <div className={style.box}>
-          <img className={style.image} src={ingredientData?.image} alt={ingredientData?.name} />
-          <h2 className={"text text_type_main-medium pt-4 " + style.name}>{ingredientData?.name}</h2>
-          <div className={'mt-8 pb-15 ' + style.nutrients}>
-            <Nutrient nutrient="Калории,ккал" >{ingredientData?.calories}</Nutrient>
-            <Nutrient nutrient="Белки, г">{ingredientData?.proteins}</Nutrient>
-            <Nutrient nutrient="Жиры, г">{ingredientData?.fat}</Nutrient>
-            <Nutrient nutrient="Углеводы, г">{ingredientData?.carbohydrates}</Nutrient>
-          </div>
+    <section className={style.section}>
+      <h1 className={"text text_type_main-large  " + style.header}>Детали ингредиента</h1>
+      <div className={style.box}>
+        <img className={style.image} src={ingredientData?.image} alt={ingredientData?.name} />
+        <h2 className={"text text_type_main-medium pt-4 " + style.name}>{ingredientData?.name}</h2>
+        <div className={'mt-8 pb-15 ' + style.nutrients}>
+          <Nutrient nutrient="Калории,ккал" >{ingredientData?.calories}</Nutrient>
+          <Nutrient nutrient="Белки, г">{ingredientData?.proteins}</Nutrient>
+          <Nutrient nutrient="Жиры, г">{ingredientData?.fat}</Nutrient>
+          <Nutrient nutrient="Углеводы, г">{ingredientData?.carbohydrates}</Nutrient>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }

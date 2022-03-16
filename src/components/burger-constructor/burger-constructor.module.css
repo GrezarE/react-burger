@@ -1,5 +1,6 @@
 .constructor {
   width: 600px;
+  position: relative;
 }
 
 .box {

@@ -18,11 +18,6 @@ export const ForgotPassword = () => {
   };
   const location = useLocation()
 
-  useEffect(() => {
-    console.log(forgotSuccess)
-
-  }, [forgotSuccess])
-
   const forgotPasswordSubmit = (e) => {
     e.preventDefault()
     if (emailValue) {

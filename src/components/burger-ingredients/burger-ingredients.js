@@ -1,4 +1,4 @@
-import React, { useRef, useState} from "react";
+import React, { useCallback, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import {
@@ -14,13 +14,13 @@ import { CLOSE_CARD, OPEN_CARD } from "../../services/actions/view";
 import { useDrag } from "react-dnd";
 
 
-const HeaderIngredients = (props) => {
+export const Header = (props) => {
   return (
     <h1 className="mt-10 mb-5 text text_type_main-large">{props.children}</h1>
   );
 };
 
-HeaderIngredients.propTypes = {
+Header.propTypes = {
   children: PropTypes.string.isRequired,
 };
 
@@ -187,6 +187,7 @@ export const BurgerIngredients = () => {
   const main = useRef("main");
   const [tab, setTab] = useState("one");
 
+
   const scroll = (item) => {
     item.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -214,14 +215,16 @@ export const BurgerIngredients = () => {
 
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>
-      <HeaderIngredients>Соберите бургер</HeaderIngredients>
+      <Header>Соберите бургер</Header>
       <TabContainer
         buns={() => scroll(buns)}
         sauses={() => scroll(sause)}
         main={() => scroll(main)}
         tab={tab}
       />
-      <ul className={burgerIngredientsStyle.box} onScroll={(e) => onScroll(e)}>
+      <ul className={burgerIngredientsStyle.box}
+        onScroll={(e) => onScroll(e)}
+      >
         <IngredientsBlock refElement={buns} key="bun" type="bun" text="Булки" />
         <IngredientsBlock
           refElement={sause}

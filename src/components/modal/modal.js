@@ -11,7 +11,7 @@ const modalRoot = document.getElementById("react-modals");
 export const Modal = (props) => {
   const escClose = (e) => {
     if (e.key === "Escape") {
-      props.onClose();
+      props.onClose(e);
     }
   };
 

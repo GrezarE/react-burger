@@ -4,6 +4,7 @@ import { Registration } from "./register";
 import { ForgotPassword } from "./forgot-password";
 import { ResetPassword } from "./reset-password";
 import { Profile } from "./profile";
+import { FeedsPage } from "./feeds-page";
 
 
-export { Profile, ResetPassword, ForgotPassword, Registration, Login, MainPage }
+export { Profile, ResetPassword, ForgotPassword, Registration, Login, MainPage, FeedsPage }

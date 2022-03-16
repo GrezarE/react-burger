@@ -1,6 +1,6 @@
 import { BASE_URL } from "../../utils/base-url";
 import { USER_SET_DATA, RESET_TOKEN } from "./user";
-import { setCookie } from "../../utils/cookies";
+import { setCookie, deleteCookie } from "../../utils/cookies";
 import { checkResponse } from "../../utils/check-response";
 
 
@@ -35,7 +35,10 @@ export function getLogin(data) {
           })
           setTimeout(() => dispatch({ type: RESET_TOKEN }), [1000 * 1200])
           const refreshToken = res.refreshToken
-          setCookie('refreshToken', refreshToken)
+          deleteCookie('refreshToken')
+          setCookie('refreshToken', refreshToken, { path: '/' })
+          setCookie('refreshToken', refreshToken, { path: '/profile', expires: -1 })
+          setCookie('refreshToken', refreshToken, { path: '/feed', expires: -1 })
         } else {
           dispatch({
             type: LOGIN_FAIL,

@@ -6,7 +6,7 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { Modal } from "../modal/modal.js";
+import { Modal } from "../modal/modal";
 import { IngredientDetails } from "../ingredient-details/ingredient-details.js";
 import { ingredientType } from "../../utils/types.js";
 import { useDispatch, useSelector } from "react-redux";

@@ -6,17 +6,21 @@ import { ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components"
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
   useHistory,
-  useRouteMatch,
   Link,
   useLocation
 } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { FC } from "react";
 
-const Navigation = (props) => {
+const Navigation: FC = (props) => {
   return <nav className={headerStyles.navigation}>{props.children}</nav>;
 };
 
-const NavigationLink = (props) => {
+interface INavigationLink {
+  class?: string;
+  onClick: () => void
+}
+
+const NavigationLink: FC<INavigationLink> = (props) => {
   return (
     <div
       className={

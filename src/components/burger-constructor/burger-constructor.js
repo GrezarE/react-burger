@@ -7,7 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyle from "./burger-constructor.module.css";
 import CurrencyIcon from "../../images/CurrencyIcon.svg";
-import { Modal } from "../modal/modal.js";
+import { Modal } from "../modal/modal";
 import { OrderDetails } from "../order-details/order-details.js";
 import { ingredientType } from "../../utils/types.js";
 import { useDispatch, useSelector } from "react-redux";

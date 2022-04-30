@@ -1,4 +1,4 @@
-import { IIngredientType } from "../../utils/type";
+import { IIngredientType } from "../../utils/types";
 
 export const OPEN_CARD: "OPEN_CARD" = "OPEN_CARD";
 export const CLOSE_CARD: "CLOSE_CARD" = "CLOSE_CARD";
@@ -12,4 +12,4 @@ export interface ICloseCard {
   readonly type: typeof CLOSE_CARD;
 }
 
-export type TViev = ICloseCard | IOpenCard<IIngredientType>;
+export type TView = ICloseCard | IOpenCard<IIngredientType>;

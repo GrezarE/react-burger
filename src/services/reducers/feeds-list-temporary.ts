@@ -1,7 +1,14 @@
-import { GET_ORDERS_TEMPORARY, GET_ORDERS_TEMPORARY_REQUEST, GET_ORDERS_TEMPORARY_FAIL } from "../actions/feeds-list-temporary";
+import { GET_ORDERS_TEMPORARY, GET_ORDERS_TEMPORARY_REQUEST, GET_ORDERS_TEMPORARY_FAIL, TGetOrders } from "../actions/feeds-list-temporary";
+import { IOrder } from "../../utils/types";
 
+interface IInitStateTemp {
+  readonly orders: Array<IOrder>
+  readonly total: number
+  readonly totalToday: number
+  readonly request: boolean
+}
 
-const initStateTemp = {
+const initStateTemp: IInitStateTemp = {
   orders: [],
   total: 0,
   totalToday: 0,
@@ -9,7 +16,7 @@ const initStateTemp = {
 }
 
 
-export const ordersReducerTemporary = (state = initStateTemp, action) => {
+export const ordersReducerTemporary = (state = initStateTemp, action: TGetOrders) => {
   switch (action.type) {
     case GET_ORDERS_TEMPORARY_REQUEST: {
       return {

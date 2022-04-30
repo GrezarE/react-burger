@@ -12,6 +12,7 @@ import { feedReducer } from "./feed-view";
 import { wsReducer } from "./ws-reducer";
 import { ordersReducerTemporary } from "./feeds-list-temporary";
 
+
 export const rootReducer = combineReducers({
   burger: burgerReducer,
   view: viewReducer,

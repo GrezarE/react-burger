@@ -3,7 +3,7 @@ export const CLOSE_FEED: "CLOSE_FEED" = "CLOSE_FEED";
 
 export interface IOpenFeed {
   readonly type: typeof OPEN_FEED;
-  readonly number: string;
+  readonly number: number;
   readonly view: string
 }
 

@@ -2,16 +2,25 @@ import {
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS,
   GET_INGREDIENTS_FAIL,
+  TGetIngredients,
 } from "../actions/burger";
 
-const initialState = {
+interface IInitialState {
+  readonly ingredients: [];
+  readonly ingredientsRequest: boolean;
+  readonly ingredientsFail: boolean;
+}
+
+const initialState: IInitialState = {
   ingredients: [],
   ingredientsRequest: false,
   ingredientsFail: false,
-
 };
 
-export const burgerReducer = (state = initialState, action) => {
+export const burgerReducer = (
+  state = initialState,
+  action: TGetIngredients
+) => {
   switch (action.type) {
     case GET_INGREDIENTS_REQUEST: {
       return {

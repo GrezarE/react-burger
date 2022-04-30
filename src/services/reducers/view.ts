@@ -1,5 +1,5 @@
-import { CLOSE_CARD, OPEN_CARD, TViev } from "../actions/view";
-import { IIngredientType } from "../../utils/type";
+import { CLOSE_CARD, OPEN_CARD, TView } from "../actions/view";
+import { IIngredientType } from "../../utils/types";
 
 type TViewInitialState<T> = {
   readonly openCard: T | string;
@@ -11,11 +11,10 @@ const viewInitialState: TViewInitialState<IIngredientType> = {
 
 export const viewReducer = (
   state = viewInitialState,
-  action: TViev
+  action: TView
 ): TViewInitialState<IIngredientType> => {
   switch (action.type) {
     case OPEN_CARD: {
-      console.log(action.view);
       return {
         openCard: action.view,
       };

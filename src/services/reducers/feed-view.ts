@@ -2,12 +2,12 @@ import { OPEN_FEED, CLOSE_FEED, TFeedView } from "../actions/feed-view";
 
 type TFeedInitState = {
   feedView: string;
-  number: string;
+  number: number | null;
 };
 
 const feedInitState: TFeedInitState = {
   feedView: "",
-  number: "",
+  number: null,
 };
 
 export const feedReducer = (state = feedInitState, action: TFeedView): TFeedInitState => {
@@ -21,7 +21,7 @@ export const feedReducer = (state = feedInitState, action: TFeedView): TFeedInit
     case CLOSE_FEED: {
       return {
         feedView: "",
-        number: "",
+        number: null,
       };
     }
     default: {

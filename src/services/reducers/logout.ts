@@ -1,13 +1,15 @@
-import { LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAIL } from "../actions/logout";
+import { LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAIL, TLogout } from "../actions/logout";
+import { IAuthorizationBoolean } from '../../utils/types'
 
 
-const loginInitState = {
+
+const loginInitState: IAuthorizationBoolean = {
   isRequest: false,
   isFail: false
 
 }
 
-export const logoutReducer = (state = loginInitState, action) => {
+export const logoutReducer = (state = loginInitState, action: TLogout) => {
   switch (action.type) {
     case LOGOUT_REQUEST: {
       return {

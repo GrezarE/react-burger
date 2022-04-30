@@ -3,15 +3,22 @@ import {
   GET_ORDER_SUCCESS,
   GET_ORDER_FAIL,
   ORDER_CLEAR,
+  TGetOrder
 } from "../actions/order";
 
-const orderInitialState = {
+interface IOrderInitialState {
+  readonly order: number | null
+  readonly orderRequest: boolean
+  readonly orderFail: boolean
+}
+
+const orderInitialState: IOrderInitialState = {
   order: null,
   orderRequest: false,
   orderFail: false,
 };
 
-export const orderReducer = (state = orderInitialState, action) => {
+export const orderReducer = (state = orderInitialState, action: TGetOrder) => {
   switch (action.type) {
     case GET_ORDER_REQUEST: {
       return {

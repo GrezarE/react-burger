@@ -5,13 +5,26 @@ import { setCookie } from "../../utils/cookies";
 import { checkResponse } from "../../utils/check-response";
 
 
-export const REGISTRATION_REQUEST = "REGISTRATION_REQUEST";
-export const REGISTRATION_SUCCESS = "LOGIN_SUCCESS";
-export const REGISTRATION_FAIL = "LOGIN_FAIL";
+export const REGISTRATION_REQUEST: 'REGISTRATION_REQUEST' = "REGISTRATION_REQUEST";
+export const REGISTRATION_SUCCESS: 'REGISTRATION_SUCCESS' = "REGISTRATION_SUCCESS";
+export const REGISTRATION_FAIL: 'REGISTRATION_FAIL' = "REGISTRATION_FAIL";
 
-export function getRegistration(data) {
+export interface IRegistrationRequest {
+  readonly type: typeof REGISTRATION_REQUEST
+}
+export interface IRegistrationSuccess {
+  readonly type: typeof REGISTRATION_SUCCESS
+}
+export interface IRegistrationFail {
+  readonly type: typeof REGISTRATION_FAIL
+}
 
-  return function (dispatch) {
+export type TRegistration = IRegistrationRequest | IRegistrationSuccess | IRegistrationFail
+
+
+export function getRegistration(data: any) {
+
+  return function (dispatch: any) {
     dispatch({
       type: REGISTRATION_REQUEST,
     });
@@ -36,7 +49,7 @@ export function getRegistration(data) {
             name: res.user.name,
             token: res.accessToken
           })
-          setTimeout(() => dispatch({ type: RESET_TOKEN }), [1000 * 1200])
+          setTimeout(() => dispatch({ type: RESET_TOKEN }), 1000 * 1200)
           const refreshToken = res.refreshToken
           setCookie('refreshToken', refreshToken)
 

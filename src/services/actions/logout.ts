@@ -9,8 +9,20 @@ export const LOGOUT_REQUEST = "LOGIN_REQUEST";
 export const LOGOUT_SUCCESS = "LOGIN_SUCCESS";
 export const LOGOUT_FAIL = "LOGOUT_FAIL";
 
-export function getLogout(token) {
-  return function (dispatch) {
+export interface ILogoutRequest{
+  readonly type: typeof LOGOUT_REQUEST
+}
+export interface ILogoutSuccess{
+  readonly type: typeof LOGOUT_SUCCESS
+}
+export interface ILogoutFail{
+  readonly type: typeof LOGOUT_FAIL
+}
+
+export type TLogout = ILogoutRequest | ILogoutSuccess | ILogoutFail
+
+export function getLogout(token: string) {
+  return function (dispatch: any) {
     dispatch({
       type: LOGOUT_REQUEST,
     });

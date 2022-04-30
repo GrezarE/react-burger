@@ -5,46 +5,48 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link,  Redirect } from "react-router-dom";
-import { useDispatch, useSelector, } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "../services/hooks";
 import { getRegistration } from "../services/actions/register";
+import { IUserAllData } from "../utils/types";
 
 export const Registration = () => {
-  const dispatch = useDispatch()
-  const { isAuthenticated } = useSelector(state => state.user)
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.user);
 
-  const [emailValue, setEmailValue] = React.useState("");
-  const onChangeEmail = (e) => {
+  const [emailValue, setEmailValue] = React.useState<string>("");
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailValue(e.target.value);
   };
-  const [passwordValue, setPasswordValue] = React.useState("");
-  const onChangePassword = (e) => {
+  const [passwordValue, setPasswordValue] = React.useState<string>("");
+  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(e.target.value);
   };
-  const [nameInput, setNameInput] = React.useState("");
-  const inputRef = React.useRef(null);
+  const [nameInput, setNameInput] = React.useState<string>("");
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const registerOnClick = (e) => {
-    e.preventDefault()
+  const registerOnClick = (e: React.FormEvent) => {
+    e.preventDefault();
 
-    const registerData = {
+    const registerData: IUserAllData = {
       email: emailValue,
       password: passwordValue,
-      name: nameInput
-    }
-    dispatch(getRegistration(registerData))
-  }
+      name: nameInput,
+    };
+    dispatch(getRegistration(registerData));
+  };
 
   if (isAuthenticated) {
-    return (
-      <Redirect to='/' />
-    )
+    return <Redirect to="/" />;
   }
 
   return (
     <>
       <section className="input__box">
-        <form className="authorization__box" onSubmit={(e) => registerOnClick(e)}>
+        <form
+          className="authorization__box"
+          onSubmit={(e) => registerOnClick(e)}
+        >
           <h1 className="mb-6 text text_type_main-medium ">Регистрация</h1>
           <Input
             type={"text"}
@@ -65,7 +67,7 @@ export const Registration = () => {
             value={passwordValue}
             name={"password"}
           />
-          <Button >Зарегистрироваться</Button>
+          <Button>Зарегистрироваться</Button>
           <div className="mt-20 input__text-line">
             <p className="text text_type_main-default">Уже зарегистрированы?</p>
             <Link

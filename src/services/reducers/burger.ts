@@ -4,9 +4,11 @@ import {
   GET_INGREDIENTS_FAIL,
   TGetIngredients,
 } from "../actions/burger";
+import { IIngredientType } from "../../utils/types";
+
 
 interface IInitialState {
-  readonly ingredients: [];
+  readonly ingredients: Array<IIngredientType>;
   readonly ingredientsRequest: boolean;
   readonly ingredientsFail: boolean;
 }

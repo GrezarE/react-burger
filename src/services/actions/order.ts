@@ -1,5 +1,6 @@
 import { BASE_URL } from "../../utils/base-url";
 import { checkResponse } from "../../utils/check-response";
+import { AppThunk, AppDispatch } from "../types";
 
 export const GET_ORDER_REQUEST: "GET_ORDER_REQUEST" = "GET_ORDER_REQUEST";
 export const GET_ORDER_SUCCESS: "GET_ORDER_SUCCESS" = "GET_ORDER_SUCCESS";
@@ -11,7 +12,7 @@ export interface IGetOrderRequest {
 }
 export interface IGetOrderSuccess {
   readonly type: typeof GET_ORDER_SUCCESS;
-  readonly order: number
+  readonly order: number;
 }
 export interface IGetOrderFail {
   readonly type: typeof GET_ORDER_FAIL;
@@ -20,10 +21,17 @@ export interface IOrderClear {
   readonly type: typeof ORDER_CLEAR;
 }
 
-export type TGetOrder = IGetOrderRequest | IGetOrderSuccess | IGetOrderFail | IOrderClear
+export type TGetOrder =
+  | IGetOrderRequest
+  | IGetOrderSuccess
+  | IGetOrderFail
+  | IOrderClear;
 
-export function getOrder(ingredients: any, token: string) {
-  return function (dispatch: any) {
+export const getOrder: AppThunk = (
+  ingredients: Array<string>,
+  token: string
+) => {
+  return function (dispatch: AppDispatch) {
     dispatch({
       type: GET_ORDER_REQUEST,
     });
@@ -53,4 +61,4 @@ export function getOrder(ingredients: any, token: string) {
         });
       });
   };
-}
+};

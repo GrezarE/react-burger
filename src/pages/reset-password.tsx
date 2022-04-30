@@ -1,28 +1,27 @@
-import React, { ChangeEvent, ChangeEventHandler } from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Redirect, useLocation } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
 import { useSelector, useDispatch } from "../services/hooks";
 import { passwordReset } from "../services/actions/password-reset";
+import { ILocationState } from "../utils/types";
 
 export const ResetPassword = () => {
-  const { state }: any = useLocation();
+  const { state } = useLocation<ILocationState>();
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user);
   const { resetSuccess } = useSelector((state) => state.password);
 
-  const [passwordValue, setPasswordValue] = React.useState("");
+  const [passwordValue, setPasswordValue] = React.useState<string>("");
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
     setPasswordValue(e.target.value);
   };
-  const [codeInput, setCodeInput] = React.useState("");
-  const inputRef = React.useRef(null);
+  const [codeInput, setCodeInput] = React.useState<string>("");
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const resetPasswordSubmit = (e: Event) => {
+  const resetPasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (passwordValue && codeInput) {
       const data = {

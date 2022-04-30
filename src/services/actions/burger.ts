@@ -1,6 +1,7 @@
 import { BASE_URL } from "../../utils/base-url";
 import { checkResponse } from "../../utils/check-response";
 import { AppDispatch, AppThunk } from "../types";
+import { IIngredientType } from "../../utils/types";
 
 export const GET_INGREDIENTS_REQUEST: "GET_INGREDIENTS_REQUEST" =
   "GET_INGREDIENTS_REQUEST";
@@ -11,7 +12,7 @@ export const GET_INGREDIENTS_FAIL: "GET_INGREDIENTS_FAIL" =
 
 export interface IGetIngredientsSuccess {
   readonly type: typeof GET_INGREDIENTS_SUCCESS;
-  readonly items: [];
+  readonly items: Array<IIngredientType>;
 }
 export interface IGetIngredientsFail {
   readonly type: typeof GET_INGREDIENTS_FAIL;

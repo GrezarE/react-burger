@@ -3,7 +3,7 @@ import { FC } from "react";
 import modalOverlayStyle from "./modal-overlay.module.css";
 
 interface IModalOverlay {
-  onClose: () => any
+  onClose: () => void
 }
 
 export const ModalOverlay: FC<IModalOverlay> = ({ onClose, children }) => {
@@ -14,7 +14,3 @@ export const ModalOverlay: FC<IModalOverlay> = ({ onClose, children }) => {
   );
 };
 
-// ModalOverlay.propTypes = {
-//   onClose: PropTypes.func,
-//   children: PropTypes.element,
-// };

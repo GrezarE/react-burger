@@ -12,7 +12,6 @@ import {
 } from "../services/actions/ws-feed-actions";
 import thunk from "redux-thunk";
 import { socketMiddleware } from "../services/middleware/socketMiddleware";
-import { TWsConnect } from "./actions/ws-feed-actions";
 
 declare const window: any;
 

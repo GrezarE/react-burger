@@ -5,7 +5,7 @@ export const CLOSE_CARD: "CLOSE_CARD" = "CLOSE_CARD";
 
 export interface IOpenCard<T> {
   readonly type: typeof OPEN_CARD;
-  readonly view: T | string;
+  readonly view: T | null;
 }
 
 export interface ICloseCard {

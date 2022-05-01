@@ -14,7 +14,6 @@ export interface CustomResponse<T> extends Body {
 }
 
 export function checkResponse(res: CustomResponse<any>): Promise<any> {
-  console.log(res);
   if (res.ok) {
     return res.json();
   }

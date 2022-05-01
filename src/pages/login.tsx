@@ -43,7 +43,7 @@ export const Login = () => {
   return (
     <>
       <section className="input__box">
-        <form className="authorization__box" onSubmit={(e) => loginOnClick}>
+        <form className="authorization__box" onSubmit={(e) => loginOnClick(e)}>
           <h1 className="mb-6 text text_type_main-medium ">Вход</h1>
           <EmailInput
             onChange={onChangeEmail}

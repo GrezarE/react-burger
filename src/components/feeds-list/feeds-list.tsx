@@ -27,9 +27,9 @@ export const FeedsList = () => {
               pathname: `/feed/${item._id}`,
               state: { background: location },
             }}
-            onClick={(e) => onClick(item)}
+            onClick={() => onClick(item)}
           >
-            <Feed key={item._id} feed={item} place />
+            <Feed key={item._id} feed={item} place='' />
           </Link>
         ))}
       </ul>

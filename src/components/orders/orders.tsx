@@ -1,10 +1,12 @@
 import style from './orders.module.css'
-import { useSelector } from 'react-redux'
+import { useSelector } from "../../services/hooks";
+import { FC } from 'react';
 
 
 
 
-export const Orders = () => {
+
+export const Orders: FC = () => {
   const { total, orders, totalToday } = useSelector(state => state.websocket)
 
   return (

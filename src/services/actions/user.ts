@@ -37,8 +37,8 @@ export interface IUserUpdateRequest {
 }
 export interface IUserUpdateSuccess {
   readonly type: typeof USER_UPDATE_SUCCESS;
-  readonly email: string;
-  readonly name: string;
+  readonly email: string | undefined;
+  readonly name: string | undefined;
 }
 export interface IUserUpdateFail {
   readonly type: typeof USER_UPDATE_FAIL;
@@ -69,7 +69,12 @@ export type TUser =
   | IUserSetData
   | IUserUpdateRequest;
 
-const addUserUpdate = (data: any) => {
+  interface IAddUserUpdate {
+    success: boolean
+    user: IUserAllData
+  }
+
+const addUserUpdate =  (data: IAddUserUpdate): IUserUpdateSuccess => {
   return {
     type: USER_UPDATE_SUCCESS,
     email: data.user.email,

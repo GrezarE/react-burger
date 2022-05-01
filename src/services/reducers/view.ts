@@ -2,11 +2,11 @@ import { CLOSE_CARD, OPEN_CARD, TView } from "../actions/view";
 import { IIngredientType } from "../../utils/types";
 
 type TViewInitialState<T> = {
-  readonly openCard: T | string;
+  readonly openCard: T | null;
 };
 
 const viewInitialState: TViewInitialState<IIngredientType> = {
-  openCard: ''
+  openCard: null
 };
 
 export const viewReducer = (
@@ -21,7 +21,7 @@ export const viewReducer = (
     }
     case CLOSE_CARD: {
       return {
-        openCard: "",
+        openCard: null,
       };
     }
     default: {

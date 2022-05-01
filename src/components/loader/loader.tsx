@@ -1,6 +1,11 @@
+import { FC } from "react";
 import style from "./loader.module.css";
 
-export const Loader = ({ text }: { text: string }) => {
+interface ILoader {
+  readonly text: string;
+}
+
+export const Loader: FC<ILoader> = ({ text }) => {
   return (
     <div className={style.loader}>
       <span className={style.loader__icon}></span>
@@ -8,4 +13,3 @@ export const Loader = ({ text }: { text: string }) => {
     </div>
   );
 };
-

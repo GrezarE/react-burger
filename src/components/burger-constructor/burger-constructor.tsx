@@ -1,5 +1,4 @@
-import React, { useMemo, useRef } from "react";
-import PropTypes from "prop-types";
+import React, { FC, useMemo, useRef } from "react";
 import {
   ConstructorElement,
   DragIcon,
@@ -8,9 +7,9 @@ import {
 import burgerConstructorStyle from "./burger-constructor.module.css";
 import CurrencyIcon from "../../images/CurrencyIcon.svg";
 import { Modal } from "../modal/modal";
-import { OrderDetails } from "../order-details/order-details.js";
-import { ingredientType } from "../../utils/types.js";
-import { useDispatch, useSelector } from "react-redux";
+import { OrderDetails } from "../order-details/order-details";
+import { useSelector, useDispatch } from "../../services/hooks";
+
 import { ORDER_CLEAR, getOrder } from "../../services/actions/order";
 import {
   ADD_COMPONENT,
@@ -24,13 +23,25 @@ import { useDrag, useDrop } from "react-dnd";
 import { v4 as uuidv4 } from "uuid";
 import { useHistory } from "react-router-dom";
 import { Loader } from "../loader/loader";
+import { TComponents } from "../../services/reducers/construct";
+import { IIngredientType } from "../../utils/types";
 
-const ConstructorItem = ({ ingredient, index, itemKey }) => {
+interface IConstructorItem {
+  ingredient: IIngredientType;
+  index: number;
+  itemKey: string;
+}
+
+const ConstructorItem: FC<IConstructorItem> = ({
+  ingredient,
+  index,
+  itemKey,
+}) => {
   const dispatch = useDispatch();
-  const ref = useRef(null);
+  const ref = useRef<HTMLLIElement>(null);
   const componentsData = useSelector((store) => store.construct);
 
-  const moveCard = (dragIndex, hoverIndex) => {
+  const moveCard = (dragIndex: number, hoverIndex: number) => {
     const components = componentsData.components;
     const newComp = components.slice();
     const spliced = update(newComp, {
@@ -62,7 +73,7 @@ const ConstructorItem = ({ ingredient, index, itemKey }) => {
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(item, monitor) {
+    hover(item: any, monitor: any) {
       if (!ref.current) {
         return;
       }
@@ -92,7 +103,7 @@ const ConstructorItem = ({ ingredient, index, itemKey }) => {
       moveCard(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
-    drop(item) {
+    drop(item: any) {
       const dragIndex = item.index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) {
@@ -119,7 +130,6 @@ const ConstructorItem = ({ ingredient, index, itemKey }) => {
       </div>
       <div className={burgerConstructorStyle.element} style={{ opacity }}>
         <ConstructorElement
-          type={ingredient.type}
           text={ingredient.name}
           price={ingredient.price}
           thumbnail={ingredient.image}
@@ -130,24 +140,40 @@ const ConstructorItem = ({ ingredient, index, itemKey }) => {
   );
 };
 
-ConstructorItem.propTypes = {
-  ingredient: ingredientType.isRequired,
-  index: PropTypes.number.isRequired,
-  itemKey: PropTypes.string.isRequired,
-};
+interface IPlug {
+  type: string;
+}
 
-const Plug = ({ type }) => {
+const Plug: FC<IPlug> = ({ type }) => {
   return (
     <li className={"pl-8 " + burgerConstructorStyle.card}>
       <div className={burgerConstructorStyle.plug}>
-        <p className={"text text_type_main-medium " + burgerConstructorStyle.plug__text}>{type !== 'bun' ? 'Пожалуйста, перенесите сюда ингредиенты для создания заказа' : 'Пожалуйста, перенесите сюда булку для создания заказа'}</p>
+        <p
+          className={
+            "text text_type_main-medium " + burgerConstructorStyle.plug__text
+          }
+        >
+          {type !== "bun"
+            ? "Пожалуйста, перенесите сюда ингредиенты для создания заказа"
+            : "Пожалуйста, перенесите сюда булку для создания заказа"}
+        </p>
       </div>
     </li>
   );
 };
 
-const ConstructorLockedItem = ({ ingredient, position, type }) => {
-  console.log(type)
+interface IConstructorLockedItem {
+  ingredient: IIngredientType;
+  position: string;
+  type: "top" | "bottom" | undefined;
+}
+
+const ConstructorLockedItem: FC<IConstructorLockedItem> = ({
+  ingredient,
+  position,
+  type,
+}) => {
+  console.log(type);
   return (
     <li className="pl-8">
       <ConstructorElement
@@ -161,17 +187,16 @@ const ConstructorLockedItem = ({ ingredient, position, type }) => {
   );
 };
 
-ConstructorLockedItem.propTypes = {
-  ingredient: ingredientType.isRequired,
-  position: PropTypes.string.isRequired,
-};
+interface IConstructorBox {
+  ingredients: Array<string>;
+}
 
-const ConstructorBox = ({ ingredients }) => {
+const ConstructorBox: FC<IConstructorBox> = ({ ingredients }) => {
   const dispatch = useDispatch();
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
-    drop({ card }) {
+    drop({ card }: { card: any }) {
       if (card.type === "bun") {
         dispatch({ type: CHANGE_BUN, id: card._id });
       } else {
@@ -186,22 +211,25 @@ const ConstructorBox = ({ ingredients }) => {
 
   return (
     <ul className={burgerConstructorStyle.box} ref={dropTarget}>
-      {components.bun ? ingredientsData.map(
-        (item) =>
-          item._id === components.bun && (
-            <ConstructorLockedItem
-              key={item._id}
-              ingredient={item}
-              position={" (верх)"}
-              type={'top'}
-            />
-          )
-      ) : (<Plug type='bun' />
+      {components.bun ? (
+        ingredientsData.map(
+          (item) =>
+            item._id === components.bun && (
+              <ConstructorLockedItem
+                key={item._id}
+                ingredient={item}
+                position={" (верх)"}
+                type={"top"}
+              />
+            )
+        )
+      ) : (
+        <Plug type="bun" />
       )}
       <li>
         <ul className={burgerConstructorStyle.box_active}>
           {ingredients.length === 1 ? (
-            <Plug type='main' />
+            <Plug type="main" />
           ) : (
             components.components.map(({ id, key }, index) => {
               const ingredient = ingredientsData.find(
@@ -228,7 +256,7 @@ const ConstructorBox = ({ ingredients }) => {
               key={item._id}
               ingredient={item}
               position={" (низ)"}
-              type={'bottom'}
+              type={"bottom"}
             />
           )
       )}
@@ -236,11 +264,13 @@ const ConstructorBox = ({ ingredients }) => {
   );
 };
 
-ConstructorBox.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
+interface IConstructorButtonBoxPrice {
+  ingredients: Array<string>;
+}
 
-const ConstructorButtonBoxPrice = ({ ingredients }) => {
+const ConstructorButtonBoxPrice: FC<IConstructorButtonBoxPrice> = ({
+  ingredients,
+}) => {
   const ingredientsData = useSelector((state) => state.burger.ingredients);
 
   const price = useMemo(() => {
@@ -262,17 +292,16 @@ const ConstructorButtonBoxPrice = ({ ingredients }) => {
   );
 };
 
-ConstructorButtonBoxPrice.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
+interface IConstructorButtonBox {
+  ingredients: Array<string>;
+}
 
-const ConstructorButtonBox = ({ ingredients }) => {
+const ConstructorButtonBox: FC<IConstructorButtonBox> = ({ ingredients }) => {
   const dispatch = useDispatch();
-  const history = useHistory()
+  const history = useHistory();
   const { order } = useSelector((store) => store.order);
   const { bun } = useSelector((store) => store.construct);
-  const { isAuthenticated, token } = useSelector(state => state.user)
-
+  const { isAuthenticated, token } = useSelector((state) => state.user);
 
   const handleClose = () => {
     dispatch({
@@ -310,17 +339,12 @@ const ConstructorButtonBox = ({ ingredients }) => {
   );
 };
 
-ConstructorButtonBox.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
-
 export const BurgerConstructor = () => {
   const componentsData = useSelector((store) => store.construct);
   const { orderRequest } = useSelector((store) => store.order);
 
-
-  function getComponentsIdArray() {
-    let arr = [];
+  function getComponentsIdArray(): Array<any> {
+    let arr: any[] = [];
     if (componentsData.components.length > 0) {
       arr = componentsData.components.map((item) => item.id);
     }

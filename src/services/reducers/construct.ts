@@ -7,7 +7,7 @@ import {
   TConstruct,
 } from "../actions/construct";
 
-type TComponents = {
+export type TComponents = {
   readonly id: string;
   readonly key: string;
 };

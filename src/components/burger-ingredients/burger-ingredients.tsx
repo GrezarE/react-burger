@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { FC, useCallback, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import {
@@ -7,14 +7,13 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { Modal } from "../modal/modal";
-import { IngredientDetails } from "../ingredient-details/ingredient-details.js";
-import { ingredientType } from "../../utils/types.js";
-import { useDispatch, useSelector } from "react-redux";
+import { IngredientDetails } from "../ingredient-details/ingredient-details";
+import { useSelector, useDispatch } from "../../services/hooks";
 import { CLOSE_CARD, OPEN_CARD } from "../../services/actions/view";
 import { useDrag } from "react-dnd";
+import { IIngredientType } from "../../utils/types";
 
-
-export const Header = (props) => {
+export const Header: FC = (props) => {
   return (
     <h1 className="mt-10 mb-5 text text_type_main-large">{props.children}</h1>
   );
@@ -24,7 +23,14 @@ Header.propTypes = {
   children: PropTypes.string.isRequired,
 };
 
-const TabContainer = (props) => {
+interface ITabContainer {
+  tab: string;
+  sauses: () => void;
+  buns: () => void;
+  main: () => void;
+}
+
+const TabContainer: FC<ITabContainer> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <Tab
@@ -58,20 +64,17 @@ const TabContainer = (props) => {
   );
 };
 
-TabContainer.propTypes = {
-  tab: PropTypes.string.isRequired,
-  sauses: PropTypes.func.isRequired,
-  buns: PropTypes.func.isRequired,
-  main: PropTypes.func.isRequired,
-};
+interface IIngredientCard {
+  props: IIngredientType;
+}
 
-const IngredientCard = ({ card }) => {
+const IngredientCard: FC<IIngredientCard> = ({ props }) => {
   const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(false);
 
   const componentsData = useSelector((store) => store.construct);
   function getComponentsIdArray() {
-    let arr = [];
+    let arr: Array<string> = [];
     if (componentsData.components.length > 0) {
       arr = componentsData.components.map((item) => item.id);
     }
@@ -86,13 +89,13 @@ const IngredientCard = ({ card }) => {
     [componentsData]
   );
   const counter = React.useMemo(
-    () => ingredients.filter((item) => item === card._id).length,
-    [ingredients, card]
+    () => ingredients.filter((item) => item === props._id).length,
+    [ingredients, props]
   );
 
   const [{ opacity }, ref] = useDrag({
     type: "ingredient",
-    item: { card },
+    item: { props },
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.1 : 1,
     }),
@@ -101,18 +104,21 @@ const IngredientCard = ({ card }) => {
   const handleOpen = () => {
     dispatch({
       type: OPEN_CARD,
-      view: card,
+      view: props,
     });
     setIsVisible(true);
-    window.history.pushState({ path: `/ingredients/${card._id}` }, '', `/ingredients/${card._id}`)
+    window.history.pushState(
+      { path: `/ingredients/${props._id}` },
+      "",
+      `/ingredients/${props._id}`
+    );
   };
   const handleClose = () => {
     dispatch({
       type: CLOSE_CARD,
     });
     setIsVisible(false);
-    window.history.pushState({ path: `/` }, '', `/`)
-
+    window.history.pushState({ path: `/` }, "", `/`);
   };
 
   const modal = (
@@ -129,9 +135,9 @@ const IngredientCard = ({ card }) => {
         ref={ref}
         style={{ opacity }}
       >
-        <img className="ml-4 mr-4 " src={card.image} alt={card.image} />
+        <img className="ml-4 mr-4 " src={props.image} alt={props.image} />
         <div className={"mt-1 mb-1 " + burgerIngredientsStyle.priceBox}>
-          <p className="text text_type_digits-default">{card.price}</p>
+          <p className="text text_type_digits-default">{props.price}</p>
           <CurrencyIcon type="primary" />
         </div>
         <h2
@@ -139,7 +145,7 @@ const IngredientCard = ({ card }) => {
             "text text_type_main-default " + burgerIngredientsStyle.name
           }
         >
-          {card.name}
+          {props.name}
         </h2>
         <div
           className={
@@ -156,11 +162,13 @@ const IngredientCard = ({ card }) => {
   );
 };
 
-IngredientCard.propTypes = {
-  card: ingredientType.isRequired,
-};
+interface IIngredientsBlock {
+  type: string;
+  text: string;
+  refElement: any;
+}
 
-const IngredientsBlock = (data) => {
+const IngredientsBlock: FC<IIngredientsBlock> = (data) => {
   const ingredients = useSelector((store) => store.burger.ingredients);
   const itemType = ingredients.filter((item) => item.type === data.type);
 
@@ -169,49 +177,43 @@ const IngredientsBlock = (data) => {
       <h2 className="text text_type_main-medium">{data.text}</h2>
       <ul className={" pl-4 " + burgerIngredientsStyle.ingredientsList}>
         {itemType.map((item) => (
-          <IngredientCard key={item._id} card={item} />
+          <IngredientCard key={item._id} props={item} />
         ))}
       </ul>
     </li>
   );
 };
 
-IngredientsBlock.propTypes = {
-  type: PropTypes.oneOf(["bun", "sauce", "main"]).isRequired,
-  text: PropTypes.string.isRequired,
-};
-
 export const BurgerIngredients = () => {
-  const buns = useRef("bun");
-  const sause = useRef("sause");
-  const main = useRef("main");
-  const [tab, setTab] = useState("one");
+  const buns = useRef<any>("bun");
+  const sause = useRef<any>("sause");
+  const main = useRef<any>("main");
+  const [tab, setTab] = useState<string>("one");
 
-
-  const scroll = (item) => {
+  const scroll = (item: any) => {
     item.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const onScroll = (e) => {
+  const onScroll = (e: any): void => {
     let element = e.target;
+
     if (
       element.scrollTop > buns.current.scrollHeight &&
-      element.scrollTop < sause.current.scrollHeight + buns.current.scrollHeight
+      e.target.scrollTop <
+        sause.current.scrollHeight + buns.current.scrollHeight
     ) {
       setTab("two");
     }
     if (
-      element.scrollTop >
+      e.target.scrollTop >
       sause.current.scrollHeight + buns.current.scrollHeight
     ) {
       setTab("three");
     }
-    if (element.scrollTop <= buns.current.scrollHeight) {
+    if (e.target.scrollTop <= buns.current.scrollHeight) {
       setTab("one");
     }
   };
-
-
 
   return (
     <section className={burgerIngredientsStyle.burgerIngredients}>
@@ -222,9 +224,7 @@ export const BurgerIngredients = () => {
         main={() => scroll(main)}
         tab={tab}
       />
-      <ul className={burgerIngredientsStyle.box}
-        onScroll={(e) => onScroll(e)}
-      >
+      <ul className={burgerIngredientsStyle.box} onScroll={(e) => onScroll(e)}>
         <IngredientsBlock refElement={buns} key="bun" type="bun" text="Булки" />
         <IngredientsBlock
           refElement={sause}

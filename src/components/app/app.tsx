@@ -1,11 +1,24 @@
 import { useEffect } from "react";
 import { ProtectedRoute } from "../protected-route/protected-route";
 import ErrorBoundary from "../error-boundary/error-boundary";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "../../services/hooks";
 import { getIngredient } from "../../services/actions/burger";
-
-import { BrowserRouter as Router, Switch, Route, useLocation, useHistory } from "react-router-dom";
-import { Profile, ResetPassword, ForgotPassword, Registration, Login, MainPage, FeedsPage } from '../../pages/index'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useLocation,
+  useHistory,
+} from "react-router-dom";
+import {
+  Profile,
+  ResetPassword,
+  ForgotPassword,
+  Registration,
+  Login,
+  MainPage,
+  FeedsPage,
+} from "../../pages/index";
 import { getCookie } from "../../utils/cookies";
 import { getUserData } from "../../services/actions/user";
 import { Ingredient } from "../../pages/ingredient";
@@ -16,41 +29,37 @@ import { FeedDetails } from "../feed-details/feed-details";
 import { FeedDetailsPage } from "../../pages/feed-details-page";
 import { getOrdersTemporary } from "../../services/actions/feeds-list-temporary";
 
-
 export const App = () => {
-  let location = useLocation()
+  let location = useLocation<any>();
   const dispatch = useDispatch();
-  const history = useHistory()
-  const { number } = useSelector(state => state.feed)
+  const history = useHistory();
+  const { number } = useSelector((state) => state.feed);
 
-  const background = location.state && location.state.background;
+  const background = location.state && location.state?.background;
 
   useEffect(() => {
     dispatch(getIngredient());
-    dispatch(getOrdersTemporary())
+    dispatch(getOrdersTemporary());
   }, [dispatch]);
 
   useEffect(() => {
-    const refreshToken = getCookie('refreshToken')
+    const refreshToken = getCookie("refreshToken");
     if (refreshToken) {
-      dispatch(getUserData(refreshToken))
+      dispatch(getUserData(refreshToken));
     }
-  }, [])
+  }, []);
 
-  const onClose = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    history.goBack()
-    dispatch({ type: CLOSE_FEED })
-  }
+  const onClose = () => {
+    history.goBack();
+    dispatch({ type: CLOSE_FEED });
+  };
 
   useEffect(() => {
-    history.replace({ pathname: location.pathname, state: undefined })
-  }, [])
+    history.replace({ pathname: location.pathname, state: undefined });
+  }, []);
 
   return (
     <ErrorBoundary>
-
       <Header />
 
       <Switch location={background || location}>
@@ -88,8 +97,23 @@ export const App = () => {
           <FeedDetailsPage />
         </Route>
       </Switch>
-      {background && <ProtectedRoute path="/profile/orders/:id" exact={true}><Modal onClose={onClose} header={`#${number}`} ><FeedDetails /></Modal></ProtectedRoute>}
-      {background && <Route path="/feed/:id" children={<Modal onClose={onClose} header={`#${number}`} ><FeedDetails /></Modal>} />}
+      {background && (
+        <ProtectedRoute path="/profile/orders/:id" exact={true}>
+          <Modal onClose={onClose} header={`#${number}`}>
+            <FeedDetails />
+          </Modal>
+        </ProtectedRoute>
+      )}
+      {background && (
+        <Route
+          path="/feed/:id"
+          children={
+            <Modal onClose={onClose} header={`#${number}`}>
+              <FeedDetails />
+            </Modal>
+          }
+        />
+      )}
     </ErrorBoundary>
   );
 };

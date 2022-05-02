@@ -32,7 +32,6 @@ export const socketMiddleware = (
       }
       if (socket) {
         socket.onopen = (event) => {
-          console.log(event);
           dispatch({ type: onOpen, payload: event });
         };
         socket.onerror = (event) => {

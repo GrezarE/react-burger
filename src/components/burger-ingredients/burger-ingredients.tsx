@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useRef, useState } from "react";
+import React, { FC, useRef, useState, MutableRefObject } from "react";
 import PropTypes from "prop-types";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import {
@@ -70,7 +70,7 @@ interface IIngredientCard {
 
 const IngredientCard: FC<IIngredientCard> = ({ props }) => {
   const dispatch = useDispatch();
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const componentsData = useSelector((store) => store.construct);
   function getComponentsIdArray() {
@@ -93,13 +93,13 @@ const IngredientCard: FC<IIngredientCard> = ({ props }) => {
     [ingredients, props]
   );
 
-  const [{ opacity }, ref] = useDrag({
+  const [{ opacity }, ref] = useDrag(() => ({
     type: "ingredient",
-    item: { props },
-    collect: (monitor) => ({
+    item: props,
+    collect: (monitor: any) => ({
       opacity: monitor.isDragging() ? 0.1 : 1,
     }),
-  });
+  }));
 
   const handleOpen = () => {
     dispatch({
@@ -165,7 +165,9 @@ const IngredientCard: FC<IIngredientCard> = ({ props }) => {
 interface IIngredientsBlock {
   type: string;
   text: string;
-  refElement: any;
+  refElement: {
+    current: any;
+  };
 }
 
 const IngredientsBlock: FC<IIngredientsBlock> = (data) => {
@@ -185,33 +187,34 @@ const IngredientsBlock: FC<IIngredientsBlock> = (data) => {
 };
 
 export const BurgerIngredients = () => {
-  const buns = useRef<any>("bun");
-  const sause = useRef<any>("sause");
-  const main = useRef<any>("main");
+  const buns = useRef<HTMLElement | null>();
+  const sause = useRef<HTMLElement | null>();
+  const main = useRef<HTMLElement | null>();
   const [tab, setTab] = useState<string>("one");
 
-  const scroll = (item: any) => {
-    item.current.scrollIntoView({ behavior: "smooth" });
+  const scroll = (item: MutableRefObject<HTMLElement | null | undefined>) => {
+    if (item.current) item.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const onScroll = (e: any): void => {
-    let element = e.target;
-
-    if (
-      element.scrollTop > buns.current.scrollHeight &&
-      e.target.scrollTop <
+  const onScroll = (e: React.UIEvent<HTMLElement>): void => {
+    let element = e.currentTarget;
+    if (buns.current && sause.current) {
+      if (
+        element.scrollTop > buns.current.scrollHeight &&
+        element.scrollTop <
+          sause.current.scrollHeight + buns.current.scrollHeight
+      ) {
+        setTab("two");
+      }
+      if (
+        element.scrollTop >
         sause.current.scrollHeight + buns.current.scrollHeight
-    ) {
-      setTab("two");
-    }
-    if (
-      e.target.scrollTop >
-      sause.current.scrollHeight + buns.current.scrollHeight
-    ) {
-      setTab("three");
-    }
-    if (e.target.scrollTop <= buns.current.scrollHeight) {
-      setTab("one");
+      ) {
+        setTab("three");
+      }
+      if (element.scrollTop <= buns.current.scrollHeight) {
+        setTab("one");
+      }
     }
   };
 
@@ -224,7 +227,7 @@ export const BurgerIngredients = () => {
         main={() => scroll(main)}
         tab={tab}
       />
-      <ul className={burgerIngredientsStyle.box} onScroll={(e) => onScroll(e)}>
+      <ul className={burgerIngredientsStyle.box} onScroll={onScroll}>
         <IngredientsBlock refElement={buns} key="bun" type="bun" text="Булки" />
         <IngredientsBlock
           refElement={sause}

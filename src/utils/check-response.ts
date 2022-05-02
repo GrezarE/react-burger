@@ -1,19 +1,14 @@
-
-
-export interface CustomResponse<T> extends Body {
+export interface CustomResponse extends Body {
   readonly headers: Headers;
   readonly ok: boolean;
   readonly redirected: boolean;
   readonly status: number;
   readonly statusText: string;
-  readonly trailer?: Promise<Headers>;
   readonly type: ResponseType;
   readonly url: string;
-  clone(): Response;
-  json(): Promise<T>;
 }
 
-export function checkResponse(res: CustomResponse<any>): Promise<any> {
+export function checkResponse(res: CustomResponse): Promise<any> {
   if (res.ok) {
     return res.json();
   }

@@ -5,9 +5,10 @@ import { Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "../../services/hooks";
 import { OPEN_FEED } from "../../services/actions/feed-view";
 import { IOrder } from "../../utils/types";
+import { ILocationState } from "../../utils/types";
 
 export const FeedsList = () => {
-  const location = useLocation();
+  const location = useLocation<ILocationState>();
   const dispatch = useDispatch();
 
   const onClick = (item: IOrder) => {

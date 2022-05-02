@@ -23,13 +23,19 @@ import { useDrag, useDrop } from "react-dnd";
 import { v4 as uuidv4 } from "uuid";
 import { useHistory } from "react-router-dom";
 import { Loader } from "../loader/loader";
-import { TComponents } from "../../services/reducers/construct";
 import { IIngredientType } from "../../utils/types";
+import type { Identifier } from "dnd-core";
 
 interface IConstructorItem {
   ingredient: IIngredientType;
   index: number;
   itemKey: string;
+}
+
+interface IConstructorItemMove {
+  ingredient: IIngredientType;
+  index: number;
+  type?: string;
 }
 
 const ConstructorItem: FC<IConstructorItem> = ({
@@ -66,14 +72,18 @@ const ConstructorItem: FC<IConstructorItem> = ({
     }),
   });
 
-  const [{ handlerId }, dropRef] = useDrop({
+  const [{ handlerId }, dropRef] = useDrop<
+    IConstructorItemMove,
+    void,
+    { handlerId: Identifier | null }
+  >({
     accept: "component",
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(item: any, monitor: any) {
+    hover(item: IConstructorItemMove, monitor: any) {
       if (!ref.current) {
         return;
       }
@@ -103,7 +113,7 @@ const ConstructorItem: FC<IConstructorItem> = ({
       moveCard(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
-    drop(item: any) {
+    drop(item: IConstructorItemMove) {
       const dragIndex = item.index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) {
@@ -173,7 +183,6 @@ const ConstructorLockedItem: FC<IConstructorLockedItem> = ({
   position,
   type,
 }) => {
-  console.log(type);
   return (
     <li className="pl-8">
       <ConstructorElement
@@ -194,9 +203,9 @@ interface IConstructorBox {
 const ConstructorBox: FC<IConstructorBox> = ({ ingredients }) => {
   const dispatch = useDispatch();
 
-  const [, dropTarget] = useDrop({
+  const [, dropTarget] = useDrop(() => ({
     accept: "ingredient",
-    drop({ card }: { card: any }) {
+    drop: (card: IIngredientType) => {
       if (card.type === "bun") {
         dispatch({ type: CHANGE_BUN, id: card._id });
       } else {
@@ -204,7 +213,7 @@ const ConstructorBox: FC<IConstructorBox> = ({ ingredients }) => {
         dispatch({ type: ADD_COMPONENT, id: card._id, key: key });
       }
     },
-  });
+  }));
 
   const ingredientsData = useSelector((state) => state.burger.ingredients);
   const components = useSelector((store) => store.construct);
@@ -343,8 +352,8 @@ export const BurgerConstructor = () => {
   const componentsData = useSelector((store) => store.construct);
   const { orderRequest } = useSelector((store) => store.order);
 
-  function getComponentsIdArray(): Array<any> {
-    let arr: any[] = [];
+  function getComponentsIdArray(): Array<string> {
+    let arr: Array<string> = [];
     if (componentsData.components.length > 0) {
       arr = componentsData.components.map((item) => item.id);
     }

@@ -31,7 +31,7 @@ export interface IConnectClose {
 }
 
 export interface IPayload<I> {
-  readonly orders: Array<IOrder> ;
+  readonly orders: Array<I> ;
   readonly total: number;
   readonly totalToday: number;
 }
